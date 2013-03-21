@@ -68,7 +68,7 @@ public class Game implements ApplicationListener, InputProcessor
 			{
 				for(int y = 0; y < 120; y++)
 				{
-					if(data[x][y] == 0) m.tiles[x][y] = new TileWall();
+					if(data[x][y] == 0) m.tiles[x][y] = new TileVoid();
 					else if(data[x][y] == 1) m.tiles[x][y] = new TileWall();
 					else if(data[x][y] == 2) m.tiles[x][y] = new TileFloor();
 					else if(data[x][y] == 3) m.tiles[x][y] = new TileFloor(); //TODO: doors
@@ -76,7 +76,8 @@ public class Game implements ApplicationListener, InputProcessor
 					else if(data[x][y] == 5)
 					{
 						m.tiles[x][y] = new TileFloor(); //TODO: torch
-						addLight(m, x, y, 10, 7, 0);
+						int strength = rand.nextInt(5)+6;
+						addLight(m, x, y, strength+3, strength, 0);
 					}
 					else m.tiles[x][y] = new TileWall();
 				}
@@ -103,7 +104,16 @@ public class Game implements ApplicationListener, InputProcessor
 		ticks = 0;
 		frameRate = 0;
 		
-		addEntity(new EntityPlayer(2, 5, 20), maps[0]);
+		while(true)
+		{
+			int x = rand.nextInt(maps[0].tiles.length);
+			int y = rand.nextInt(maps[0].tiles[x].length);
+			if(maps[0].tiles[x][y] instanceof TileFloor)
+			{
+				addEntity(new EntityPlayer(x, y, 20), maps[0]);
+				break;
+			}
+		}
 		
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
