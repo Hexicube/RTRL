@@ -61,11 +61,11 @@ public class EntityPlayer extends EntityLiving
 		}
 		if(Game.keyPress[33])
 		{
-			if(facingDir == Direction.UP)
+			if(facingDir == Direction.DOWN)
 			{
 				if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
 			}
-			if(facingDir == Direction.DOWN)
+			if(facingDir == Direction.UP)
 			{
 				if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
 			}
@@ -78,35 +78,43 @@ public class EntityPlayer extends EntityLiving
 				if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
 			}
 		}
-		if(walkDelay == 0)
+		if(Game.keysDown[19])
 		{
-			if(Game.keysDown[19])
+			if(walkDelay == 0)
 			{
 				walkDelay = 15;
 				move(false, 1);
-				facingDir = Direction.UP;
 			}
-			else if(Game.keysDown[20])
+			facingDir = Direction.UP;
+		}
+		else if(Game.keysDown[20])
+		{
+			if(walkDelay == 0)
 			{
 				walkDelay = 15;
 				move(false, -1);
-				facingDir = Direction.DOWN;
 			}
-			else if(Game.keysDown[21])
+			facingDir = Direction.DOWN;
+		}
+		else if(Game.keysDown[21])
+		{
+			if(walkDelay == 0)
 			{
 				walkDelay = 15;
 				move(true, -1);
-				facingDir = Direction.LEFT;
 			}
-			else if(Game.keysDown[22])
+			facingDir = Direction.LEFT;
+		}
+		else if(Game.keysDown[22])
+		{
+			if(walkDelay == 0)
 			{
 				walkDelay = 15;
 				move(true, 1);
-				facingDir = Direction.RIGHT;
 			}
+			facingDir = Direction.RIGHT;
 		}
-		else walkDelay--;
-		//TODO: read input
+		if(walkDelay > 0) walkDelay--;
 		Game.camX = xPos;
 		Game.camY = yPos;
 	}
@@ -118,12 +126,12 @@ public class EntityPlayer extends EntityLiving
 		if(facingDir == Direction.DOWN || facingDir == Direction.RIGHT) texX += 32;
 		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
 		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, texX, texY, 32, 32, false, false);
-		//TODO: sprites
+		//TODO: animation render (do I want to have animations?)
 	}
 	
 	@Override
 	public void collide(Entity entity)
 	{
-		//TODO: check collision things
+		//TODO: check collision things, such as pushing a boulder
 	}
 }

@@ -15,4 +15,6 @@ public abstract class Tile
 	
 	public int[] lightLevel = new int[3];
 	public int[] lightSource = new int[3];
+	
+	public Map map;
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
@@ -23,7 +24,7 @@ public class Game implements ApplicationListener, InputProcessor
 {
 	public static final int xOffset = 384, yOffset = 284;
 	
-	public static final String gameName = "Roguelike";
+	public static final String gameName = "RTRL";
 	public static final String versionText = "Prototype";
 	
 	private static SpriteBatch spriteBatch;
@@ -52,6 +53,8 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static int camX, camY;
 	
+	private static ArrayList<Message> messages;
+	
 	@Override
 	public void create()
 	{
@@ -71,7 +74,11 @@ public class Game implements ApplicationListener, InputProcessor
 					if(data[x][y] == 0) m.tiles[x][y] = new TileVoid();
 					else if(data[x][y] == 1) m.tiles[x][y] = new TileWall();
 					else if(data[x][y] == 2) m.tiles[x][y] = new TileFloor();
-					else if(data[x][y] == 3) m.tiles[x][y] = new TileFloor(); //TODO: doors
+					else if(data[x][y] == 3)
+					{
+						if(data[x][y-1] == 1) m.tiles[x][y] = new TileDoor(false, true);
+						else m.tiles[x][y] = new TileDoor(true, true);
+					}
 					else if(data[x][y] == 4) m.tiles[x][y] = new TileFloor(); //TODO: chests
 					else if(data[x][y] == 5)
 					{
@@ -80,6 +87,7 @@ public class Game implements ApplicationListener, InputProcessor
 						addLight(m, x, y, strength+3, strength, 0);
 					}
 					else m.tiles[x][y] = new TileWall();
+					m.tiles[x][y].map = m;
 				}
 			}
 			maps[a] = m;
@@ -114,6 +122,8 @@ public class Game implements ApplicationListener, InputProcessor
 				break;
 			}
 		}
+		
+		messages = new ArrayList<Message>();
 		
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
@@ -169,6 +179,25 @@ public class Game implements ApplicationListener, InputProcessor
 		spriteBatch.setColor(1, 1, 1, 1);
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
 		FontHolder.render(spriteBatch, tickRateText, 796-FontHolder.getTextWidth(tickRateText, true), 20, true);
+		
+		size = messages.size();
+		for(int a = 0; a < size; a++)
+		{
+			Message m = messages.get(a);
+			m.timeLeft--;
+			if(m.timeLeft == 0)
+			{
+				messages.remove(a);
+				size--;
+				a--;
+			}
+			else
+			{
+				spriteBatch.setColor(1, 1, 1, (m.timeLeft<300)?((float)m.timeLeft/300f):1);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, 606-(size-a)*10, false);
+			}
+		}
+		
 		spriteBatch.end();
 	}
 	
@@ -295,6 +324,7 @@ public class Game implements ApplicationListener, InputProcessor
 			{
 				((Entity)list[a]).tick();
 			}
+			if(maps[z].needsLighting) updateLighting(maps[z]);
 		}
 		for(int a = 0; a < keyPress.length; a++)
 		{
@@ -440,6 +470,6 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static void message(String message)
 	{
-		//TODO
+		messages.add(new Message(message, 600));
 	}
 }
