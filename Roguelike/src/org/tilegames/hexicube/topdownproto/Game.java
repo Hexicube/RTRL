@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
+import org.tilegames.hexicube.topdownproto.item.ItemWeaponTestSword;
 import org.tilegames.hexicube.topdownproto.map.*;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -49,7 +50,7 @@ public class Game implements ApplicationListener, InputProcessor
 	public static Texture tileTex;
 	
 	public static Map[] maps;
-	public static int mapID;
+	public static Map curMap;
 	
 	public static int camX, camY;
 	
@@ -83,7 +84,7 @@ public class Game implements ApplicationListener, InputProcessor
 					else if(data[x][y] == 5)
 					{
 						m.tiles[x][y] = new TileFloor(); //TODO: torch
-						int strength = rand.nextInt(5)+6;
+						int strength = rand.nextInt(8)+5;
 						addLight(m, x, y, strength+3, strength, 0);
 					}
 					else m.tiles[x][y] = new TileWall();
@@ -123,7 +124,20 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 		}
 		
+		while(true)
+		{
+			int x = rand.nextInt(maps[0].tiles.length);
+			int y = rand.nextInt(maps[0].tiles[x].length);
+			if(maps[0].tiles[x][y] instanceof TileFloor)
+			{
+				addEntity(new EntityItem(x, y, new ItemWeaponTestSword()), maps[0]);
+				break;
+			}
+		}
+		
 		messages = new ArrayList<Message>();
+		
+		curMap = maps[0];
 		
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
@@ -159,21 +173,21 @@ public class Game implements ApplicationListener, InputProcessor
 		Gdx.graphics.getGL10().glClearColor(0, 0, 0, 1);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		for(int x = 0; x < maps[mapID].tiles.length; x++)
+		for(int x = 0; x < curMap.tiles.length; x++)
 		{
-			for(int y = 0; y < maps[mapID].tiles[x].length; y++)
+			for(int y = 0; y < curMap.tiles[x].length; y++)
 			{
-				spriteBatch.setColor((float)(maps[mapID].tiles[x][y].lightLevel[0]+3)/18f, (float)(maps[mapID].tiles[x][y].lightLevel[1]+3)/18f, (float)(maps[mapID].tiles[x][y].lightLevel[2]+3)/18f, 1);
-				maps[mapID].tiles[x][y].render(spriteBatch, x-camX, y-camY);
+				spriteBatch.setColor((float)(curMap.tiles[x][y].lightLevel[0]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[1]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[2]+3)/18f, 1);
+				curMap.tiles[x][y].render(spriteBatch, x-camX, y-camY);
 			}
 		}
-		int size = maps[mapID].entities.size();
+		int size = curMap.entities.size();
 		for(int a = 0; a < size; a++)
 		{
-			Entity e = maps[mapID].entities.get(a);
-			Tile t = maps[mapID].tiles[e.xPos][e.yPos];
+			Entity e = curMap.entities.get(a);
+			Tile t = curMap.tiles[e.xPos][e.yPos];
 			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, 1);
-			maps[mapID].entities.get(a).render(spriteBatch, camX, camY);
+			curMap.entities.get(a).render(spriteBatch, camX, camY);
 		}
 		
 		spriteBatch.setColor(1, 1, 1, 1);
@@ -219,6 +233,7 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int key)
 	{
+		//System.out.println(key);
 		keysDown[key] = true;
 		keyPress[key] = true;
 		return false;
@@ -336,6 +351,7 @@ public class Game implements ApplicationListener, InputProcessor
 	{
 		removeEntity(e);
 		map.entities.add(e);
+		map.tiles[e.xPos][e.yPos].setCurrentEntity(e);
 		e.map = map;
 	}
 	
@@ -344,6 +360,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(e.map != null)
 		{
 			e.map.entities.remove(e);
+			e.map.tiles[e.xPos][e.yPos].setCurrentEntity(null);
 			e.map = null;
 		}
 	}

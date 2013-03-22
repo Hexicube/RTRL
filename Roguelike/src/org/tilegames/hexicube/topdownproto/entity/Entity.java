@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Entity
 {
-	public int xPos, yPos, width, height;
+	public int xPos, yPos;
 	
 	public Map map;
 	
@@ -33,7 +33,7 @@ public abstract class Entity
 				e.collide(this);
 				this.collide(e);
 			}
-			if(map.tiles[newX][newY].onWalkAttempt(this))
+			else if(map.tiles[newX][newY].onWalkAttempt(this))
 			{
 				map.tiles[xPos][yPos].setCurrentEntity(null);
 				map.tiles[newX][newY].setCurrentEntity(this);

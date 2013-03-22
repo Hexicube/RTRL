@@ -21,8 +21,6 @@ public class EntityDamageHealthDisplay extends Entity
 		timeLived = 0;
 		xPos = x;
 		yPos = y;
-		width = 0;
-		height = 0;
 		renderOffset = 0;
 	}
 	

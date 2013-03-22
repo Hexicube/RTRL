@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Direction;
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.item.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,7 +18,11 @@ public class EntityPlayer extends EntityLiving
 	private int walkDelay, useDelay, useAnimTime, useAnimType;
 	
 	private Item[] inventory;
-	private Item[] itemsInUse;
+	private ItemUsable heldItem;
+	private ItemArmour[] armour;
+	private ItemBracelet bracelet1, bracelet2;
+	private ItemNecklace necklace;
+	private ItemRing ring1, ring2;
 	
 	private int hungerLevel;
 	
@@ -31,35 +35,47 @@ public class EntityPlayer extends EntityLiving
 		health = maxHP;
 		healthMax = maxHP;
 		inventory = new Item[100];
-		itemsInUse = new Item[11];
-		hungerLevel = 25200; //7 mins of food
-		//main hand, off hand(shield), helmet,
-		//chestplate, leggings, boots, ring1, ring2,
-		//nechlace, bracelet, headband
+		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
+		hungerLevel = 60*60*7;
 	}
 	
 	@Override
 	public long damageAfterResistance(long damage, DamageType type)
 	{
-		//TODO: armour checks
+		double mult = 1;
+		for(int a = 0; a < armour.length; a++)
+		{
+			if(armour[a] != null)
+			{
+				mult *= armour[a].getProtectionMod(type);
+			}
+		}
+		damage *= mult;
 		return damage;
 	}
 	
 	@Override
 	public void tick()
 	{
-		hungerLevel--;
+		//hungerLevel--;
 		if(hungerLevel <= 0)
 		{
 			health = 0;
 			return;
 		}
-		if(Game.keyPress[45])
+		//0-9 -> 7-16
+		//0 -> open inventory
+		//1/2/3 -> unused
+		//4/5/6/8 -> left/down/right/up
+		//7 -> open door
+		//9 -> use held item
+		if(Game.keyPress[7])
 		{
+			Game.message("TODO: Open inventory!");
 			//TODO: open inventory screen
 		}
-		if(Game.keyPress[33])
+		if(Game.keyPress[14])
 		{
 			if(facingDir == Direction.DOWN)
 			{
@@ -78,7 +94,7 @@ public class EntityPlayer extends EntityLiving
 				if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
 			}
 		}
-		if(Game.keysDown[19])
+		if(Game.keysDown[15])
 		{
 			if(walkDelay == 0)
 			{
@@ -87,7 +103,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			facingDir = Direction.UP;
 		}
-		else if(Game.keysDown[20])
+		else if(Game.keysDown[12])
 		{
 			if(walkDelay == 0)
 			{
@@ -96,7 +112,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			facingDir = Direction.DOWN;
 		}
-		else if(Game.keysDown[21])
+		else if(Game.keysDown[11])
 		{
 			if(walkDelay == 0)
 			{
@@ -105,7 +121,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			facingDir = Direction.LEFT;
 		}
-		else if(Game.keysDown[22])
+		else if(Game.keysDown[13])
 		{
 			if(walkDelay == 0)
 			{
@@ -132,6 +148,20 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void collide(Entity entity)
 	{
+		if(entity instanceof EntityItem)
+		{
+			for(int a = 0; a < inventory.length; a++)
+			{
+				if(inventory[a] == null)
+				{
+					Game.removeEntity(entity);
+					inventory[a] = ((EntityItem)entity).curItem;
+					Game.message("Collected item: "+inventory[a].getName());
+					return;
+				}
+			}
+			Game.message("Your inventory is full!");
+		}
 		//TODO: check collision things, such as pushing a boulder
 	}
 }
