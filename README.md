@@ -6,11 +6,12 @@ Concept:
   Being a douche, I will be taking all steps I can to make this as hard as I can without ruining it. You will starve to death, you can use fire potions on wooden doors (any door) or kick it down and mayeb get splinters which kill you.
   Slight realism, you can't stab a slime because it's gelatinous. You also can't burn skeletons because they're made of bones, but acid helps with them.
 
-Controls:
-  Arrow keys (may be changed to WASD): Movement
-  E: Use tiles (open/close doors right now, will also have ability to use buttons/levers when I implement wiring)
-  Q: Use current item (sword, potion, whatever) in the direction you're facing
-  Z: Use current item on self if applicable (potions mainly, i.e. invisibility potion)
+Controls (all numpad):
+  4/5/6/8: left/down/right/up (movement)
+  7: Use tiles (open/close doors right now, will also have ability to use buttons/levers when I implement wiring)
+  9: Use current item (sword, potion, whatever) in the direction you're facing
+  1: Use current item on self if applicable (potions mainly, i.e. invisibility potion)
+  0: Open/close inventory
 
 Enemies:
   Slime:
@@ -22,4 +23,3 @@ Enemies:
     What this does: Skeletons slowly follow you around and beat you to death. You will take blunt damage for each punch.
     What can beat this: Any kind of weapon, most potions (fire doesn't work).
   Will list more when ideas come through.
-
