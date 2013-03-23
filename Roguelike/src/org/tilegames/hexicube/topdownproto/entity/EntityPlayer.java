@@ -2,7 +2,6 @@ package org.tilegames.hexicube.topdownproto.entity;
 
 import java.util.ArrayList;
 
-import org.tilegames.hexicube.topdownproto.Direction;
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.item.*;
 
@@ -76,7 +75,8 @@ public class EntityPlayer extends EntityLiving
 		else
 		{
 			//0 -> open inventory
-			//1/2/3 -> unused
+			//1 -> use on self
+			//2/3 -> unused
 			//4/5/6/8 -> left/down/right/up
 			//7 -> open door
 			//9 -> use held item
@@ -134,6 +134,14 @@ public class EntityPlayer extends EntityLiving
 					move(true, 1);
 				}
 				facingDir = Direction.RIGHT;
+			}
+			if(Game.keyPress[8])
+			{
+				Game.message("TODO: Use held item on self.");
+			}
+			else if(Game.keyPress[16])
+			{
+				Game.message("TODO: Use held item at target.");
 			}
 		}
 		if(Game.keyPress[7])

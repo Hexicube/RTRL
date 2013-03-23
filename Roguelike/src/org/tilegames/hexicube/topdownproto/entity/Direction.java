@@ -1,4 +1,4 @@
-package org.tilegames.hexicube.topdownproto;
+package org.tilegames.hexicube.topdownproto.entity;
 
 public enum Direction
 {

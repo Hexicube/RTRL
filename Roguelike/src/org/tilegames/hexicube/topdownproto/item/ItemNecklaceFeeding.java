@@ -26,8 +26,8 @@ public class ItemNecklaceFeeding extends ItemAccessory
 		return 1;
 	}
 	@Override
-	public ItemAccessoryType getAccessoryType()
+	public AccessorySlot getAccessoryType()
 	{
-		return ItemAccessoryType.NECKLACE;
+		return AccessorySlot.NECKLACE;
 	}
 }

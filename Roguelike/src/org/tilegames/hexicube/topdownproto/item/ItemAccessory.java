@@ -15,5 +15,5 @@ public abstract class ItemAccessory extends Item
 		return null;
 	}
 	
-	public abstract ItemAccessoryType getAccessoryType();
+	public abstract AccessorySlot getAccessoryType();
 }

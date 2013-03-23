@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.map;
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.ItemKey;
 import org.tilegames.hexicube.topdownproto.item.KeyType;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -121,10 +122,30 @@ public class TileDoor extends Tile
 				entity.map.needsLighting = true;
 			}
 		}
-		else
+		else if(entity instanceof EntityPlayer)
 		{
-			//TODO: inv checks
-			Game.message("You need the "+requiredKey+" key or a skeleton key to open that!");
+			EntityPlayer player = (EntityPlayer)entity;
+			for(int a = 0; a < 100; a++)
+			{
+				if(player.inventory[a] instanceof ItemKey)
+				{
+					ItemKey key = (ItemKey)player.inventory[a];
+					if(key.type == requiredKey)
+					{
+						player.inventory[a] = null;
+						requiredKey = KeyType.NONE;
+						Game.message("Door unlocked.");
+						return;
+					}
+					if(key.type == KeyType.SKELETON)
+					{
+						requiredKey = KeyType.NONE;
+						Game.message("Door unlocked with skeleton key.");
+						return;
+					}
+				}
+			}
+			Game.message("You need a "+requiredKey+" key or a skeleton key to open that!");
 		}
 	}
 }

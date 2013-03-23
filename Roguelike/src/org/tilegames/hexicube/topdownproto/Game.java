@@ -83,7 +83,23 @@ public class Game implements ApplicationListener, InputProcessor
 						if(data[x][y-1] == 1) m.tiles[x][y] = new TileDoor(false, false);
 						else m.tiles[x][y] = new TileDoor(true, true);
 					}
-					else if(data[x][y] == 4) m.tiles[x][y] = new TileFloor(); //TODO: chests
+					else if(data[x][y] == 4)
+					{
+						m.tiles[x][y] = new TileFloor();
+						ArrayList<Item> items = new ArrayList<Item>();
+						int r = rand.nextInt(13);
+						KeyType type;
+						if(r < 2) type = KeyType.RED;
+						else if(r < 4) type = KeyType.ORANGE;
+						else if(r < 6) type = KeyType.YELLOW;
+						else if(r < 8) type = KeyType.GREEN;
+						else if(r < 10) type = KeyType.BLUE;
+						else if(r < 12) type = KeyType.VIOLET;
+						else type = KeyType.SKELETON;
+						items.add(new ItemKey(type));
+						//TODO: insert items
+						addEntity(new EntityChest(x, y, items), m);
+					}
 					else if(data[x][y] == 5)
 					{
 						m.tiles[x][y] = new TileFloor(); //TODO: torch
@@ -123,20 +139,31 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y, 20);
-				player.heldItem = new ItemWeaponTestSword();
-				player.necklace = new ItemNecklaceFeeding();
+				int x2 = x, y2 = y;
+				if(maps[0].tiles[x-1][y] instanceof TileFloor)
+				{
+					x2 = x-1;
+				}
+				else if(maps[0].tiles[x+1][y] instanceof TileFloor)
+				{
+					x2 = x+1;
+				}
+				else if(maps[0].tiles[x][y-1] instanceof TileFloor)
+				{
+					y2 = y-1;
+				}
+				else if(maps[0].tiles[x][y+1] instanceof TileFloor)
+				{
+					y2 = y+1;
+				}
 				addEntity(player, maps[0]);
-				break;
-			}
-		}
-		
-		while(true)
-		{
-			int x = rand.nextInt(maps[0].tiles.length);
-			int y = rand.nextInt(maps[0].tiles[x].length);
-			if(maps[0].tiles[x][y] instanceof TileFloor)
-			{
-				addEntity(new EntityItem(x, y, new ItemWeaponTestSword()), maps[0]);
+				ArrayList<Item> items = new ArrayList<Item>();
+				items.add(new ItemWeaponTestSword());
+				items.add(new ItemNecklaceFeeding());
+				items.add(new ItemKey(KeyType.RED));
+				items.add(new ItemKey(KeyType.GREEN));
+				items.add(new ItemKey(KeyType.BLUE));
+				addEntity(new EntityChest(x2, y2, items), maps[0]);
 				break;
 			}
 		}
