@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntityItem extends Entity
 {
-	private static Texture tex = Game.loadImage("items");
+	public static Texture tex = Game.loadImage("items");
 	
 	public Item curItem;
 	

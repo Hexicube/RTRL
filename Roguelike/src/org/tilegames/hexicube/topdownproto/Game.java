@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
-import org.tilegames.hexicube.topdownproto.item.ItemWeaponTestSword;
+import org.tilegames.hexicube.topdownproto.item.*;
 import org.tilegames.hexicube.topdownproto.map.*;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -47,7 +47,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex;
+	public static Texture tileTex, invTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -56,12 +56,15 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static ArrayList<Message> messages;
 	
+	private static EntityPlayer player;
+	
 	@Override
 	public void create()
 	{
 		rand = new Random();
 		
 		tileTex = loadImage("tiles");
+		invTex = loadImage("inventory");
 		
 		maps = new Map[1];
 		for(int a = 0; a < 1; a++)
@@ -77,7 +80,7 @@ public class Game implements ApplicationListener, InputProcessor
 					else if(data[x][y] == 2) m.tiles[x][y] = new TileFloor();
 					else if(data[x][y] == 3)
 					{
-						if(data[x][y-1] == 1) m.tiles[x][y] = new TileDoor(false, true);
+						if(data[x][y-1] == 1) m.tiles[x][y] = new TileDoor(false, false);
 						else m.tiles[x][y] = new TileDoor(true, true);
 					}
 					else if(data[x][y] == 4) m.tiles[x][y] = new TileFloor(); //TODO: chests
@@ -119,7 +122,10 @@ public class Game implements ApplicationListener, InputProcessor
 			int y = rand.nextInt(maps[0].tiles[x].length);
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
-				addEntity(new EntityPlayer(x, y, 20), maps[0]);
+				player = new EntityPlayer(x, y, 20);
+				player.heldItem = new ItemWeaponTestSword();
+				player.necklace = new ItemNecklaceFeeding();
+				addEntity(player, maps[0]);
 				break;
 			}
 		}
@@ -191,6 +197,87 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		
 		spriteBatch.setColor(1, 1, 1, 1);
+		if(player.viewingInventory)
+		{
+			spriteBatch.draw(invTex, 200, 28);
+			for(int a = 0; a < 30; a++)
+			{
+				Item i = player.inventory[a];
+				if(i != null)
+				{
+					int ID = i.getItemID();
+					int xPos = 364 + (a%6)*40;
+					int yPos = 504 - (a/6)*40;
+					int x = ID%16;
+					int y = ID/16;
+					spriteBatch.draw(EntityItem.tex, xPos, yPos, 32, 32, x*32, y*32, 32, 32, false, false);
+				}
+			}
+			for(int a = 30; a < 100; a++)
+			{
+				Item i = player.inventory[a];
+				if(i != null)
+				{
+					int ID = i.getItemID();
+					int xPos = 204 + ((a-30)%10)*40;
+					int yPos = 304 - ((a-30)/10)*40;
+					int x = ID%16;
+					int y = ID/16;
+					spriteBatch.draw(EntityItem.tex, xPos, yPos, 32, 32, x*32, y*32, 32, 32, false, false);
+				}
+			}
+			//40x40
+			Item i = player.heldItem;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 223, 365, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.necklace;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 303, 485, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.ring1;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 223, 405, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.ring2;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 303, 405, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.bracelet1;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 223, 445, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.bracelet2;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 303, 445, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			//TODO: render armour in inventory
+		}
+		
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
 		FontHolder.render(spriteBatch, tickRateText, 796-FontHolder.getTextWidth(tickRateText, true), 20, true);
 		

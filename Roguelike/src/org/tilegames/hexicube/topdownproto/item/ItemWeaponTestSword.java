@@ -91,7 +91,7 @@ public class ItemWeaponTestSword extends ItemWeapon
 		return "???";
 	}
 	@Override
-	public void tick() {}
+	public void tick(Entity entity) {}
 	@Override
 	public int getItemID()
 	{

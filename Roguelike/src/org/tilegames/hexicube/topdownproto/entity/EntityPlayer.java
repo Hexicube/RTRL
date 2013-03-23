@@ -17,14 +17,14 @@ public class EntityPlayer extends EntityLiving
 	
 	private int walkDelay, useDelay, useAnimTime, useAnimType;
 	
-	private Item[] inventory;
-	private ItemUsable heldItem;
+	public Item[] inventory;
+	public ItemUsable heldItem;
 	private ItemArmour[] armour;
-	private ItemBracelet bracelet1, bracelet2;
-	private ItemNecklace necklace;
-	private ItemRing ring1, ring2;
+	public ItemAccessory necklace, ring1, ring2, bracelet1, bracelet2;
 	
-	private int hungerLevel;
+	public boolean viewingInventory;
+	
+	public int hungerLevel;
 	
 	public ArrayList<Effect> effects;
 	
@@ -58,77 +58,87 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void tick()
 	{
-		//hungerLevel--;
+		hungerLevel--;
 		if(hungerLevel <= 0)
 		{
 			health = 0;
 			return;
 		}
 		//0-9 -> 7-16
-		//0 -> open inventory
-		//1/2/3 -> unused
-		//4/5/6/8 -> left/down/right/up
-		//7 -> open door
-		//9 -> use held item
+		if(viewingInventory)
+		{
+			//0 -> close inventory
+			//TODO: These controls:
+			//1/2/3 -> unused
+			//4/5/6/8 -> left/down/right/up
+			//7/9 -> unused
+		}
+		else
+		{
+			//0 -> open inventory
+			//1/2/3 -> unused
+			//4/5/6/8 -> left/down/right/up
+			//7 -> open door
+			//9 -> use held item
+			if(Game.keyPress[14])
+			{
+				if(facingDir == Direction.DOWN)
+				{
+					if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
+				}
+				if(facingDir == Direction.UP)
+				{
+					if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
+				}
+				if(facingDir == Direction.LEFT)
+				{
+					if(xPos > 0) map.tiles[xPos-1][yPos].use(this);
+				}
+				if(facingDir == Direction.RIGHT)
+				{
+					if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
+				}
+			}
+			if(Game.keysDown[15])
+			{
+				if(walkDelay == 0)
+				{
+					walkDelay = 15;
+					move(false, 1);
+				}
+				facingDir = Direction.UP;
+			}
+			else if(Game.keysDown[12])
+			{
+				if(walkDelay == 0)
+				{
+					walkDelay = 15;
+					move(false, -1);
+				}
+				facingDir = Direction.DOWN;
+			}
+			else if(Game.keysDown[11])
+			{
+				if(walkDelay == 0)
+				{
+					walkDelay = 15;
+					move(true, -1);
+				}
+				facingDir = Direction.LEFT;
+			}
+			else if(Game.keysDown[13])
+			{
+				if(walkDelay == 0)
+				{
+					walkDelay = 15;
+					move(true, 1);
+				}
+				facingDir = Direction.RIGHT;
+			}
+		}
 		if(Game.keyPress[7])
 		{
-			Game.message("TODO: Open inventory!");
-			//TODO: open inventory screen
-		}
-		if(Game.keyPress[14])
-		{
-			if(facingDir == Direction.DOWN)
-			{
-				if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
-			}
-			if(facingDir == Direction.UP)
-			{
-				if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
-			}
-			if(facingDir == Direction.LEFT)
-			{
-				if(xPos > 0) map.tiles[xPos-1][yPos].use(this);
-			}
-			if(facingDir == Direction.RIGHT)
-			{
-				if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
-			}
-		}
-		if(Game.keysDown[15])
-		{
-			if(walkDelay == 0)
-			{
-				walkDelay = 15;
-				move(false, 1);
-			}
-			facingDir = Direction.UP;
-		}
-		else if(Game.keysDown[12])
-		{
-			if(walkDelay == 0)
-			{
-				walkDelay = 15;
-				move(false, -1);
-			}
-			facingDir = Direction.DOWN;
-		}
-		else if(Game.keysDown[11])
-		{
-			if(walkDelay == 0)
-			{
-				walkDelay = 15;
-				move(true, -1);
-			}
-			facingDir = Direction.LEFT;
-		}
-		else if(Game.keysDown[13])
-		{
-			if(walkDelay == 0)
-			{
-				walkDelay = 15;
-				move(true, 1);
-			}
-			facingDir = Direction.RIGHT;
+			viewingInventory = !viewingInventory;
 		}
 		if(walkDelay > 0) walkDelay--;
 		Game.camX = xPos;

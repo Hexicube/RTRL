@@ -2,7 +2,7 @@ package org.tilegames.hexicube.topdownproto.item;
 
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 
-public abstract class ItemBracelet extends Item
+public abstract class ItemAccessory extends Item
 {
 	@Override
 	public boolean isWeapon()
@@ -14,4 +14,6 @@ public abstract class ItemBracelet extends Item
 	{
 		return null;
 	}
+	
+	public abstract ItemAccessoryType getAccessoryType();
 }

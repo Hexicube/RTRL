@@ -16,4 +16,5 @@ public abstract class ItemArmour extends ItemExpirable
 	}
 	
 	public abstract double getProtectionMod(DamageType type);
+	public abstract ItemArmourType getArmourType();
 }
