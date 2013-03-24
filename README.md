@@ -3,7 +3,7 @@
 ##Concept:  
 * Tick based, allows more freedom with some effects like slowing as well as allowing a more logical food decay (7 minutes) instead of a step-based one.  
 * Wiring, so you can sabotage my traps if you have the tools without it seeming like some generic system for disarming.  
-* Being a douche, I will be taking all steps I can to make this as hard as I can without ruining it. You will starve to death, you can use fire potions on wooden doors (any door) or kick it down and mayeb get splinters which kill you.  
+* Being a douche, I will be taking all steps I can to make this as hard as I can without ruining it. You will starve to death, you can use fire potions on wooden doors (any door) or kick it down and maybe get splinters which kill you.  
 * Slight realism, you can't stab a slime because it's gelatinous. You also can't burn skeletons because they're made of bones, but acid helps with them.  
   
 ##Controls (all numpad):  
@@ -16,8 +16,8 @@
 * Inventory:  
     * 0: Close inventory  
     * 1: Select item to move/Swap with selected item (todo)  
-    * 2: Dispose of item (todo)  
-    * 3: Drop item on floor if space (todo)  
+    * 2: Drop item on floor if space (todo)  
+    * 3: Dispose of item (todo)  
     * 4/5/6/8: Navigate inventory  
   
 ##Enemies:  
