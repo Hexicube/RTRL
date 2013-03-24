@@ -102,8 +102,8 @@ public class Game implements ApplicationListener, InputProcessor
 					}
 					else if(data[x][y] == 5)
 					{
-						m.tiles[x][y] = new TileFloor(); //TODO: torch
-						int strength = rand.nextInt(8)+5;
+						m.tiles[x][y] = new TileTorchWall(); //TODO: torch
+						int strength = rand.nextInt(6)+2;
 						addLight(m, x, y, strength+3, strength, 0);
 					}
 					else m.tiles[x][y] = new TileWall();
@@ -139,6 +139,7 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y, 20);
+				player.heldItem = new ItemWeaponTestSword();//TODO
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
 				{
@@ -227,40 +228,58 @@ public class Game implements ApplicationListener, InputProcessor
 		if(player.viewingInventory)
 		{
 			spriteBatch.draw(invTex, 200, 28);
-			for(int a = 0; a < 30; a++)
+			for(int a = 0; a < 100; a++)
 			{
 				Item i = player.inventory[a];
 				if(i != null)
 				{
 					int ID = i.getItemID();
-					int xPos = 364 + (a%6)*40;
-					int yPos = 504 - (a/6)*40;
+					int xPos = 204 + (a%10)*40;
+					int yPos = 424 - (a/10)*40;
 					int x = ID%16;
 					int y = ID/16;
 					spriteBatch.draw(EntityItem.tex, xPos, yPos, 32, 32, x*32, y*32, 32, 32, false, false);
 				}
 			}
-			for(int a = 30; a < 100; a++)
-			{
-				Item i = player.inventory[a];
-				if(i != null)
-				{
-					int ID = i.getItemID();
-					int xPos = 204 + ((a-30)%10)*40;
-					int yPos = 304 - ((a-30)/10)*40;
-					int x = ID%16;
-					int y = ID/16;
-					spriteBatch.draw(EntityItem.tex, xPos, yPos, 32, 32, x*32, y*32, 32, 32, false, false);
-				}
-			}
-			//40x40
-			Item i = player.heldItem;
+			Item i = player.armour[0];
 			if(i != null)
 			{
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 223, 365, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 204, 464, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.armour[1];
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 244, 464, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.armour[2];
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 284, 464, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.armour[3];
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 324, 464, 32, 32, x*32, y*32, 32, 32, false, false);
+			}
+			i = player.heldItem;
+			if(i != null)
+			{
+				int ID = i.getItemID();
+				int x = ID%16;
+				int y = ID/16;
+				spriteBatch.draw(EntityItem.tex, 364, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
 			i = player.necklace;
 			if(i != null)
@@ -268,7 +287,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 303, 485, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 404, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
 			i = player.ring1;
 			if(i != null)
@@ -276,7 +295,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 223, 405, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 444, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
 			i = player.ring2;
 			if(i != null)
@@ -284,7 +303,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 303, 405, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 484, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
 			i = player.bracelet1;
 			if(i != null)
@@ -292,7 +311,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 223, 445, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 524, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
 			i = player.bracelet2;
 			if(i != null)
@@ -300,9 +319,8 @@ public class Game implements ApplicationListener, InputProcessor
 				int ID = i.getItemID();
 				int x = ID%16;
 				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 303, 445, 32, 32, x*32, y*32, 32, 32, false, false);
+				spriteBatch.draw(EntityItem.tex, 564, 464, 32, 32, x*32, y*32, 32, 32, false, false);
 			}
-			//TODO: render armour in inventory
 		}
 		
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
@@ -515,11 +533,11 @@ public class Game implements ApplicationListener, InputProcessor
 	public static void updateLightingSubfunc(Map map, int x, int y)
 	{
 		Tile t = map.tiles[x][y];
-		if(!t.lightable())
+		if(!t.takesLight())
 		{
-			t.lightLevel[0] = 15;
-			t.lightLevel[1] = 15;
-			t.lightLevel[2] = 15;
+			t.lightLevel[0] = t.lightSource[0];
+			t.lightLevel[1] = t.lightSource[1];
+			t.lightLevel[2] = t.lightSource[2];
 			return;
 		}
 		int maxR = t.lightSource[0];
@@ -528,7 +546,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(x > 0)
 		{
 			Tile t2 = map.tiles[x-1][y];
-			if(t2.lightable())
+			if(t2.givesLight())
 			{
 				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
 				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
@@ -541,7 +559,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(x < map.tiles.length-1)
 		{
 			Tile t2 = map.tiles[x+1][y];
-			if(t2.lightable())
+			if(t2.givesLight())
 			{
 				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
 				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
@@ -554,7 +572,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(y > 0)
 		{
 			Tile t2 = map.tiles[x][y-1];
-			if(t2.lightable())
+			if(t2.givesLight())
 			{
 				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
 				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
@@ -567,7 +585,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(y < map.tiles[x].length-1)
 		{
 			Tile t2 = map.tiles[x][y+1];
-			if(t2.lightable())
+			if(t2.givesLight())
 			{
 				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
 				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;

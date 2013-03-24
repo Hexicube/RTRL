@@ -18,7 +18,7 @@ public class EntityPlayer extends EntityLiving
 	
 	public Item[] inventory;
 	public ItemUsable heldItem;
-	private ItemArmour[] armour;
+	public ItemArmour[] armour;
 	public ItemAccessory necklace, ring1, ring2, bracelet1, bracelet2;
 	
 	public boolean viewingInventory;
@@ -58,6 +58,59 @@ public class EntityPlayer extends EntityLiving
 	public void tick()
 	{
 		hungerLevel--;
+		for(int a = 0; a < 100; a++)
+		{
+			if(inventory[a] != null)
+			{
+				if(inventory[a].getCurrentDurability() <= 0 && inventory[a].getMaxDurability() > 0) inventory[a] = null;
+				else inventory[a].tick(this, false);
+			}
+		}
+		for(int a = 0; a < 4; a++)
+		{
+			if(armour[a] != null)
+			{
+				if(armour[a].getCurrentDurability() <= 0 && armour[a].getMaxDurability() > 0) armour[a] = null;
+				else armour[a].tick(this, true);
+			}
+		}
+		if(heldItem != null)
+		{
+			if(heldItem.getCurrentDurability() <= 0 && heldItem.getMaxDurability() > 0) heldItem = null;
+			else heldItem.tick(this, true);
+		}
+		if(ring1 != null)
+		{
+			if(ring1.getCurrentDurability() <= 0 && ring1.getMaxDurability() > 0) ring1 = null;
+			else ring1.tick(this, true);
+		}
+		if(ring2 != null)
+		{
+			if(ring2.getCurrentDurability() <= 0 && ring2.getMaxDurability() > 0) ring2 = null;
+			else ring2.tick(this, true);
+		}
+		if(bracelet1 != null)
+		{
+			if(bracelet1.getCurrentDurability() <= 0 && bracelet1.getMaxDurability() > 0) bracelet1 = null;
+			else bracelet1.tick(this, true);
+		}
+		if(bracelet2 != null)
+		{
+			if(bracelet2.getCurrentDurability() <= 0 && bracelet2.getMaxDurability() > 0) bracelet2 = null;
+			else bracelet2.tick(this, true);
+		}
+		if(necklace != null)
+		{
+			if(necklace.getCurrentDurability() <= 0 && necklace.getMaxDurability() > 0) necklace = null;
+			else necklace.tick(this, true);
+		}
+		Object[] o = effects.toArray();
+		for(int a = 0; a < o.length; a++)
+		{
+			Effect e = (Effect)o[a];
+			if(e.timeRemaining() <= 0) effects.remove(e);
+			else e.tick(this);
+		}
 		if(hungerLevel <= 0)
 		{
 			health = 0;

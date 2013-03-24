@@ -39,7 +39,13 @@ public class TileFloor extends Tile
 	}
 	
 	@Override
-	public boolean lightable()
+	public boolean givesLight()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean takesLight()
 	{
 		return true;
 	}

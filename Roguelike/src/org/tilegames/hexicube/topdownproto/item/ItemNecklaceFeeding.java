@@ -5,6 +5,12 @@ import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
 public class ItemNecklaceFeeding extends ItemAccessory
 {
+	private int durability;
+	
+	public ItemNecklaceFeeding()
+	{
+		durability = getMaxDurability();
+	}
 	@Override
 	public ItemModifier getModifier()
 	{
@@ -16,9 +22,13 @@ public class ItemNecklaceFeeding extends ItemAccessory
 		return "Necklace of Feeding";
 	}
 	@Override
-	public void tick(Entity entity)
+	public void tick(Entity entity, boolean equipped)
 	{
-		if(entity instanceof EntityPlayer) ((EntityPlayer)entity).hungerLevel++;
+		if(equipped && entity instanceof EntityPlayer)
+		{
+			((EntityPlayer)entity).hungerLevel++;
+			durability--;
+		}
 	}
 	@Override
 	public int getItemID()
@@ -29,5 +39,15 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	public AccessorySlot getAccessoryType()
 	{
 		return AccessorySlot.NECKLACE;
+	}
+	@Override
+	public int getMaxDurability()
+	{
+		return 54000;
+	}
+	@Override
+	public int getCurrentDurability()
+	{
+		return durability;
 	}
 }

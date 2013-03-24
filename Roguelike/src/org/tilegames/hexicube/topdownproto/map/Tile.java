@@ -10,7 +10,8 @@ public abstract class Tile
 	public abstract void render(SpriteBatch batch, int x, int y);
 	public abstract void setCurrentEntity(Entity entity);
 	public abstract Entity getCurrentEntity();
-	public abstract boolean lightable();
+	public abstract boolean givesLight();
+	public abstract boolean takesLight();
 	public abstract void use(Entity entity);
 	
 	public int[] lightLevel = new int[3];

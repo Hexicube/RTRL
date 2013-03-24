@@ -23,6 +23,8 @@ public class ItemWeaponTestSword extends ItemWeapon
 			dmgRng[0] += 2;
 			dmgRng[1] += 3;
 		}
+		
+		durability = getMaxDurability();
 	}
 	
 	public ItemWeaponTestSword(ItemModifier mod, int dur)
@@ -91,7 +93,7 @@ public class ItemWeaponTestSword extends ItemWeapon
 		return "???";
 	}
 	@Override
-	public void tick(Entity entity) {}
+	public void tick(Entity entity, boolean equipped) {}
 	@Override
 	public int getItemID()
 	{

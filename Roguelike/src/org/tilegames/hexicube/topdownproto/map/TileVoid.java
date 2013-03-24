@@ -21,7 +21,12 @@ public class TileVoid extends Tile
 		return null;
 	}
 	@Override
-	public boolean lightable()
+	public boolean givesLight()
+	{
+		return false;
+	}
+	@Override
+	public boolean takesLight()
 	{
 		return false;
 	}

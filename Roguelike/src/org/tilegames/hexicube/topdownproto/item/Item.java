@@ -9,6 +9,8 @@ public abstract class Item
 	public abstract DamageType getAttackType();
 	public abstract ItemModifier getModifier();
 	public abstract String getName();
-	public abstract void tick(Entity entity);
+	public abstract void tick(Entity entity, boolean equipped);
 	public abstract int getItemID();
+	public abstract int getMaxDurability();
+	public abstract int getCurrentDurability();
 }

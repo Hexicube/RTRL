@@ -97,7 +97,13 @@ public class TileDoor extends Tile
 	}
 	
 	@Override
-	public boolean lightable()
+	public boolean givesLight()
+	{
+		return opened;
+	}
+	
+	@Override
+	public boolean takesLight()
 	{
 		return opened;
 	}

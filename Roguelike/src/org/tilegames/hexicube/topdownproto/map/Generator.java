@@ -2,6 +2,8 @@ package org.tilegames.hexicube.topdownproto.map;
 
 import java.util.Random;
 
+import org.tilegames.hexicube.topdownproto.Game;
+
 public class Generator
 {
 	private int[][] data;
@@ -22,7 +24,11 @@ public class Generator
 		{
 			for(int y = 0; y < height; y++)
 			{
-				if(data[x][y] == 2 && isExposed(x, y)) data[x][y] = 1;
+				if(data[x][y] == 2 && isExposed(x, y))
+				{
+					if(Game.rand.nextInt(10) == 7) data[x][y] = 5;
+					else data[x][y] = 1;
+				}
 			}
 		}
 		for(int x = 0; x < width; x++)
@@ -110,8 +116,7 @@ public class Generator
 		{
 			for(y = bottomSide; y <= topSide; y++)
 			{
-				if((x == leftSide+1 || x == rightSide-1 || y == bottomSide+1 || y == topSide-1) && (x > leftSide && x < rightSide && y > bottomSide && y < topSide) && r.nextInt(9) == 2) data[x][y] = 5;
-				else data[x][y] = 2;
+				data[x][y] = 2;
 			}
 		}
 		if(Math.abs(leftSide-rightSide) > 16 && Math.abs(topSide-bottomSide) > 16 && r.nextInt(10) > 4)

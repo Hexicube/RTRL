@@ -2,7 +2,7 @@ package org.tilegames.hexicube.topdownproto.item;
 
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 
-public abstract class ItemArmour extends ItemExpirable
+public abstract class ItemArmour extends Item
 {
 	@Override
 	public boolean isWeapon()
