@@ -250,7 +250,7 @@ public class Game implements ApplicationListener, InputProcessor
 				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
 				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
 				if(otherItem != null && otherItem.getMaxDurability() > 0) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
-				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName;
+				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName2;
 				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);
 				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), 204, 536, false);
 			}

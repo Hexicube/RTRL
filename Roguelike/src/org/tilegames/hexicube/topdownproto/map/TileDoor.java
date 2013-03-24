@@ -91,6 +91,7 @@ public class TileDoor extends Tile
 	@Override
 	public boolean setCurrentEntity(Entity entity)
 	{
+		if(!opened) return false;
 		curEnt = entity;
 		return true;
 	}
