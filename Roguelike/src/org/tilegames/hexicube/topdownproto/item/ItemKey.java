@@ -56,4 +56,9 @@ public class ItemKey extends Item
 	{
 		return -1;
 	}
+	@Override
+	public boolean canMove()
+	{
+		return true;
+	}
 }

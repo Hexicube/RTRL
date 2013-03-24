@@ -99,4 +99,9 @@ public class ItemWeaponTestSword extends ItemWeapon
 	{
 		return 0;
 	}
+	@Override
+	public boolean canMove()
+	{
+		return !(modifier == ItemModifier.CURSED);
+	}
 }

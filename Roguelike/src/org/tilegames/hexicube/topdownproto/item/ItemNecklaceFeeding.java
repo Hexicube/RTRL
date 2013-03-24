@@ -50,4 +50,9 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	{
 		return durability;
 	}
+	@Override
+	public boolean canMove()
+	{
+		return true;
+	}
 }

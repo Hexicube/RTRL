@@ -47,7 +47,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex;
+	public static Texture tileTex, invTex, invHighlightTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -65,6 +65,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
+		invHighlightTex = loadImage("highlight");
 		
 		maps = new Map[1];
 		for(int a = 0; a < 1; a++)
@@ -228,99 +229,31 @@ public class Game implements ApplicationListener, InputProcessor
 		if(player.viewingInventory)
 		{
 			spriteBatch.draw(invTex, 200, 28);
-			for(int a = 0; a < 100; a++)
+			for(int x = 0; x < 10; x++)
 			{
-				Item i = player.inventory[a];
-				if(i != null)
+				for(int y = 0; y < 11; y++)
 				{
-					int ID = i.getItemID();
-					int xPos = 204 + (a%10)*40;
-					int yPos = 424 - (a/10)*40;
-					int x = ID%16;
-					int y = ID/16;
-					spriteBatch.draw(EntityItem.tex, xPos, yPos, 32, 32, x*32, y*32, 32, 32, false, false);
+					Item i = player.getItemInSlot(x, y);
+					if(i != null)
+					{
+						int ID = i.getItemID();
+						int x2 = ID%16;
+						int y2 = ID/16;
+						spriteBatch.draw(EntityItem.tex, 204 + x*40, 464 - y*40, 32, 32, x2*32, y2*32, 32, 32, false, false);
+					}
 				}
 			}
-			Item i = player.armour[0];
-			if(i != null)
+			spriteBatch.draw(invHighlightTex, 204 + player.invX*40, 464 - player.invY*40, 32, 32, 32, 0, 32, 32, false, false);
+			Item curItem = player.getItemInSlot(player.invX, player.invY);
+			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
+			if(player.invSelectY != -1)
 			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 204, 464, 32, 32, x*32, y*32, 32, 32, false, false);
+				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
+				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
+				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), 204, 536, false);
 			}
-			i = player.armour[1];
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 244, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.armour[2];
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 284, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.armour[3];
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 324, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.heldItem;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 364, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.necklace;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 404, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.ring1;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 444, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.ring2;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 484, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.bracelet1;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 524, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
-			i = player.bracelet2;
-			if(i != null)
-			{
-				int ID = i.getItemID();
-				int x = ID%16;
-				int y = ID/16;
-				spriteBatch.draw(EntityItem.tex, 564, 464, 32, 32, x*32, y*32, 32, 32, false, false);
-			}
+			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), 204, 536, false);
 		}
 		
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));

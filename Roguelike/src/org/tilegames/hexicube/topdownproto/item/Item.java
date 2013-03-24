@@ -13,4 +13,5 @@ public abstract class Item
 	public abstract int getItemID();
 	public abstract int getMaxDurability();
 	public abstract int getCurrentDurability();
+	public abstract boolean canMove();
 }

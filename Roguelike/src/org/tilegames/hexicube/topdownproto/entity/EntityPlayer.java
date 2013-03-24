@@ -16,6 +16,8 @@ public class EntityPlayer extends EntityLiving
 	
 	private int walkDelay, useDelay, useAnimTime, useAnimType;
 	
+	public int invX, invY, invSelectX, invSelectY;
+	
 	public Item[] inventory;
 	public ItemUsable heldItem;
 	public ItemArmour[] armour;
@@ -120,10 +122,65 @@ public class EntityPlayer extends EntityLiving
 		if(viewingInventory)
 		{
 			//0 -> close inventory
-			//TODO: These controls:
-			//1/2/3 -> unused
+			//1 -> Select item/Swap with selected
 			//4/5/6/8 -> left/down/right/up
 			//7/9 -> unused
+			//TODO: These controls:
+			//2 -> Dispose of item
+			//3 -> Drop item or place in chest
+			if(Game.keyPress[8])
+			{
+				if(invSelectY == -1 && canMoveItem(invX, invY))
+				{
+					invSelectX = invX;
+					invSelectY = invY;
+				}
+				else if(invSelectX == invX && invSelectY == invY)
+				{
+					invSelectY = -1;
+				}
+				else if(canMoveItem(invX, invY))
+				{
+					Item i1 = getItemInSlot(invX, invY);
+					Item i2 = getItemInSlot(invSelectX, invSelectY);
+					if(setItemInSlot(invX, invY, i2))
+					{
+						if(setItemInSlot(invSelectX, invSelectY, i1)) invSelectY = -1;
+						else setItemInSlot(invX, invY, i1);
+					}
+				}
+			}
+			if(Game.keyPress[9])
+			{
+				if(invSelectY == -1)
+				{
+					if(canMoveItem(invX, invY)) setItemInSlot(invX, invY, null);
+				}
+				else
+				{
+					if(canMoveItem(invSelectX, invSelectY))
+					{
+						setItemInSlot(invSelectX, invSelectY, null);
+						invSelectY = -1;
+					}
+				}
+			}
+			if(Game.keyPress[15])
+			{
+				if(invY > 0) invY--;
+			}
+			if(Game.keyPress[12])
+			{
+				if(invY < 10) invY++;
+			}
+			if(Game.keyPress[11])
+			{
+				if(invX > 0) invX--;
+			}
+			if(Game.keyPress[13])
+			{
+				if(invX < 9) invX++;
+			}
 		}
 		else
 		{
@@ -200,6 +257,12 @@ public class EntityPlayer extends EntityLiving
 		if(Game.keyPress[7])
 		{
 			viewingInventory = !viewingInventory;
+			if(viewingInventory)
+			{
+				invX = 0;
+				invY = 0;
+				invSelectY = -1;
+			}
 		}
 		if(walkDelay > 0) walkDelay--;
 		Game.camX = xPos;
@@ -234,5 +297,148 @@ public class EntityPlayer extends EntityLiving
 			Game.message("Your inventory is full!");
 		}
 		//TODO: check collision things, such as pushing a boulder
+	}
+	
+	public Item getItemInSlot(int x, int y)
+	{
+		if(y == 0)
+		{
+			if(x < 4) return armour[x];
+			if(x == 4) return heldItem;
+			if(x == 5) return necklace;
+			if(x == 6) return ring1;
+			if(x == 7) return ring2;
+			if(x == 8) return bracelet1;
+			if(x == 9) return bracelet2;
+		}
+		else return inventory[(y-1)*10+x];
+		return null;
+	}
+	
+	public boolean setItemInSlot(int x, int y, Item item)
+	{
+		if(y == 0)
+		{
+			if(x < 4)
+			{
+				if(item == null || item instanceof ItemArmour)
+				{
+					ItemArmour i = (ItemArmour)item;
+					if(x == 0 && i.getArmourType() != ArmourSlot.HEAD) return false;
+					if(x == 1 && i.getArmourType() != ArmourSlot.CHEST) return false;
+					if(x == 2 && i.getArmourType() != ArmourSlot.LEGS) return false;
+					if(x == 3 && i.getArmourType() != ArmourSlot.FEET) return false;
+					armour[x] = i;
+					return true;
+				}
+				return false;
+			}
+			if(x == 4)
+			{
+				if(item == null || item instanceof ItemUsable)
+				{
+					heldItem = (ItemUsable)item;
+					return true;
+				}
+				return false;
+			}
+			if(!(item instanceof ItemAccessory) && item != null) return false;
+			ItemAccessory i = (ItemAccessory)item;
+			if(x == 5)
+			{
+				if(i != null && i.getAccessoryType() != AccessorySlot.NECKLACE) return false;
+				necklace = i;
+				return true;
+			}
+			if(x == 6)
+			{
+				if(i != null && i.getAccessoryType() != AccessorySlot.RING) return false;
+				ring1 = i;
+				return true;
+			}
+			if(x == 7)
+			{
+				if(i != null && i.getAccessoryType() != AccessorySlot.RING) return false;
+				ring2 = i;
+				return true;
+			}
+			if(x == 8)
+			{
+				if(i != null && i.getAccessoryType() != AccessorySlot.BRACELET) return false;
+				bracelet1 = i;
+				return true;
+			}
+			if(x == 9)
+			{
+				if(i != null && i.getAccessoryType() != AccessorySlot.BRACELET) return false;
+				bracelet2 = i;
+				return true;
+			}
+		}
+		else
+		{
+			inventory[(y-1)*10+x] = item;
+			return true;
+		}
+		return false;
+	}
+	
+	public String getSlotName(int x, int y)
+	{
+		if(y == 0)
+		{
+			if(x == 0) return "Helmet slot";
+			if(x == 1) return "Chestplate slot";
+			if(x == 2) return "Leggings slot";
+			if(x == 3) return "Boots slot";
+			if(x == 4) return "Held item slot";
+			if(x == 5) return "Necklace slot";
+			if(x == 6 || x == 7) return "Ring slot";
+			return "Bracelet slot";
+		}
+		else return "Inventory slot";
+	}
+	
+	public boolean canMoveItem(int x, int y)
+	{
+		if(y == 0)
+		{
+			if(x < 4)
+			{
+				if(armour[x] == null) return true;
+				return armour[x].canMove();
+			}
+			if(x == 4)
+			{
+				if(heldItem == null) return true;
+				return heldItem.canMove();
+			}
+			if(x == 5)
+			{
+				if(necklace == null) return true;
+				return necklace.canMove();
+			}
+			if(x == 6)
+			{
+				if(ring1 == null) return true;
+				return ring1.canMove();
+			}
+			if(x == 7)
+			{
+				if(ring2 == null) return true;
+				return ring2.canMove();
+			}
+			if(x == 8)
+			{
+				if(bracelet1 == null) return true;
+				return bracelet1.canMove();
+			}
+			if(x == 9)
+			{
+				if(bracelet2 == null) return true;
+				return bracelet2.canMove();
+			}
+		}
+		return true;
 	}
 }
