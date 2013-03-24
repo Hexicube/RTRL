@@ -11,7 +11,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 {
 	private int durability;
 	
-	private static Texture tex = Game.loadImage("necklace", "feeding.png");
+	private static Texture tex = Game.loadImage("necklace", "feeding");
 	
 	public ItemNecklaceFeeding()
 	{

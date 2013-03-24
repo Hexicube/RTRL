@@ -1,8 +1,12 @@
 package org.tilegames.hexicube.topdownproto.map;
 
+import java.util.ArrayList;
+
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.entity.EntityChest;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemKey;
 import org.tilegames.hexicube.topdownproto.item.KeyType;
 
@@ -59,13 +63,13 @@ public class TileDoor extends Tile
 			batch.setColor((float)(light[0]+2)/18f, (float)(light[1]+2)/18f, (float)(light[2]+2)/18f, 1);
 		}
 		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 0, 0, 32, 32, false, false);
-		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1);
-		else if(requiredKey == KeyType.RED) batch.setColor(1, 0.3f, 0.3f, 1);
-		else if(requiredKey == KeyType.ORANGE) batch.setColor(1, 0.6f, 0.2f, 1);
-		else if(requiredKey == KeyType.YELLOW) batch.setColor(1, 1, 0.2f, 1);
-		else if(requiredKey == KeyType.GREEN) batch.setColor(0.2f, 1, 0.2f, 1);
-		else if(requiredKey == KeyType.BLUE) batch.setColor(0.2f, 0.2f, 1, 1);
-		else if(requiredKey == KeyType.VIOLET) batch.setColor(0.6f, 0.2f, 1, 1);
+		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1); 
+		else if(requiredKey == KeyType.RED) batch.setColor(1, 0, 0, 1);
+		else if(requiredKey == KeyType.ORANGE) batch.setColor(1, 0.6f, 0, 1);
+		else if(requiredKey == KeyType.YELLOW) batch.setColor(1, 1, 0, 1);
+		else if(requiredKey == KeyType.GREEN) batch.setColor(0, 1, 0, 1);
+		else if(requiredKey == KeyType.BLUE) batch.setColor(0, 0, 1, 1);
+		else if(requiredKey == KeyType.VIOLET) batch.setColor(0.6f, 0, 1, 1);
 		else batch.setColor(0.2f, 0.2f, 0.2f, 1);
 		/*if(!opened)
 		{
@@ -112,6 +116,39 @@ public class TileDoor extends Tile
 	@Override
 	public void use(Entity entity)
 	{
+		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)entity;
+			ArrayList<Item> items = ((EntityChest)curEnt).contents;
+			if(items.size() == 0)
+			{
+				Game.message("The chest is empty!");
+				Game.removeEntity(curEnt);
+			}
+			else
+			{
+				while(items.size() > 0)
+				{
+					boolean found = false;
+					for(int a = 0; a < player.inventory.length && !found; a++)
+					{
+						if(player.inventory[a] == null)
+						{
+							player.inventory[a] = items.remove(0);
+							Game.message("Collected item: "+player.inventory[a].getName());
+							found = true;
+						}
+					}
+					if(!found)
+					{
+						Game.message("Your inventory is full!");
+						return;
+					}
+				}
+				if(items.size() == 0) Game.removeEntity(curEnt);
+			}
+			return;
+		}
 		if(requiredKey == KeyType.NONE)
 		{
 			if(opened)

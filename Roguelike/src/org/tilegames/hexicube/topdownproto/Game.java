@@ -89,17 +89,7 @@ public class Game implements ApplicationListener, InputProcessor
 					{
 						m.tiles[x][y] = new TileFloor();
 						ArrayList<Item> items = new ArrayList<Item>();
-						int r = rand.nextInt(13);
-						KeyType type;
-						if(r < 2) type = KeyType.RED;
-						else if(r < 4) type = KeyType.ORANGE;
-						else if(r < 6) type = KeyType.YELLOW;
-						else if(r < 8) type = KeyType.GREEN;
-						else if(r < 10) type = KeyType.BLUE;
-						else if(r < 12) type = KeyType.VIOLET;
-						else type = KeyType.SKELETON;
-						items.add(new ItemKey(type));
-						//TODO: insert items
+						insertRandomLoot(items, a);
 						addEntity(new EntityChest(x, y, items), m);
 					}
 					else if(data[x][y] == 5)
@@ -141,7 +131,6 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
-				player.heldItem = new ItemWeaponTestSword();//TODO
 				addEntity(player, maps[0]);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
@@ -164,8 +153,12 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemWeaponTestSword());
 				items.add(new ItemNecklaceFeeding());
 				items.add(new ItemKey(KeyType.RED));
+				items.add(new ItemKey(KeyType.ORANGE));
+				items.add(new ItemKey(KeyType.YELLOW));
 				items.add(new ItemKey(KeyType.GREEN));
 				items.add(new ItemKey(KeyType.BLUE));
+				items.add(new ItemKey(KeyType.VIOLET));
+				items.add(new ItemKey(KeyType.SKELETON));
 				addEntity(new EntityChest(x2, y2, items), maps[0]);
 				break;
 			}
@@ -580,5 +573,20 @@ public class Game implements ApplicationListener, InputProcessor
 			count += rand.nextInt(sides)+1;
 		}
 		return count;
+	}
+	
+	private static void insertRandomLoot(ArrayList<Item> list, int lootLevel)
+	{
+		int r = rand.nextInt(13);
+		KeyType type;
+		if(r < 2) type = KeyType.RED;
+		else if(r < 4) type = KeyType.ORANGE;
+		else if(r < 6) type = KeyType.YELLOW;
+		else if(r < 8) type = KeyType.GREEN;
+		else if(r < 10) type = KeyType.BLUE;
+		else if(r < 12) type = KeyType.VIOLET;
+		else type = KeyType.SKELETON;
+		list.add(new ItemKey(type));
+		//TODO: make this actually do something
 	}
 }
