@@ -1,10 +1,17 @@
 package org.tilegames.hexicube.topdownproto.item;
 
+import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class ItemKey extends Item
 {
+	private static Texture tex = Game.loadImage("item", "key");
+	private static Texture tex2 = Game.loadImage("item", "keyskeleton");
+	
 	public KeyType type;
 	
 	public ItemKey(KeyType type)
@@ -60,5 +67,22 @@ public class ItemKey extends Item
 	public boolean canMove()
 	{
 		return true;
+	}
+	@Override
+	public void render(SpriteBatch batch, int x, int y)
+	{
+		if(type == KeyType.SKELETON)
+		{
+			batch.draw(tex2, x, y);
+			return;
+		}
+		if(type == KeyType.RED) batch.setColor(1, 0, 0, 1);
+		if(type == KeyType.ORANGE) batch.setColor(1, 0.6f, 0, 1);
+		if(type == KeyType.YELLOW) batch.setColor(1, 1, 0, 1);
+		if(type == KeyType.GREEN) batch.setColor(0, 1, 0, 1);
+		if(type == KeyType.BLUE) batch.setColor(0, 0, 1, 1);
+		if(type == KeyType.VIOLET) batch.setColor(0.6f, 0, 0, 1);
+		batch.draw(tex, x, y);
+		batch.setColor(1, 1, 1, 1);
 	}
 }

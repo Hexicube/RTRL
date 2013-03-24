@@ -47,7 +47,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex, invHighlightTex;
+	public static Texture tileTex, invTex, invHighlightTex, invUsedBar;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -66,6 +66,7 @@ public class Game implements ApplicationListener, InputProcessor
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
 		invHighlightTex = loadImage("highlight");
+		invUsedBar = loadImage("usagebar");
 		
 		maps = new Map[1];
 		for(int a = 0; a < 1; a++)
@@ -139,8 +140,9 @@ public class Game implements ApplicationListener, InputProcessor
 			int y = rand.nextInt(maps[0].tiles[x].length);
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
-				player = new EntityPlayer(x, y, 20);
+				player = new EntityPlayer(x, y);
 				player.heldItem = new ItemWeaponTestSword();//TODO
+				addEntity(player, maps[0]);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
 				{
@@ -158,7 +160,6 @@ public class Game implements ApplicationListener, InputProcessor
 				{
 					y2 = y+1;
 				}
-				addEntity(player, maps[0]);
 				ArrayList<Item> items = new ArrayList<Item>();
 				items.add(new ItemWeaponTestSword());
 				items.add(new ItemNecklaceFeeding());
@@ -236,20 +237,27 @@ public class Game implements ApplicationListener, InputProcessor
 					Item i = player.getItemInSlot(x, y);
 					if(i != null)
 					{
-						int ID = i.getItemID();
-						int x2 = ID%16;
-						int y2 = ID/16;
-						spriteBatch.draw(EntityItem.tex, 204 + x*40, 464 - y*40, 32, 32, x2*32, y2*32, 32, 32, false, false);
+						i.render(spriteBatch, 204+x*40, 464-y*40);
+						if(i.getMaxDurability() > 0)
+						{
+							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
+							if(stage == 16) stage = 15;
+							spriteBatch.draw(invUsedBar, 204+x*40, 462-y*40, 32, 2, 0, 30-stage*2, 32, 2, false, false);
+						}
 					}
 				}
 			}
 			spriteBatch.draw(invHighlightTex, 204 + player.invX*40, 464 - player.invY*40, 32, 32, 32, 0, 32, 32, false, false);
 			Item curItem = player.getItemInSlot(player.invX, player.invY);
 			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
+			if(curItem != null && curItem.getMaxDurability() > 0) itemName += " ("+(curItem.getCurrentDurability()*100/curItem.getMaxDurability())+"%)";
+			if(curItem != null && curItem instanceof ItemWeapon) itemName = "["+((ItemWeapon)curItem).getWeaponDamageRange()+"] "+itemName;
 			if(player.invSelectY != -1)
 			{
 				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
 				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
+				if(otherItem != null && otherItem.getMaxDurability() > 0) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
+				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName;
 				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);
 				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), 204, 536, false);
 			}
@@ -353,6 +361,11 @@ public class Game implements ApplicationListener, InputProcessor
 		return new Texture(Gdx.files.internal("images" + File.separator + name + ".png"));
 	}
 	
+	public static Texture loadImage(String subFolder, String name)
+	{
+		return new Texture(Gdx.files.internal("images" + File.separator + subFolder + File.separator + name + ".png"));
+	}
+	
 	public static Sound loadSound(String name)
 	{
 		return Gdx.audio.newSound(Gdx.files.internal("sounds" + File.separator + name + ".mp3"));
@@ -412,12 +425,16 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 	}
 	
-	public static void addEntity(Entity e, Map map)
+	public static boolean addEntity(Entity e, Map map)
 	{
-		removeEntity(e);
-		map.entities.add(e);
-		map.tiles[e.xPos][e.yPos].setCurrentEntity(e);
-		e.map = map;
+		if(map.tiles[e.xPos][e.yPos].setCurrentEntity(e))
+		{
+			removeEntity(e);
+			map.entities.add(e);
+			e.map = map;
+			return true;
+		}
+		return false;
 	}
 	
 	public static void removeEntity(Entity e)
@@ -553,5 +570,15 @@ public class Game implements ApplicationListener, InputProcessor
 	public static void message(String message)
 	{
 		messages.add(new Message(message, 600));
+	}
+	
+	public static int rollDice(int sides, int amount)
+	{
+		int count = 0;
+		for(int a = 0; a < amount; a++)
+		{
+			count += rand.nextInt(sides)+1;
+		}
+		return count;
 	}
 }

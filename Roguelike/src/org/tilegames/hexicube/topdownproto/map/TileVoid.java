@@ -14,7 +14,10 @@ public class TileVoid extends Tile
 	@Override
 	public void render(SpriteBatch batch, int x, int y) {}
 	@Override
-	public void setCurrentEntity(Entity entity) {}
+	public boolean setCurrentEntity(Entity entity)
+	{
+		return false;
+	}
 	@Override
 	public Entity getCurrentEntity()
 	{

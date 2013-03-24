@@ -2,13 +2,18 @@ package org.tilegames.hexicube.topdownproto.item;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
+import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemWeaponTestSword extends ItemWeapon
 {
+	private static Texture tex = Game.loadImage("weapon", "badsword");
+	
 	private int durability;
 	private ItemModifier modifier;
-	private int[] dmgRng;
 	
 	public ItemWeaponTestSword()
 	{
@@ -16,13 +21,6 @@ public class ItemWeaponTestSword extends ItemWeapon
 		if(rand < 6) modifier = ItemModifier.NONE;
 		else if(rand < 9) modifier = ItemModifier.CURSED;
 		else modifier = ItemModifier.SHARPENED;
-
-		dmgRng = new int[]{3, 5};
-		if(modifier == ItemModifier.SHARPENED)
-		{
-			dmgRng[0] += 2;
-			dmgRng[1] += 3;
-		}
 		
 		durability = getMaxDurability();
 	}
@@ -31,16 +29,10 @@ public class ItemWeaponTestSword extends ItemWeapon
 	{
 		modifier = mod;
 		durability = dur;
-		dmgRng = new int[]{3, 5};
-		if(modifier == ItemModifier.SHARPENED)
-		{
-			dmgRng[0] += 2;
-			dmgRng[1] += 3;
-		}
 	}
 	
 	@Override
-	public boolean use(Entity source, int direction)
+	public boolean use(Entity source, Direction dir)
 	{
 		//TODO: check for hitting something
 		if(durability <= 0) return false;
@@ -48,9 +40,10 @@ public class ItemWeaponTestSword extends ItemWeapon
 		return true;
 	}
 	@Override
-	public int[] getWeaponDamageRange()
+	public String getWeaponDamageRange()
 	{
-		return dmgRng;
+		if(modifier == ItemModifier.SHARPENED) return "1d6";
+		return "1d4";
 	}
 	@Override
 	public int getMaxDurability()
@@ -93,15 +86,21 @@ public class ItemWeaponTestSword extends ItemWeapon
 		return "???";
 	}
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
-	@Override
 	public int getItemID()
 	{
 		return 0;
 	}
 	@Override
+	public void tick(Entity entity, boolean equipped) {}
+	@Override
 	public boolean canMove()
 	{
 		return !(modifier == ItemModifier.CURSED);
+	}
+
+	@Override
+	public void render(SpriteBatch batch, int x, int y)
+	{
+		batch.draw(tex, x, y);
 	}
 }

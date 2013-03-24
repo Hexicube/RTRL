@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.item.*;
+import org.tilegames.hexicube.topdownproto.map.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,16 +30,15 @@ public class EntityPlayer extends EntityLiving
 	
 	public ArrayList<Effect> effects;
 	
-	public EntityPlayer(int x, int y, int maxHP)
+	public EntityPlayer(int x, int y)
 	{
 		xPos = x;
 		yPos = y;
-		health = maxHP;
-		healthMax = maxHP;
+		health = healthMax = 1000;
 		inventory = new Item[100];
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
-		hungerLevel = 60*60*7;
+		hungerLevel = 25200;
 	}
 	
 	@Override
@@ -113,9 +113,11 @@ public class EntityPlayer extends EntityLiving
 			if(e.timeRemaining() <= 0) effects.remove(e);
 			else e.tick(this);
 		}
-		if(hungerLevel <= 0)
+		if(hungerLevel <= 0) health = 0;
+		alive = (health > 0);
+		if(!alive)
 		{
-			health = 0;
+			//TODO: die
 			return;
 		}
 		//0-9 -> 7-16
@@ -125,9 +127,8 @@ public class EntityPlayer extends EntityLiving
 			//1 -> Select item/Swap with selected
 			//4/5/6/8 -> left/down/right/up
 			//7/9 -> unused
-			//TODO: These controls:
-			//2 -> Dispose of item
-			//3 -> Drop item or place in chest
+			//2 -> Drop item or place in chest
+			//3 -> Dispose of item
 			if(Game.keyPress[8])
 			{
 				if(invSelectY == -1 && canMoveItem(invX, invY))
@@ -152,18 +153,41 @@ public class EntityPlayer extends EntityLiving
 			}
 			if(Game.keyPress[9])
 			{
-				if(invSelectY == -1)
+				if(canMoveItem(invX, invY))
 				{
-					if(canMoveItem(invX, invY)) setItemInSlot(invX, invY, null);
-				}
-				else
-				{
-					if(canMoveItem(invSelectX, invSelectY))
+					Item i = getItemInSlot(invX, invY);
+					if(i != null)
 					{
-						setItemInSlot(invSelectX, invSelectY, null);
-						invSelectY = -1;
+						int targetX = xPos, targetY = yPos;
+						if(facingDir == Direction.DOWN) targetY--;
+						else if(facingDir == Direction.UP) targetY++;
+						else if(facingDir == Direction.LEFT) targetX--;
+						else if(facingDir == Direction.RIGHT) targetX++;
+						Tile target = map.tiles[targetX][targetY];
+						Entity e = target.getCurrentEntity();
+						if(e instanceof EntityChest)
+						{
+							((EntityChest)e).contents.add(i);
+							setItemInSlot(invX, invY, null);
+							Game.message("Item added to chest.");
+						}
+						else if(e == null)
+						{
+							e = new EntityChest(targetX, targetY, new ArrayList<Item>());
+							if(Game.addEntity(e, map))
+							{
+								((EntityChest)e).contents.add(i);
+								setItemInSlot(invX, invY, null);
+								Game.message("Item added to new chest.");
+							}
+						}
+						else Game.message("Something is blocking the spot in front of you.");
 					}
 				}
+			}
+			if(Game.keyPress[10])
+			{
+				if(canMoveItem(invX, invY)) setItemInSlot(invX, invY, null);
 			}
 			if(Game.keyPress[15])
 			{
@@ -296,7 +320,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			Game.message("Your inventory is full!");
 		}
-		//TODO: check collision things, such as pushing a boulder
+		//TODO: check more collision things, such as pushing a boulder
 	}
 	
 	public Item getItemInSlot(int x, int y)

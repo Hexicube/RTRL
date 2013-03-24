@@ -1,11 +1,17 @@
 package org.tilegames.hexicube.topdownproto.item;
 
+import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemNecklaceFeeding extends ItemAccessory
 {
 	private int durability;
+	
+	private static Texture tex = Game.loadImage("necklace", "feeding.png");
 	
 	public ItemNecklaceFeeding()
 	{
@@ -22,6 +28,11 @@ public class ItemNecklaceFeeding extends ItemAccessory
 		return "Necklace of Feeding";
 	}
 	@Override
+	public int getItemID()
+	{
+		return 1;
+	}
+	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
 		if(equipped && entity instanceof EntityPlayer)
@@ -29,11 +40,6 @@ public class ItemNecklaceFeeding extends ItemAccessory
 			((EntityPlayer)entity).hungerLevel++;
 			durability--;
 		}
-	}
-	@Override
-	public int getItemID()
-	{
-		return 1;
 	}
 	@Override
 	public AccessorySlot getAccessoryType()
@@ -54,5 +60,10 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	public boolean canMove()
 	{
 		return true;
+	}
+	@Override
+	public void render(SpriteBatch batch, int x, int y)
+	{
+		batch.draw(tex, x, y);
 	}
 }

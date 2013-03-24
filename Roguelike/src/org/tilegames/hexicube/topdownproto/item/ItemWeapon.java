@@ -8,5 +8,5 @@ public abstract class ItemWeapon extends ItemUsable
 		return true;
 	}
 	
-	public abstract int[] getWeaponDamageRange();
+	public abstract String getWeaponDamageRange();
 }

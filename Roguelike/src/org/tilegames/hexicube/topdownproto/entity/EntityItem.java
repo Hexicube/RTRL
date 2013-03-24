@@ -24,11 +24,7 @@ public class EntityItem extends Entity
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		int ID = curItem.getItemID();
-		int x = ID%16;
-		int y = ID/16;
-		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, x*32, y*32, 32, 32, false, false);
-		//TODO: this
+		curItem.render(batch, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32);
 	}
 	@Override
 	public void collide(Entity entity) {}

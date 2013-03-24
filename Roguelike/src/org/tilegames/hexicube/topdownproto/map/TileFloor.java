@@ -27,9 +27,10 @@ public class TileFloor extends Tile
 	}
 	
 	@Override
-	public void setCurrentEntity(Entity entity)
+	public boolean setCurrentEntity(Entity entity)
 	{
 		curEnt = entity;
+		return true;
 	}
 	
 	@Override

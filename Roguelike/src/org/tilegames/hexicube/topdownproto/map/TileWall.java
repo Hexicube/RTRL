@@ -25,7 +25,10 @@ public class TileWall extends Tile
 	}
 	
 	@Override
-	public void setCurrentEntity(Entity entity) {}
+	public boolean setCurrentEntity(Entity entity)
+	{
+		return false;
+	}
 	
 	@Override
 	public Entity getCurrentEntity()
