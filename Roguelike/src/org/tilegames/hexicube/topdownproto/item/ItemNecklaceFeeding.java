@@ -26,7 +26,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	@Override
 	public String getName()
 	{
-		if(!nameDiscovered) return "Unknown necklace";
+		if(!nameDiscovered) return "Unknown Necklace";
 		return "Necklace of Feeding";
 	}
 	@Override

@@ -56,11 +56,16 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static ArrayList<Message> messages;
 	
-	private static EntityPlayer player;
+	public static EntityPlayer player;
 	
 	@Override
 	public void create()
 	{
+		/*
+		Game plot idea:
+		You just entered a cave for shelter from a blizzard which has recently calmed down. You try to leave, but an evil force prevents you from doing so. You have to confront it at some point, but it's best to find tools in the cave first.
+		*/
+		
 		rand = new Random();
 		
 		tileTex = loadImage("tiles");
@@ -68,8 +73,29 @@ public class Game implements ApplicationListener, InputProcessor
 		invHighlightTex = loadImage("highlight");
 		invUsedBar = loadImage("usagebar");
 		
-		ItemWeaponBadSword.tex = loadImage("weapon", "badsword");
-		ItemNecklaceFeeding.tex = loadImage("necklace", "feeding");
+		Texture[] images = new Texture[3];
+		for(int a = 0; a < images.length; a++)
+		{
+			images[a] = loadImage("necklace", "necklace"+(a+1));
+		}
+		images = shuffleTex(images);
+		ItemNecklaceFeeding.tex = images[0];
+		
+		images = new Texture[2];
+		for(int a = 0; a < images.length; a++)
+		{
+			images[a] = loadImage("weapon", "sword"+(a+1));
+		}
+		images = shuffleTex(images);
+		ItemWeaponBadSword.tex = images[0];
+		
+		images = new Texture[1];
+		for(int a = 0; a < images.length; a++)
+		{
+			images[a] = loadImage("item", "potion"+(a+1));
+		}
+		images = shuffleTex(images);
+		ItemPotionHealing.tex = images[0];
 		
 		maps = new Map[5];
 		int[] ladderPos = new int[2];
@@ -145,6 +171,11 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
+				player.heldItem = new ItemWeaponBadSword();
+				player.armour[0] = new ItemArmourWoolCap();
+				player.armour[1] = new ItemArmourJumper();
+				player.armour[2] = new ItemArmourJeans();
+				player.armour[3] = new ItemArmourTrainers();
 				addEntity(player, maps[0], true);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
@@ -164,15 +195,10 @@ public class Game implements ApplicationListener, InputProcessor
 					y2 = y+1;
 				}
 				ArrayList<Item> items = new ArrayList<Item>();
-				items.add(new ItemWeaponBadSword());
 				items.add(new ItemNecklaceFeeding());
-				items.add(new ItemKey(KeyType.RED));
-				items.add(new ItemKey(KeyType.ORANGE));
-				items.add(new ItemKey(KeyType.YELLOW));
-				items.add(new ItemKey(KeyType.GREEN));
-				items.add(new ItemKey(KeyType.BLUE));
-				items.add(new ItemKey(KeyType.VIOLET));
-				items.add(new ItemKey(KeyType.SKELETON));
+				items.add(new ItemPotionHealing());
+				items.add(new ItemPotionHealing());
+				items.add(new ItemPotionHealing());
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
 			}
@@ -180,9 +206,9 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		Entity e = new EntitySkeleton(0, 0);
 		
-		for(int x = player.xPos-2; x <= player.xPos+2; x++)
+		for(int x = player.xPos-5; x <= player.xPos+5; x++)
 		{
-			for(int y = player.yPos-2; y <= player.yPos+2; y++)
+			for(int y = player.yPos-5; y <= player.yPos+5; y++)
 			{
 				e.xPos = x;
 				e.yPos = y;
@@ -190,8 +216,8 @@ public class Game implements ApplicationListener, InputProcessor
 				{
 					if(addEntity(e, maps[0], true))
 					{
-						x = player.xPos+2;
-						y = player.yPos+2;
+						x = player.xPos+5;
+						y = player.yPos+5;
 					}
 				}
 			}
@@ -282,7 +308,7 @@ public class Game implements ApplicationListener, InputProcessor
 			{
 				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
 				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
-				if(otherItem != null && otherItem.getMaxDurability() > 0) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
+				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
 				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName2;
 				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);
 				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), 204, 536, false);
@@ -394,12 +420,12 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static Sound loadSound(String name)
 	{
-		return Gdx.audio.newSound(Gdx.files.internal("sounds" + File.separator + name + ".mp3"));
+		return Gdx.audio.newSound(Gdx.files.internal("sounds" + File.separator + name + ".ogg"));
 	}
 	
 	public static Music loadMusic(String name)
 	{
-		return Gdx.audio.newMusic(Gdx.files.internal("sounds" + File.separator + name + ".mp3"));
+		return Gdx.audio.newMusic(Gdx.files.internal("sounds" + File.separator + name + ".ogg"));
 	}
 	
 	public static BufferedReader loadTextFile(String name, String folder)
@@ -634,8 +660,29 @@ public class Game implements ApplicationListener, InputProcessor
 		if(source instanceof EntitySkeleton)
 		{
 			if(rand.nextInt(150) == 27) list.add(new ItemKey(KeyType.SKELETON));
-			//TODO: add bones, maybe rare bonesword
+			int count = rollDice(2, 3);
+			for(int a = 0; a < count; a++)
+			{
+				list.add(new ItemWeaponBone(rand.nextInt(101)+100));
+			}
+			//TODO: rare bonesword?
 		}
 		//TODO: make this include loot for harder things
+	}
+	
+	public static Texture[] shuffleTex(Texture[] images)
+	{
+		Texture[] images2 = new Texture[images.length];
+		for(int a = 0; a < images.length; a++)
+		{
+			int pos = rand.nextInt(images.length-a);
+			for(int b = 0; b <= pos; b++)
+			{
+				if(images[b] == null) pos++;
+			}
+			images2[a] = images[pos];
+			images[pos] = null;
+		}
+		return images2;
 	}
 }

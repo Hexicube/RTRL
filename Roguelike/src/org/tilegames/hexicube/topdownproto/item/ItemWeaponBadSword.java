@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto.item;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
+import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
 
@@ -42,16 +43,26 @@ public class ItemWeaponBadSword extends ItemWeapon
 	}
 	
 	@Override
-	public boolean use(Entity source, Entity target)
+	public boolean use(Entity source, Direction dir)
 	{
+		Entity target = null;
+		if(dir == Direction.NONE) return false;
+		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos+1].getCurrentEntity();
+		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos-1].getCurrentEntity();
+		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos-1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos+1][source.yPos].getCurrentEntity();
+		else return false;
 		if(target == null) return false;
-		if(source == target) return false;
 		if(!(target instanceof EntityLiving)) return false;
 		if(durability <= 0) return false;
-		if(!modDiscovered) modDiscovered = true;
+		if(!modDiscovered)
+		{
+			Game.message("You realise the Badsword is "+(modifier==ItemModifier.SHODDY?"shoddy":"sharp")+"...");
+			modDiscovered = true;
+		}
 		EntityLiving e = (EntityLiving)target;
 		if(!e.alive) return false;
-		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(6, 1):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
+		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(2, 4):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
 		durability--;
 		return true;
 	}
@@ -60,7 +71,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		if(!nameDiscovered) return "???";
 		if(!modDiscovered) return "1d4";
-		if(modifier == ItemModifier.SHARPENED) return "1d6";
+		if(modifier == ItemModifier.SHARPENED) return "2d4";
 		if(modifier == ItemModifier.SHODDY) return "1d4-1";
 		return "1d4";
 	}
@@ -109,8 +120,13 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		if(equipped)
 		{
+			if(!nameDiscovered) Game.message("Discovered item: Badsword");
 			nameDiscovered = true;
-			if(modifier == ItemModifier.CURSED) modDiscovered = true;
+			if(modifier == ItemModifier.CURSED && !modDiscovered)
+			{
+				Game.message("The Badsword is cursed, you can't remove it!");
+				modDiscovered = true;
+			}
 		}
 	}
 	@Override

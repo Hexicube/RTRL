@@ -15,7 +15,7 @@ public class EntityPlayer extends EntityLiving
 	
 	private Direction facingDir = Direction.UP;
 	
-	private int walkDelay, useDelay, useAnimTime, useAnimType;
+	private int walkDelay, useDelay;
 	
 	public int invX, invY, invSelectX, invSelectY;
 	
@@ -44,15 +44,15 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public long damageAfterResistance(long damage, DamageType type)
 	{
-		double mult = 1;
+		double mult = 0;
 		for(int a = 0; a < armour.length; a++)
 		{
 			if(armour[a] != null)
 			{
-				mult *= armour[a].getProtectionMod(type);
+				mult += armour[a].getProtectionMod(type);
 			}
 		}
-		damage *= mult;
+		damage *= mult/4;
 		return damage;
 	}
 	
@@ -125,10 +125,11 @@ public class EntityPlayer extends EntityLiving
 		{
 			//0 -> close inventory
 			//1 -> Select item/Swap with selected
-			//4/5/6/8 -> left/down/right/up
-			//7/9 -> unused
 			//2 -> Drop item or place in chest
 			//3 -> Dispose of item
+			//4/5/6/8 -> left/down/right/up
+			//7 -> use on self
+			//9 -> unused
 			if(Game.keyPress[8])
 			{
 				if(invSelectY == -1 && canMoveItem(invX, invY))
@@ -205,6 +206,13 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(invX < 9) invX++;
 			}
+			if(Game.keyPress[14])
+			{
+				if(getItemInSlot(invX, invY) instanceof ItemUsable)
+				{
+					((ItemUsable)getItemInSlot(invX, invY)).use(this, Direction.NONE);
+				}
+			}
 		}
 		else
 		{
@@ -242,7 +250,7 @@ public class EntityPlayer extends EntityLiving
 				if(walkDelay == 0)
 				{
 					walkDelay = 15;
-					move(false, 1);
+					move(Direction.UP);
 				}
 				facingDir = Direction.UP;
 			}
@@ -251,7 +259,7 @@ public class EntityPlayer extends EntityLiving
 				if(walkDelay == 0)
 				{
 					walkDelay = 15;
-					move(false, -1);
+					move(Direction.DOWN);
 				}
 				facingDir = Direction.DOWN;
 			}
@@ -260,7 +268,7 @@ public class EntityPlayer extends EntityLiving
 				if(walkDelay == 0)
 				{
 					walkDelay = 15;
-					move(true, -1);
+					move(Direction.LEFT);
 				}
 				facingDir = Direction.LEFT;
 			}
@@ -269,14 +277,14 @@ public class EntityPlayer extends EntityLiving
 				if(walkDelay == 0)
 				{
 					walkDelay = 15;
-					move(true, 1);
+					move(Direction.RIGHT);
 				}
 				facingDir = Direction.RIGHT;
 			}
 			if(Game.keyPress[8])
 			{
 				if(heldItem == null) Game.message("You have no held item to use on yourself!");
-				else heldItem.use(this, this);
+				else heldItem.use(this, Direction.NONE);
 			}
 			else if(Game.keysDown[16])
 			{
@@ -284,15 +292,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					useDelay = 15;
 					if(heldItem == null) Game.message("You have no held item!");
-					else
-					{
-						Entity target = null;
-						if(facingDir == Direction.UP) target = map.tiles[xPos][yPos+1].getCurrentEntity();
-						else if(facingDir == Direction.DOWN) target = map.tiles[xPos][yPos-1].getCurrentEntity();
-						else if(facingDir == Direction.RIGHT) target = map.tiles[xPos+1][yPos].getCurrentEntity();
-						else if(facingDir == Direction.LEFT)target = map.tiles[xPos-1][yPos].getCurrentEntity();
-						heldItem.use(this, target);
-					}
+					else heldItem.use(this, facingDir);
 				}
 			}
 		}
@@ -364,7 +364,12 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(x < 4)
 			{
-				if(item == null || item instanceof ItemArmour)
+				if(item == null)
+				{
+					armour[x] = null;
+					return true;
+				}
+				if(item instanceof ItemArmour)
 				{
 					ItemArmour i = (ItemArmour)item;
 					if(x == 0 && i.getArmourType() != ArmourSlot.HEAD) return false;

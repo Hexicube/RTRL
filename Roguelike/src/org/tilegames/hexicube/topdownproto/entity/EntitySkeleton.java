@@ -15,6 +15,8 @@ public class EntitySkeleton extends EntityLiving
 	
 	private int movementTimer;
 	
+	private boolean chasing;
+	
 	public EntitySkeleton(int x, int y)
 	{
 		health = healthMax = 100;
@@ -49,7 +51,59 @@ public class EntitySkeleton extends EntityLiving
 			Game.addEntity(new EntityChest(xPos, yPos, items), map, true);
 			return;
 		}
-		//TODO: many things
+		if(movementTimer == 0)
+		{
+			movementTimer = 45;
+			int xDist = Game.player.xPos - xPos;
+			int yDist = Game.player.yPos - yPos;
+			int dist = Math.abs(xDist) + Math.abs(yDist);
+			if(dist < 6) chasing = true;
+			if(dist > 10) chasing = false;
+			if(chasing)
+			{
+				if(dist == 1)
+				{
+					Game.player.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
+				}
+				else
+				{
+					if(yDist == 0)
+					{
+						move((xDist>0)?Direction.RIGHT:Direction.LEFT);
+					}
+					else if(xDist == 0)
+					{
+						move((yDist>0)?Direction.UP:Direction.DOWN);
+					}
+					else if(Game.rand.nextBoolean())
+					{
+						int oldX = xPos;
+						move((xDist>0)?Direction.RIGHT:Direction.LEFT);
+						if(oldX == xPos) move((yDist>0)?Direction.UP:Direction.DOWN);
+					}
+					else
+					{
+						int oldY = yPos;
+						move((yDist>0)?Direction.UP:Direction.DOWN);
+						if(oldY == yPos) move((xDist>0)?Direction.RIGHT:Direction.LEFT);
+					}
+				}
+			}
+			else
+			{
+				int oldX = xPos, oldY = yPos;
+				for(int a = 0; a < 5; a++)
+				{
+					int rand = Game.rand.nextInt(4);
+					if(rand == 0) move(Direction.UP);
+					else if(rand == 1) move(Direction.DOWN);
+					else if(rand == 2) move(Direction.LEFT);
+					else if(rand == 3) move(Direction.RIGHT);
+					if(xPos != oldX || yPos != oldY) break;
+				}
+			}
+		}
+		else movementTimer--;
 	}
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)

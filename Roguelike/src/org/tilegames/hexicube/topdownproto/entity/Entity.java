@@ -10,14 +10,37 @@ public abstract class Entity
 	
 	public Map map;
 	
-	public Entity rider;
+	public Entity rider, riding;
 	
 	public abstract void tick();
 	public abstract void render(SpriteBatch batch, int camX, int camY);
 	public abstract void collide(Entity entity);
 	
-	public void move(boolean horizontal, int amount)
+	public void move(Direction dir)
 	{
+		boolean horizontal;
+		int amount;
+		if(dir == Direction.UP)
+		{
+			horizontal = false;
+			amount = 1;
+		}
+		else if(dir == Direction.DOWN)
+		{
+			horizontal = false;
+			amount = -1;
+		}
+		else if(dir == Direction.RIGHT)
+		{
+			horizontal = true;
+			amount = 1;
+		}
+		else if(dir == Direction.LEFT)
+		{
+			horizontal = true;
+			amount = -1;
+		}
+		else return;
 		int dirX = 0, dirY = 0;
 		if(horizontal) dirX = amount/Math.abs(amount);
 		else dirY = amount/Math.abs(amount);
