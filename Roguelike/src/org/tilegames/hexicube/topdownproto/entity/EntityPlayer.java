@@ -214,23 +214,27 @@ public class EntityPlayer extends EntityLiving
 			//4/5/6/8 -> left/down/right/up
 			//7 -> open door
 			//9 -> use held item
-			if(Game.keyPress[14])
+			if(Game.keysDown[14])
 			{
-				if(facingDir == Direction.DOWN)
+				if(useDelay == 0)
 				{
-					if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
-				}
-				if(facingDir == Direction.UP)
-				{
-					if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
-				}
-				if(facingDir == Direction.LEFT)
-				{
-					if(xPos > 0) map.tiles[xPos-1][yPos].use(this);
-				}
-				if(facingDir == Direction.RIGHT)
-				{
-					if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
+					useDelay = 15;
+					if(facingDir == Direction.DOWN)
+					{
+						if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
+					}
+					if(facingDir == Direction.UP)
+					{
+						if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
+					}
+					if(facingDir == Direction.LEFT)
+					{
+						if(xPos > 0) map.tiles[xPos-1][yPos].use(this);
+					}
+					if(facingDir == Direction.RIGHT)
+					{
+						if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
+					}
 				}
 			}
 			if(Game.keysDown[15])

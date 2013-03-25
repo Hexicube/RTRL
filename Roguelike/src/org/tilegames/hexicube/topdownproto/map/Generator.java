@@ -14,12 +14,35 @@ public class Generator
 	
 	private Random r = new Random();
 	
-	public int[][] gen(int w, int h)
+	public int[][] gen(int w, int h, int[] firstRoomPos, boolean needsLadder)
 	{
 		width = w;
 		height = h;
 		data = new int[width][height];
-		for(int a = 0; a < width*height*roomDensity; a++) genRoom(r.nextInt(width), r.nextInt(height), r.nextInt(11)+15, r.nextInt(11)+15);
+		int ladderRoom = needsLadder?1:-1;
+		for(int a = 0; a < width*height*roomDensity; a++)
+		{
+			if(firstRoomPos != null)
+			{
+				genRoom(firstRoomPos[0], firstRoomPos[1], r.nextInt(11)+15, r.nextInt(11)+15);
+				data[firstRoomPos[0]][firstRoomPos[1]] = 6;
+				firstRoomPos = null;
+			}
+			else
+			{
+				int xPos = r.nextInt(width);
+				int yPos = r.nextInt(height);
+				if(data[xPos][yPos] == 0)
+				{
+					genRoom(xPos, yPos, r.nextInt(11)+15, r.nextInt(11)+15);
+					if(a == ladderRoom)
+					{
+						if(data[xPos][yPos] == 2) data[xPos][yPos] = 7;
+						else ladderRoom++;
+					}
+				}
+			}
+		}
 		for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)

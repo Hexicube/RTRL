@@ -47,7 +47,6 @@ public class EntitySkeleton extends EntityLiving
 			Map map = this.map;
 			Game.removeEntity(this);
 			Game.addEntity(new EntityChest(xPos, yPos, items), map, true);
-			//TODO: die
 			return;
 		}
 		//TODO: many things

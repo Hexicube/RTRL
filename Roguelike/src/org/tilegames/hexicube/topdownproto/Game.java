@@ -71,11 +71,12 @@ public class Game implements ApplicationListener, InputProcessor
 		ItemWeaponBadSword.tex = loadImage("weapon", "badsword");
 		ItemNecklaceFeeding.tex = loadImage("necklace", "feeding");
 		
-		maps = new Map[1];
-		for(int a = 0; a < 1; a++)
+		maps = new Map[5];
+		int[] ladderPos = new int[2];
+		for(int a = 0; a < 5; a++)
 		{
 			Map m = new Map(120, 120);
-			int[][] data = new Generator().gen(120, 120);
+			int[][] data = new Generator().gen(120, 120, (a==0)?null:ladderPos, a!=4);
 			for(int x = 0; x < 120; x++)
 			{
 				for(int y = 0; y < 120; y++)
@@ -100,6 +101,16 @@ public class Game implements ApplicationListener, InputProcessor
 						m.tiles[x][y] = new TileTorchWall();
 						int strength = rand.nextInt(6)+2;
 						addLight(m, x, y, strength+3, strength, 0);
+					}
+					else if(data[x][y] == 6) //up ladder
+					{
+						m.tiles[x][y] = new TileLadder(false, a);
+					}
+					else if(data[x][y] == 7) //down ladder
+					{
+						m.tiles[x][y] = new TileLadder(true, a);
+						ladderPos[0] = x;
+						ladderPos[1] = y;
 					}
 					else m.tiles[x][y] = new TileWall();
 					m.tiles[x][y].map = m;
@@ -179,8 +190,8 @@ public class Game implements ApplicationListener, InputProcessor
 				{
 					if(addEntity(e, maps[0], true))
 					{
-						x = 9999;
-						y = 9999;
+						x = player.xPos+2;
+						y = player.yPos+2;
 					}
 				}
 			}
@@ -442,7 +453,6 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static boolean addEntity(Entity e, Map map, boolean needsTile)
 	{
-		removeEntity(e);
 		if(!needsTile)
 		{
 			map.entities.add(e);
@@ -451,6 +461,7 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		if(map.tiles[e.xPos][e.yPos].setCurrentEntity(e))
 		{
+			removeEntity(e);
 			map.entities.add(e);
 			e.map = map;
 			return true;
