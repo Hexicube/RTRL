@@ -42,18 +42,6 @@ public class ItemKey extends Item
 	@Override
 	public void tick(Entity entity, boolean equipped) {}
 	@Override
-	public int getItemID()
-	{
-		if(type == KeyType.RED) return 2;
-		if(type == KeyType.ORANGE) return 3;
-		if(type == KeyType.YELLOW) return 4;
-		if(type == KeyType.GREEN) return 5;
-		if(type == KeyType.BLUE) return 6;
-		if(type == KeyType.VIOLET) return 7;
-		if(type == KeyType.SKELETON) return 8;
-		return -1;
-	}
-	@Override
 	public int getMaxDurability()
 	{
 		return -1;

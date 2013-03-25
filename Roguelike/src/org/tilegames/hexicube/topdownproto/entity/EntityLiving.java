@@ -19,7 +19,7 @@ public abstract class EntityLiving extends Entity
 			health -= damage;
 			if(health < 0) health = 0;
 			alive = (health > 0);
-			Game.addEntity(new EntityDamageHealthDisplay(true, damage, xPos, yPos), map);
+			Game.addEntity(new EntityDamageHealthDisplay(true, damage, xPos, yPos), map, false);
 		}
 	}
 	
@@ -30,6 +30,6 @@ public abstract class EntityLiving extends Entity
 		if(max == 0) return;
 		if(max < amount) amount = max;
 		health += amount;
-		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map);
+		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);
 	}
 }

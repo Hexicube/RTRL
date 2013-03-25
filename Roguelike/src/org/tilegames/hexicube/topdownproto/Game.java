@@ -68,6 +68,9 @@ public class Game implements ApplicationListener, InputProcessor
 		invHighlightTex = loadImage("highlight");
 		invUsedBar = loadImage("usagebar");
 		
+		ItemWeaponBadSword.tex = loadImage("weapon", "badsword");
+		ItemNecklaceFeeding.tex = loadImage("necklace", "feeding");
+		
 		maps = new Map[1];
 		for(int a = 0; a < 1; a++)
 		{
@@ -90,11 +93,11 @@ public class Game implements ApplicationListener, InputProcessor
 						m.tiles[x][y] = new TileFloor();
 						ArrayList<Item> items = new ArrayList<Item>();
 						insertRandomLoot(items, a);
-						addEntity(new EntityChest(x, y, items), m);
+						addEntity(new EntityChest(x, y, items), m, true);
 					}
 					else if(data[x][y] == 5)
 					{
-						m.tiles[x][y] = new TileTorchWall(); //TODO: torch
+						m.tiles[x][y] = new TileTorchWall();
 						int strength = rand.nextInt(6)+2;
 						addLight(m, x, y, strength+3, strength, 0);
 					}
@@ -131,7 +134,7 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
-				addEntity(player, maps[0]);
+				addEntity(player, maps[0], true);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
 				{
@@ -150,7 +153,7 @@ public class Game implements ApplicationListener, InputProcessor
 					y2 = y+1;
 				}
 				ArrayList<Item> items = new ArrayList<Item>();
-				items.add(new ItemWeaponTestSword());
+				items.add(new ItemWeaponBadSword(ItemModifier.SHARPENED, 200));
 				items.add(new ItemNecklaceFeeding());
 				items.add(new ItemKey(KeyType.RED));
 				items.add(new ItemKey(KeyType.ORANGE));
@@ -159,8 +162,27 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemKey(KeyType.BLUE));
 				items.add(new ItemKey(KeyType.VIOLET));
 				items.add(new ItemKey(KeyType.SKELETON));
-				addEntity(new EntityChest(x2, y2, items), maps[0]);
+				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
+			}
+		}
+		
+		Entity e = new EntitySkeleton(0, 0);
+		
+		for(int x = player.xPos-2; x <= player.xPos+2; x++)
+		{
+			for(int y = player.yPos-2; y <= player.yPos+2; y++)
+			{
+				e.xPos = x;
+				e.yPos = y;
+				if(maps[0].tiles[x][y] instanceof TileFloor)
+				{
+					if(addEntity(e, maps[0], true))
+					{
+						x = 9999;
+						y = 9999;
+					}
+				}
 			}
 		}
 		
@@ -418,11 +440,17 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 	}
 	
-	public static boolean addEntity(Entity e, Map map)
+	public static boolean addEntity(Entity e, Map map, boolean needsTile)
 	{
+		if(!needsTile)
+		{
+			map.entities.add(e);
+			e.map = map;
+			return true;
+		}
+		removeEntity(e);
 		if(map.tiles[e.xPos][e.yPos].setCurrentEntity(e))
 		{
-			removeEntity(e);
 			map.entities.add(e);
 			e.map = map;
 			return true;
@@ -435,7 +463,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(e.map != null)
 		{
 			e.map.entities.remove(e);
-			e.map.tiles[e.xPos][e.yPos].setCurrentEntity(null);
+			if(e.map.tiles[e.xPos][e.yPos].getCurrentEntity() == e) e.map.tiles[e.xPos][e.yPos].setCurrentEntity(null);
 			e.map = null;
 		}
 	}
@@ -575,7 +603,7 @@ public class Game implements ApplicationListener, InputProcessor
 		return count;
 	}
 	
-	private static void insertRandomLoot(ArrayList<Item> list, int lootLevel)
+	public static void insertRandomLoot(ArrayList<Item> list, int lootLevel)
 	{
 		int r = rand.nextInt(13);
 		KeyType type;
@@ -588,5 +616,15 @@ public class Game implements ApplicationListener, InputProcessor
 		else type = KeyType.SKELETON;
 		list.add(new ItemKey(type));
 		//TODO: make this actually do something
+	}
+	
+	public static void insertRandomLoot(ArrayList<Item> list, EntityLiving source)
+	{
+		if(source instanceof EntitySkeleton)
+		{
+			if(rand.nextInt(150) == 27) list.add(new ItemKey(KeyType.SKELETON));
+			//TODO: add bones, maybe rare bonesword
+		}
+		//TODO: make this include loot for harder things
 	}
 }

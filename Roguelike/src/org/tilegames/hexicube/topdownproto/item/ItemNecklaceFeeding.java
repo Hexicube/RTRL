@@ -1,6 +1,5 @@
 package org.tilegames.hexicube.topdownproto.item;
 
-import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
@@ -9,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemNecklaceFeeding extends ItemAccessory
 {
+	private static boolean nameDiscovered = false;
+	
 	private int durability;
 	
-	private static Texture tex = Game.loadImage("necklace", "feeding");
+	public static Texture tex;
 	
 	public ItemNecklaceFeeding()
 	{
@@ -25,18 +26,15 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	@Override
 	public String getName()
 	{
+		if(!nameDiscovered) return "Unknown necklace";
 		return "Necklace of Feeding";
-	}
-	@Override
-	public int getItemID()
-	{
-		return 1;
 	}
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
 		if(equipped && entity instanceof EntityPlayer)
 		{
+			nameDiscovered = true;
 			((EntityPlayer)entity).hungerLevel++;
 			durability--;
 		}

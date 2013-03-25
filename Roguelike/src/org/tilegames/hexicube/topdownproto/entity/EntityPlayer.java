@@ -174,7 +174,7 @@ public class EntityPlayer extends EntityLiving
 						else if(e == null)
 						{
 							e = new EntityChest(targetX, targetY, new ArrayList<Item>());
-							if(Game.addEntity(e, map))
+							if(Game.addEntity(e, map, true))
 							{
 								((EntityChest)e).contents.add(i);
 								setItemInSlot(invX, invY, null);
@@ -271,11 +271,25 @@ public class EntityPlayer extends EntityLiving
 			}
 			if(Game.keyPress[8])
 			{
-				Game.message("TODO: Use held item on self.");
+				if(heldItem == null) Game.message("You have no held item to use on yourself!");
+				else heldItem.use(this, this);
 			}
-			else if(Game.keyPress[16])
+			else if(Game.keysDown[16])
 			{
-				Game.message("TODO: Use held item at target.");
+				if(useDelay == 0)
+				{
+					useDelay = 15;
+					if(heldItem == null) Game.message("You have no held item!");
+					else
+					{
+						Entity target = null;
+						if(facingDir == Direction.UP) target = map.tiles[xPos][yPos+1].getCurrentEntity();
+						else if(facingDir == Direction.DOWN) target = map.tiles[xPos][yPos-1].getCurrentEntity();
+						else if(facingDir == Direction.RIGHT) target = map.tiles[xPos+1][yPos].getCurrentEntity();
+						else if(facingDir == Direction.LEFT)target = map.tiles[xPos-1][yPos].getCurrentEntity();
+						heldItem.use(this, target);
+					}
+				}
 			}
 		}
 		if(Game.keyPress[7])
@@ -289,6 +303,7 @@ public class EntityPlayer extends EntityLiving
 			}
 		}
 		if(walkDelay > 0) walkDelay--;
+		if(useDelay > 0) useDelay--;
 		Game.camX = xPos;
 		Game.camY = yPos;
 	}
