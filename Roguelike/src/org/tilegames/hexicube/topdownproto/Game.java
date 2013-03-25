@@ -153,7 +153,7 @@ public class Game implements ApplicationListener, InputProcessor
 					y2 = y+1;
 				}
 				ArrayList<Item> items = new ArrayList<Item>();
-				items.add(new ItemWeaponBadSword(ItemModifier.SHARPENED, 200));
+				items.add(new ItemWeaponBadSword());
 				items.add(new ItemNecklaceFeeding());
 				items.add(new ItemKey(KeyType.RED));
 				items.add(new ItemKey(KeyType.ORANGE));
@@ -442,13 +442,13 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static boolean addEntity(Entity e, Map map, boolean needsTile)
 	{
+		removeEntity(e);
 		if(!needsTile)
 		{
 			map.entities.add(e);
 			e.map = map;
 			return true;
 		}
-		removeEntity(e);
 		if(map.tiles[e.xPos][e.yPos].setCurrentEntity(e))
 		{
 			map.entities.add(e);

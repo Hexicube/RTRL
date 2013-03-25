@@ -51,7 +51,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 		if(!modDiscovered) modDiscovered = true;
 		EntityLiving e = (EntityLiving)target;
 		if(!e.alive) return false;
-		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(6, 1):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.ACID);
+		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(6, 1):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
 		durability--;
 		return true;
 	}

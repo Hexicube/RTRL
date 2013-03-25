@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.map.Map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -41,9 +42,10 @@ public class EntitySkeleton extends EntityLiving
 	{
 		if(!alive)
 		{
-			Game.removeEntity(this);
 			ArrayList<Item> items = new ArrayList<Item>();
 			Game.insertRandomLoot(items, this);
+			Map map = this.map;
+			Game.removeEntity(this);
 			Game.addEntity(new EntityChest(xPos, yPos, items), map, true);
 			//TODO: die
 			return;
