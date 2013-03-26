@@ -19,6 +19,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.InputProcessor;
 
 public class Game implements ApplicationListener, InputProcessor
@@ -160,7 +161,7 @@ public class Game implements ApplicationListener, InputProcessor
 		keysDown = new boolean[512];
 		keyPress = new boolean[512];
 		
-		time = System.nanoTime();
+		time = TimeUtils.nanoTime();
 		ticks = 0;
 		frameRate = 0;
 		
@@ -257,11 +258,11 @@ public class Game implements ApplicationListener, InputProcessor
 			tick();
 		}
 		ticks++;
-		if(System.nanoTime() - time >= 1000000000)
+		if(TimeUtils.nanoTime() - time >= 1000000000)
 		{
 			frameRate = ticks;
 			ticks = 0;
-			time = System.nanoTime();
+			time = TimeUtils.nanoTime();
 		}
 		spriteBatch.begin();
 		Gdx.graphics.getGL10().glClearColor(0, 0, 0, 1);
