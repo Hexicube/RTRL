@@ -70,9 +70,9 @@ public class ItemWeaponBadSword extends ItemWeapon
 	public String getWeaponDamageRange()
 	{
 		if(!nameDiscovered) return "???";
-		if(!modDiscovered) return "1d4";
-		if(modifier == ItemModifier.SHARPENED) return "2d4";
-		if(modifier == ItemModifier.SHODDY) return "1d4-1";
+		if(!modDiscovered) return "1d4 SHARP";
+		if(modifier == ItemModifier.SHARPENED) return "2d4 SHARP";
+		if(modifier == ItemModifier.SHODDY) return "1d4-1 SHARP";
 		return "1d4";
 	}
 	@Override
@@ -127,6 +127,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 				Game.message("The Badsword is cursed, you can't remove it!");
 				modDiscovered = true;
 			}
+			if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true; 
 		}
 	}
 	@Override
@@ -139,5 +140,11 @@ public class ItemWeaponBadSword extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		batch.draw(tex, x, y);
+	}
+
+	@Override
+	public int getUseCooldown()
+	{
+		return 40;
 	}
 }

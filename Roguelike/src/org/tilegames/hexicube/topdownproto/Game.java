@@ -73,7 +73,7 @@ public class Game implements ApplicationListener, InputProcessor
 		invHighlightTex = loadImage("highlight");
 		invUsedBar = loadImage("usagebar");
 		
-		Texture[] images = new Texture[3];
+		Texture[] images = new Texture[4];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("necklace", "necklace"+(a+1));
@@ -130,11 +130,11 @@ public class Game implements ApplicationListener, InputProcessor
 					}
 					else if(data[x][y] == 6) //up ladder
 					{
-						m.tiles[x][y] = new TileLadder(false, a);
+						m.tiles[x][y] = new TileStair(false, a);
 					}
 					else if(data[x][y] == 7) //down ladder
 					{
-						m.tiles[x][y] = new TileLadder(true, a);
+						m.tiles[x][y] = new TileStair(true, a);
 						ladderPos[0] = x;
 						ladderPos[1] = y;
 					}
@@ -171,11 +171,12 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
-				player.heldItem = new ItemWeaponBadSword();
+				player.heldItem = new ItemWeaponBadSword(ItemModifier.SHARPENED, 200);
 				player.armour[0] = new ItemArmourWoolCap();
 				player.armour[1] = new ItemArmourJumper();
 				player.armour[2] = new ItemArmourJeans();
 				player.armour[3] = new ItemArmourTrainers();
+				player.necklace = new ItemNecklaceScarf();
 				addEntity(player, maps[0], true);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
@@ -199,12 +200,17 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
+				items.add(new ItemWeaponBone(50));
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
 			}
 		}
 		
-		Entity e = new EntitySkeleton(0, 0);
+		Entity e = new EntitySkeleton(0, 0); //TODO: make me spawn randomly in levels 0-5
+		//TODO: spawn slimes randomly in levels 4-12
+		//TODO: spawn rats in levels 0-3
+		//TODO: spawn plain snakes in levels 2-8
+		//TODO: spawn venemous snakes in level 14 (lowest level, these things should be deadly mostly)
 		
 		for(int x = player.xPos-5; x <= player.xPos+5; x++)
 		{

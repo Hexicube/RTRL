@@ -15,7 +15,7 @@ public class EntityPlayer extends EntityLiving
 	
 	private Direction facingDir = Direction.UP;
 	
-	private int walkDelay, useDelay;
+	private int walkDelay;
 	
 	public int invX, invY, invSelectX, invSelectY;
 	
@@ -290,9 +290,16 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(useDelay == 0)
 				{
-					useDelay = 15;
-					if(heldItem == null) Game.message("You have no held item!");
-					else heldItem.use(this, facingDir);
+					if(heldItem == null)
+					{
+						useDelay = 15;
+						Game.message("You have no held item!");
+					}
+					else
+					{
+						useDelay = heldItem.getUseCooldown();
+						heldItem.use(this, facingDir);
+					}
 				}
 			}
 		}

@@ -6,12 +6,12 @@ import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TileLadder extends Tile
+public class TileStair extends Tile
 {
 	private boolean down;
 	private int floor;
 	
-	public TileLadder(boolean goesDown, int currentFloor)
+	public TileStair(boolean goesDown, int currentFloor)
 	{
 		down = goesDown;
 		floor = currentFloor;
@@ -20,7 +20,7 @@ public class TileLadder extends Tile
 	@Override
 	public boolean onWalkAttempt(Entity entity)
 	{
-		Game.message("Use the ladder to go "+(down?"down":"up")+" a level!");
+		Game.message("Use the stairs to go "+(down?"down":"up")+" a level!");
 		return false;
 	}
 

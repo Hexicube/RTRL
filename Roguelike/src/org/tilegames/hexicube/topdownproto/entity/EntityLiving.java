@@ -6,6 +6,7 @@ public abstract class EntityLiving extends Entity
 {
 	public long health, healthMax;
 	public boolean alive;
+	public int useDelay;
 	
 	public abstract long damageAfterResistance(long damage, DamageType type);
 	
