@@ -57,3 +57,6 @@ pip-log.txt
 
 #tmp files
 *~
+
+#crash logs
+hs_err_*.log

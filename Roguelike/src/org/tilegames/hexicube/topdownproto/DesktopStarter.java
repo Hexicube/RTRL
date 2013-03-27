@@ -8,7 +8,7 @@ public class DesktopStarter {
 	
 	public static void main(String[] args) {
 		config = new LwjglApplicationConfiguration();
-		config.title = "title here";
+		config.title = "Game loading...";
 		config.width = 800;
 		config.height = 600;
 		config.useGL20 = false;
