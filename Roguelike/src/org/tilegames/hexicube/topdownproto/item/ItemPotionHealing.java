@@ -5,6 +5,7 @@ import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
+import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +27,7 @@ public class ItemPotionHealing extends ItemUsable
 			if(source instanceof EntityLiving)
 			{
 				((EntityLiving)source).heal(25);
-				if(!nameDiscovered)
+				if(source instanceof EntityPlayer && !nameDiscovered)
 				{
 					nameDiscovered = true;
 					Game.message("Discovered potion type: Healing");
@@ -96,10 +97,5 @@ public class ItemPotionHealing extends ItemUsable
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		batch.draw(tex, x, y);
-	}
-	@Override
-	public int getUseCooldown()
-	{
-		return 30;
 	}
 }

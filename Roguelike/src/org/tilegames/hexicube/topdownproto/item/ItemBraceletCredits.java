@@ -8,13 +8,32 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemBraceletCredits extends ItemAccessory
 {
-	private static final String[] credits = new String[]{
-		
+	private static final String[] credits = new String[]
+	{
+		"--------CREDITS--------",
+		"---Concept: Hexicube---",
+		"---Artwork: allyally---",
+		"--Artwork: Daft Freak--",
+		"-Programming: Hexicube-",
+		"-Inspiration: geckojsc-",
+		"-----------------------",
+		"---SPECIAL THANKS TO---",
+		"-allyally---Daft Freak-",
+		"-----------------------",
+		"-THANKS FOR LISTENING!-"
 	};
 	
-	private int timer1, timer2, creditsPos;
+	private int timer1, timer2, creditsPos, durability;
 	
 	public static Texture tex;
+	
+	public ItemBraceletCredits()
+	{
+		durability = 1;
+		timer1 = 0;
+		timer2 = 0;
+		creditsPos = -1;
+	}
 	
 	@Override
 	public AccessorySlot getAccessoryType()
@@ -39,30 +58,26 @@ public class ItemBraceletCredits extends ItemAccessory
 		{
 			timer2 = 0;
 			timer1++;
-			if(timer1 == 60) Game.message("--CREDITS--");
-			else if(timer1 == 120) Game.message("Concept: Hexicube");
-			else if(timer1 == 180) Game.message("Artwork: Allyally");
-			else if(timer1 == 240) Game.message("Programming: Hexicube");
-			else if(timer1 == 300) Game.message("Inspiration: geckojsc's roguelike");
-			else if(timer1 == 360) Game.message("");
-			else if(timer1 == 420) Game.message("Special thanks to:");
-			else if(timer1 == 480) Game.message("geckojsc - For being an inspiration source");
-			else if(timer1 == 540) Game.message("allyally - For making awesome artwork when I wanted it");
-			else if(timer1 == 600) Game.message("brawler - For keeping my entertainement levels nominal");
-			else if(timer1 == 660) Game.message("Gameinsky - For being (occasionlly) humorous on an IRC chat I hang out on");
-			else if(timer1 == 720) Game.message("The guys who made libGDX - For making this so much easier");
-			else if(timer1 == 780) Game.message("");
-			else if(timer1 == 840) Game.message("----END----");
-			//TODO: credits
+			if(timer1 == 120)
+			{
+				creditsPos++;
+				if(creditsPos < credits.length) Game.message(credits[creditsPos]);
+				else
+				{
+					durability = 0;
+					Game.message("The Memory Bracelet crumbles into pieces...");
+				}
+			}
 		}
 		else
 		{
 			timer1 = 0;
+			creditsPos = 0;
 			timer2++;
 			if(timer2 == 3600)
 			{
 				timer2 = 0;
-				Game.message("You hear your Memory Bracelet talking to itself.");
+				Game.message("You hear your Memory Bracelet talking to itself...");
 			}
 		}
 	}
@@ -74,7 +89,7 @@ public class ItemBraceletCredits extends ItemAccessory
 	@Override
 	public int getCurrentDurability()
 	{
-		return (creditsPos==credits.length)?0:1;
+		return durability;
 	}
 	@Override
 	public boolean canMove()

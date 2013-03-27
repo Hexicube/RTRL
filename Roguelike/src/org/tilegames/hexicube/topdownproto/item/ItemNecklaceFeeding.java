@@ -1,5 +1,6 @@
 package org.tilegames.hexicube.topdownproto.item;
 
+import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
@@ -16,7 +17,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	
 	public ItemNecklaceFeeding()
 	{
-		durability = getMaxDurability();
+		durability = Game.rand.nextInt(27001)+27001;
 	}
 	@Override
 	public ItemModifier getModifier()
@@ -34,6 +35,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	{
 		if(equipped && entity instanceof EntityPlayer)
 		{
+			if(!nameDiscovered) Game.message("Discovered necklace: Feeding");
 			nameDiscovered = true;
 			((EntityPlayer)entity).hungerLevel++;
 			durability--;

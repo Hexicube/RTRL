@@ -19,13 +19,13 @@ public class ItemWeaponBone extends ItemWeapon
 	public ItemWeaponBone(int dur)
 	{
 		durability = dur;
-		spriteID = Game.rand.nextInt(3); //TODO: change to 4 when 4th sprite done
+		spriteID = Game.rand.nextInt(4);
 	}
 	
 	@Override
 	public String getWeaponDamageRange()
 	{
-		return "1d4 BLUNT";
+		return "1d4";
 	}
 	@Override
 	public boolean use(Entity source, Direction dir)
@@ -66,7 +66,7 @@ public class ItemWeaponBone extends ItemWeapon
 	@Override
 	public int getMaxDurability()
 	{
-		return 200;
+		return 7200;
 	}
 	@Override
 	public int getCurrentDurability()
@@ -82,10 +82,5 @@ public class ItemWeaponBone extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		batch.draw(tex, x, y, 32, 32, spriteID*32, 0, 32, 32, false, false);
-	}
-	@Override
-	public int getUseCooldown()
-	{
-		return 60;
 	}
 }

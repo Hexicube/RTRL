@@ -15,6 +15,7 @@ public abstract class Entity
 	public abstract void tick();
 	public abstract void render(SpriteBatch batch, int camX, int camY);
 	public abstract void collide(Entity entity);
+	public abstract boolean visible(Entity looker);
 	
 	public void move(Direction dir)
 	{

@@ -15,7 +15,7 @@ public class EntityPlayer extends EntityLiving
 	
 	private Direction facingDir = Direction.UP;
 	
-	private int walkDelay;
+	private int walkDelay, useDelay;
 	
 	public int invX, invY, invSelectX, invSelectY;
 	
@@ -26,9 +26,7 @@ public class EntityPlayer extends EntityLiving
 	
 	public boolean viewingInventory;
 	
-	public int hungerLevel;
-	
-	public ArrayList<Effect> effects;
+	public int hungerLevel, mana, manaMax;
 	
 	public EntityPlayer(int x, int y)
 	{
@@ -39,6 +37,8 @@ public class EntityPlayer extends EntityLiving
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
 		hungerLevel = 25200;
+		mana = 0;
+		manaMax = 10;
 	}
 	
 	@Override
@@ -290,16 +290,9 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(useDelay == 0)
 				{
-					if(heldItem == null)
-					{
-						useDelay = 15;
-						Game.message("You have no held item!");
-					}
-					else
-					{
-						useDelay = heldItem.getUseCooldown();
-						heldItem.use(this, facingDir);
-					}
+					useDelay = 15;
+					if(heldItem == null) Game.message("You have no held item!");
+					else heldItem.use(this, facingDir);
 				}
 			}
 		}

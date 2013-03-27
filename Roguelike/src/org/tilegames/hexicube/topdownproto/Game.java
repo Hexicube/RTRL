@@ -26,8 +26,8 @@ public class Game implements ApplicationListener, InputProcessor
 {
 	public static final int xOffset = 384, yOffset = 284;
 	
-	public static final String gameName = "RTRL";
-	public static final String versionText = "Prototype";
+	public static final String gameName = "Numpad Explorer";
+	public static final String versionText = "Alpha 1";
 	
 	private static SpriteBatch spriteBatch;
 	
@@ -48,7 +48,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex, invHighlightTex, invUsedBar;
+	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarsTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -73,14 +73,17 @@ public class Game implements ApplicationListener, InputProcessor
 		invTex = loadImage("inventory");
 		invHighlightTex = loadImage("highlight");
 		invUsedBar = loadImage("usagebar");
+		statusTex = loadImage("status");
+		statusBarsTex = loadImage("statusbars");
 		
-		Texture[] images = new Texture[4];
+		Texture[] images = new Texture[3];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("necklace", "necklace"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemNecklaceFeeding.tex = images[0];
+		ItemNecklaceStrangle.tex = images[1];
 		
 		images = new Texture[2];
 		for(int a = 0; a < images.length; a++)
@@ -97,6 +100,14 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		images = shuffleTex(images);
 		ItemPotionHealing.tex = images[0];
+		
+		images = new Texture[0];
+		for(int a = 0; a < images.length; a++)
+		{
+			images[a] = loadImage("item", "bracelet"+(a+1));
+		}
+		images = shuffleTex(images);
+		ItemBraceletCredits.tex = images[0];
 		
 		maps = new Map[5];
 		int[] ladderPos = new int[2];
@@ -129,13 +140,13 @@ public class Game implements ApplicationListener, InputProcessor
 						int strength = rand.nextInt(6)+2;
 						addLight(m, x, y, strength+3, strength, 0);
 					}
-					else if(data[x][y] == 6) //up ladder
+					else if(data[x][y] == 6)
 					{
-						m.tiles[x][y] = new TileStair(false, a);
+						m.tiles[x][y] = new TileLadder(false, a);
 					}
-					else if(data[x][y] == 7) //down ladder
+					else if(data[x][y] == 7)
 					{
-						m.tiles[x][y] = new TileStair(true, a);
+						m.tiles[x][y] = new TileLadder(true, a);
 						ladderPos[0] = x;
 						ladderPos[1] = y;
 					}
@@ -172,12 +183,16 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
-				player.heldItem = new ItemWeaponBadSword(ItemModifier.SHARPENED, 200);
-				player.armour[0] = new ItemArmourWoolCap();
-				player.armour[1] = new ItemArmourJumper();
+				player.heldItem = new ItemWeaponBadSword();
+				if(rand.nextBoolean())
+				{
+					player.armour[0] = new ItemArmourWoolCap();
+					player.armour[1] = new ItemArmourJumper();
+					player.necklace = new ItemNecklaceScarf();
+				}
+				else player.armour[1] = new ItemArmourHoodie();
 				player.armour[2] = new ItemArmourJeans();
 				player.armour[3] = new ItemArmourTrainers();
-				player.necklace = new ItemNecklaceScarf();
 				addEntity(player, maps[0], true);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
@@ -198,19 +213,19 @@ public class Game implements ApplicationListener, InputProcessor
 				}
 				ArrayList<Item> items = new ArrayList<Item>();
 				items.add(new ItemNecklaceFeeding());
+				items.add(new ItemNecklaceStrangle());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
-				items.add(new ItemWeaponBone(50));
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
 			}
 		}
 		
-		Entity e = new EntitySkeleton(0, 0); //TODO: make me spawn randomly in levels 0-5
-		//TODO: spawn slimes randomly in levels 4-12
-		//TODO: spawn rats in levels 0-3
-		//TODO: spawn plain snakes in levels 2-8
+		Entity e = new EntitySkeleton(0, 0); //TODO: make me spawn randomly in levels 0-4
+		//TODO: spawn slimes randomly in levels 8-14
+		//TODO: spawn rats in levels 0-5
+		//TODO: spawn plain snakes in levels 2-10
 		//TODO: spawn venemous snakes in level 14 (lowest level, these things should be deadly mostly)
 		
 		for(int x = player.xPos-5; x <= player.xPos+5; x++)
@@ -325,7 +340,7 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
-		FontHolder.render(spriteBatch, tickRateText, 796-FontHolder.getTextWidth(tickRateText, true), 20, true);
+		FontHolder.render(spriteBatch, tickRateText, 796-FontHolder.getTextWidth(tickRateText, true), 594, true);
 		
 		size = messages.size();
 		for(int a = 0; a < size; a++)
@@ -344,6 +359,14 @@ public class Game implements ApplicationListener, InputProcessor
 				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, 606-(size-a)*10, false);
 			}
 		}
+		spriteBatch.setColor(1, 1, 1, 1);
+		spriteBatch.draw(statusTex, 672, 0);
+		int healthAmount = (int)Math.ceil((double)player.health * 100 / (double)player.healthMax);
+		spriteBatch.draw(statusBarsTex, 695, 31, healthAmount, 8, healthAmount-1, 0, 1, 1, false, false);
+		int manaAmount = (int)Math.ceil((double)player.mana * 100 / (double)player.manaMax);
+		spriteBatch.draw(statusBarsTex, 695, 18, manaAmount, 8, manaAmount-1, 1, 1, 1, false, false);
+		int foodAmount = (int)Math.ceil((double)player.hungerLevel / 252D);
+		spriteBatch.draw(statusBarsTex, 695, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
 		
 		spriteBatch.end();
 	}

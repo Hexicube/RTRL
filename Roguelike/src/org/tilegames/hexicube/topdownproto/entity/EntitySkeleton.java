@@ -6,11 +6,12 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.map.Map;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntitySkeleton extends EntityLiving
 {
-	//private static Texture tex = Game.loadImage("skeleton");
+	//private static Texture tex = Game.loadImage("skeleton"); //TODO: make this image
 	
 	private int movementTimer;
 	
@@ -56,11 +57,17 @@ public class EntitySkeleton extends EntityLiving
 			int xDist = Game.player.xPos - xPos;
 			int yDist = Game.player.yPos - yPos;
 			int dist = Math.abs(xDist) + Math.abs(yDist);
+			if(!Game.player.visible(this)) dist = 999999;
+			if(Game.player.map != map) dist = 999999;
 			if(dist < 6) chasing = true;
 			if(dist > 10) chasing = false;
 			if(chasing)
 			{
-				if(dist > 1)
+				if(dist == 1)
+				{
+					Game.player.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
+				}
+				else
 				{
 					if(yDist == 0)
 					{
@@ -97,14 +104,8 @@ public class EntitySkeleton extends EntityLiving
 					if(xPos != oldX || yPos != oldY) break;
 				}
 			}
-			if(dist == 1)
-			{
-				Game.player.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
-				useDelay = 60;
-			}
 		}
 		else movementTimer--;
-		if(useDelay > 0) useDelay--;
 	}
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)

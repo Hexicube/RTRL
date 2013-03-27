@@ -42,4 +42,9 @@ public class EntityDamageHealthDisplay extends Entity
 	}
 	@Override
 	public void collide(Entity entity){}
+	@Override
+	public boolean visible(Entity looker)
+	{
+		return false;
+	}
 }
