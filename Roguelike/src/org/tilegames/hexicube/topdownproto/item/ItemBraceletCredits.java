@@ -10,17 +10,20 @@ public class ItemBraceletCredits extends ItemAccessory
 {
 	private static final String[] credits = new String[]
 	{
-		"--------CREDITS--------",
-		"---Concept: Hexicube---",
-		"---Artwork: allyally---",
-		"--Artwork: Daft Freak--",
-		"-Programming: Hexicube-",
-		"-Inspiration: geckojsc-",
-		"-----------------------",
-		"---SPECIAL THANKS TO---",
-		"-allyally---Daft Freak-",
-		"-----------------------",
-		"-THANKS FOR LISTENING!-"
+		"#######################",
+		"#-------CREDITS-------#",
+		"#Concept: Hexicube    #",
+		"#Artwork: allyally    #",
+		"#Artwork: Daft Freak  #",
+		"#Programming: Hexicube#",
+		"#HTML port: Daft Freak#",
+		"#Inspiration: geckojsc#",
+		"#---------------------#",
+		"#--SPECIAL THANKS TO--#",
+		"#allyally---Daft Freak#",
+		"#---------------------#",
+		"#THANKS FOR LISTENING!#",
+		"#######################"
 	};
 	
 	private int timer1, timer2, creditsPos, durability;
@@ -32,7 +35,7 @@ public class ItemBraceletCredits extends ItemAccessory
 		durability = 1;
 		timer1 = 0;
 		timer2 = 0;
-		creditsPos = -1;
+		creditsPos = 0;
 	}
 	
 	@Override
@@ -60,9 +63,9 @@ public class ItemBraceletCredits extends ItemAccessory
 			timer1++;
 			if(timer1 == 120)
 			{
-				creditsPos++;
 				if(creditsPos < credits.length) Game.message(credits[creditsPos]);
-				else
+				creditsPos++;
+				if(creditsPos == credits.length)
 				{
 					durability = 0;
 					Game.message("The Memory Bracelet crumbles into pieces...");
@@ -98,8 +101,8 @@ public class ItemBraceletCredits extends ItemAccessory
 	}
 
 	@Override
-	public void render(SpriteBatch batch, int x, int y)
+	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y);
+		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
 	}
 }

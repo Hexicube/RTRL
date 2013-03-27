@@ -307,7 +307,7 @@ public class Game implements ApplicationListener, InputProcessor
 					Item i = player.getItemInSlot(x, y);
 					if(i != null)
 					{
-						i.render(spriteBatch, 204+x*40, 464-y*40);
+						i.render(spriteBatch, 204+x*40, 464-y*40, y==0);
 						if(i.getMaxDurability() > 0)
 						{
 							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();

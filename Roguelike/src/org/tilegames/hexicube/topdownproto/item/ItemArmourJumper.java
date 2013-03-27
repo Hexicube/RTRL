@@ -51,8 +51,8 @@ public class ItemArmourJumper extends ItemArmour
 		return true;
 	}
 	@Override
-	public void render(SpriteBatch batch, int x, int y)
+	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y);
+		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
 	}
 }

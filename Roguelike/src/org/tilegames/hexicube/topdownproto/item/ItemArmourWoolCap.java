@@ -51,7 +51,7 @@ public class ItemArmourWoolCap extends ItemArmour
 		return true;
 	}
 	@Override
-	public void render(SpriteBatch batch, int x, int y)
+	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y);
 	}

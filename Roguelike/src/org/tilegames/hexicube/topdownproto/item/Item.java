@@ -15,5 +15,5 @@ public abstract class Item
 	public abstract int getMaxDurability();
 	public abstract int getCurrentDurability();
 	public abstract boolean canMove();
-	public abstract void render(SpriteBatch batch, int x, int y);
+	public abstract void render(SpriteBatch batch, int x, int y, boolean equipped);
 }

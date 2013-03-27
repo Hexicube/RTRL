@@ -137,7 +137,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 	}
 
 	@Override
-	public void render(SpriteBatch batch, int x, int y)
+	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y);
 	}

@@ -57,7 +57,7 @@ public class ItemKey extends Item
 		return true;
 	}
 	@Override
-	public void render(SpriteBatch batch, int x, int y)
+	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		if(type == KeyType.SKELETON)
 		{
