@@ -65,16 +65,17 @@ public class ItemWeaponBadSword extends ItemWeapon
 		if(!e.alive) return false;
 		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(2, 4):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
 		durability--;
+		if(durability == 0) Game.message("Your "+getName()+" breaks.");
 		return true;
 	}
 	@Override
 	public String getWeaponDamageRange()
 	{
 		if(!nameDiscovered) return "???";
-		if(!modDiscovered) return "1d4";
-		if(modifier == ItemModifier.SHARPENED) return "2d4";
-		if(modifier == ItemModifier.SHODDY) return "1d4-1";
-		return "1d4";
+		if(!modDiscovered) return "1d4 SHARP";
+		if(modifier == ItemModifier.SHARPENED) return "2d4 SHARP";
+		if(modifier == ItemModifier.SHODDY) return "1d4-1 SHARP";
+		return "1d4 SHARP";
 	}
 	@Override
 	public int getMaxDurability()
@@ -109,11 +110,14 @@ public class ItemWeaponBadSword extends ItemWeapon
 		}
 		if(!modDiscovered) return "Unusual Badsword";
 		if(modifier == null || modifier == ItemModifier.NONE) return "Badsword";
-		if(modifier == ItemModifier.CURSED) return "Cursed Badsword";
-		if(modifier == ItemModifier.SHARPENED) return "Sharpened Badsword";
-		if(modifier == ItemModifier.SHODDY) return "Really Badsword";
-		System.out.println("Removed bad modifier on badsword: "+modifier);
-		modifier = ItemModifier.NONE;
+		else if(modifier == ItemModifier.CURSED) return "Cursed Badsword";
+		else if(modifier == ItemModifier.SHARPENED) return "Sharpened Badsword";
+		else if(modifier == ItemModifier.SHODDY) return "Really Badsword";
+		else
+		{
+			System.out.println("Removed bad modifier on badsword: "+modifier);
+			modifier = ItemModifier.NONE;
+		}
 		return "Badsword";
 	}
 	@Override
@@ -123,10 +127,14 @@ public class ItemWeaponBadSword extends ItemWeapon
 		{
 			if(!nameDiscovered) Game.message("Discovered item: Badsword");
 			nameDiscovered = true;
-			if(modifier == ItemModifier.CURSED && !modDiscovered)
+			if(!modDiscovered)
 			{
-				Game.message("The Badsword is cursed, you can't remove it!");
-				modDiscovered = true;
+				if(modifier == ItemModifier.CURSED)
+				{
+					Game.message("The Badsword is cursed, you can't remove it!");
+					modDiscovered = true;
+				}
+				if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true;
 			}
 		}
 	}
@@ -140,5 +148,11 @@ public class ItemWeaponBadSword extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y);
+	}
+	
+	@Override
+	public int useDelay()
+	{
+		return 45;
 	}
 }

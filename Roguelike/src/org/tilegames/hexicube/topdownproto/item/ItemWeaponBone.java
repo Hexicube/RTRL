@@ -19,13 +19,13 @@ public class ItemWeaponBone extends ItemWeapon
 	public ItemWeaponBone(int dur)
 	{
 		durability = dur;
-		spriteID = Game.rand.nextInt(4);
+		spriteID = Game.rand.nextInt(3);
 	}
 	
 	@Override
 	public String getWeaponDamageRange()
 	{
-		return "1d4";
+		return "1d4 BLUNT";
 	}
 	@Override
 	public boolean use(Entity source, Direction dir)
@@ -44,6 +44,7 @@ public class ItemWeaponBone extends ItemWeapon
 		if(!e.alive) return false;
 		e.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
 		durability--;
+		if(durability == 0) Game.message("Your Bone Club breaks.");
 		return true;
 	}
 	@Override
@@ -59,14 +60,14 @@ public class ItemWeaponBone extends ItemWeapon
 	@Override
 	public String getName()
 	{
-		return "Bone";
+		return "Bone Club";
 	}
 	@Override
 	public void tick(Entity entity, boolean equipped) {}
 	@Override
 	public int getMaxDurability()
 	{
-		return 7200;
+		return 200;
 	}
 	@Override
 	public int getCurrentDurability()
@@ -82,5 +83,10 @@ public class ItemWeaponBone extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y, 32, 32, spriteID*32, 0, 32, 32, false, false);
+	}
+	@Override
+	public int useDelay()
+	{
+		return 65;
 	}
 }

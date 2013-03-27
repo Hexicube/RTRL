@@ -98,4 +98,9 @@ public class ItemPotionHealing extends ItemUsable
 	{
 		batch.draw(tex, x, y);
 	}
+	@Override
+	public int useDelay()
+	{
+		return 15;
+	}
 }

@@ -99,7 +99,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("item/bracelet"+(a+1));
+			images[a] = loadImage("bracelet/bracelet"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemBraceletCredits.tex = images[0];
@@ -212,6 +212,7 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
+				items.add(new ItemBraceletCredits());
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
 			}
@@ -308,7 +309,7 @@ public class Game implements ApplicationListener, InputProcessor
 					if(i != null)
 					{
 						i.render(spriteBatch, 204+x*40, 464-y*40, y==0);
-						if(i.getMaxDurability() > 0)
+						if(i.getMaxDurability() > 1)
 						{
 							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
 							if(stage == 16) stage = 15;

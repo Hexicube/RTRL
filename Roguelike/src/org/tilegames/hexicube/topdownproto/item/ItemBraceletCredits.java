@@ -8,22 +8,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemBraceletCredits extends ItemAccessory
 {
-	private static final String[] credits = new String[]
+	private static final String[][] credits = new String[][]
 	{
-		"#######################",
-		"#-------CREDITS-------#",
-		"#Concept: Hexicube    #",
-		"#Artwork: allyally    #",
-		"#Artwork: Daft Freak  #",
-		"#Programming: Hexicube#",
-		"#HTML port: Daft Freak#",
-		"#Inspiration: geckojsc#",
-		"#---------------------#",
-		"#--SPECIAL THANKS TO--#",
-		"#allyally---Daft Freak#",
-		"#---------------------#",
-		"#THANKS FOR LISTENING!#",
-		"#######################"
+		new String[]
+		{
+			"CREDITS"
+		},
+		new String[]
+		{
+			"Concept: Hexicube",
+			"Artwork: allyally",
+			"Artwork: Daft Freak",
+			"Programming: Hexicube",
+			"HTML port: Daft Freak",
+			"Inspiration: geckojsc"
+		},
+		new String[]
+		{
+			"SPECIAL THANKS TO"
+		},
+		new String[]
+		{
+			"allyally",
+			"Daft Freak"
+		},
+		new String[]
+		{
+			"THANKS FOR LISTENING!"
+		}
 	};
 	
 	private int timer1, timer2, creditsPos, durability;
@@ -61,13 +73,19 @@ public class ItemBraceletCredits extends ItemAccessory
 		{
 			timer2 = 0;
 			timer1++;
-			if(timer1 == 120)
+			if(creditsPos == 0 || timer1 == credits[creditsPos-1].length*30+150)
 			{
-				if(creditsPos < credits.length) Game.message(credits[creditsPos]);
+				Game.message("-----------------");
+				timer1 = 0;
+				for(int a = credits[creditsPos].length-1; a >= 0; a--)
+				{
+					Game.message(credits[creditsPos][a]);
+				}
 				creditsPos++;
 				if(creditsPos == credits.length)
 				{
 					durability = 0;
+					Game.message("-----------------");
 					Game.message("The Memory Bracelet crumbles into pieces...");
 				}
 			}

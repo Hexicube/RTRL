@@ -32,7 +32,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		xPos = x;
 		yPos = y;
-		health = healthMax = 1000;
+		health = healthMax = 200;
 		inventory = new Item[100];
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
@@ -208,9 +208,14 @@ public class EntityPlayer extends EntityLiving
 			}
 			if(Game.keyPress[14])
 			{
-				if(getItemInSlot(invX, invY) instanceof ItemUsable)
+				if(useDelay == 0)
 				{
-					((ItemUsable)getItemInSlot(invX, invY)).use(this, Direction.NONE);
+					if(getItemInSlot(invX, invY) instanceof ItemUsable)
+					{
+						ItemUsable i = (ItemUsable)getItemInSlot(invX, invY);
+						useDelay = i.useDelay();
+						i.use(this, Direction.NONE);
+					}
 				}
 			}
 		}
@@ -290,9 +295,16 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(useDelay == 0)
 				{
-					useDelay = 15;
-					if(heldItem == null) Game.message("You have no held item!");
-					else heldItem.use(this, facingDir);
+					if(heldItem == null)
+					{
+						useDelay = 15;
+						Game.message("You have no held item!");
+					}
+					else
+					{
+						useDelay = heldItem.useDelay();
+						heldItem.use(this, facingDir);
+					}
 				}
 			}
 		}
