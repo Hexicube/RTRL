@@ -79,6 +79,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = shuffleTex(images);
 		ItemNecklaceFeeding.tex = images[0];
 		ItemNecklaceStrangle.tex = images[1];
+		ItemNecklaceManaTraining.tex = images[2];
 		
 		images = new Texture[2];
 		for(int a = 0; a < images.length; a++)
@@ -209,10 +210,12 @@ public class Game implements ApplicationListener, InputProcessor
 				ArrayList<Item> items = new ArrayList<Item>();
 				items.add(new ItemNecklaceFeeding());
 				items.add(new ItemNecklaceStrangle());
+				items.add(new ItemNecklaceManaTraining());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemBraceletCredits());
+				shuffleItems(items);
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
 			}
@@ -321,7 +324,7 @@ public class Game implements ApplicationListener, InputProcessor
 			spriteBatch.draw(invHighlightTex, 204 + player.invX*40, 464 - player.invY*40, 32, 32, 32, 0, 32, 32, false, false);
 			Item curItem = player.getItemInSlot(player.invX, player.invY);
 			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
-			if(curItem != null && curItem.getMaxDurability() > 0) itemName += " ("+(curItem.getCurrentDurability()*100/curItem.getMaxDurability())+"%)";
+			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " ("+(curItem.getCurrentDurability()*100/curItem.getMaxDurability())+"%)";
 			if(curItem != null && curItem instanceof ItemWeapon) itemName = "["+((ItemWeapon)curItem).getWeaponDamageRange()+"] "+itemName;
 			if(player.invSelectY != -1)
 			{
@@ -682,5 +685,18 @@ public class Game implements ApplicationListener, InputProcessor
 			images[pos] = null;
 		}
 		return images2;
+	}
+	
+	public static void shuffleItems(ArrayList<Item> items)
+	{
+		ArrayList<Item> newList = new ArrayList<Item>();
+		while(items.size() > 0)
+		{
+			newList.add(items.remove(rand.nextInt(items.size())));
+		}
+		while(newList.size() > 0)
+		{
+			items.add(newList.remove(0));
+		}
 	}
 }

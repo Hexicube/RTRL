@@ -65,7 +65,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 		if(!e.alive) return false;
 		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(2, 4):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
 		durability--;
-		if(durability == 0) Game.message("Your "+getName()+" breaks.");
+		if(durability == 0) Game.message("The "+getName()+" broke...");
 		return true;
 	}
 	@Override

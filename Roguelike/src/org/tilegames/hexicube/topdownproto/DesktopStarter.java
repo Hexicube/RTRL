@@ -12,6 +12,7 @@ public class DesktopStarter {
 		config.width = 800;
 		config.height = 600;
 		config.useGL20 = false;
+		config.resizable = false;
 		
 		new LwjglApplication(new Game(), config);
 	}

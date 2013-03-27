@@ -26,7 +26,7 @@ public class EntityPlayer extends EntityLiving
 	
 	public boolean viewingInventory;
 	
-	public int hungerLevel, mana, manaMax;
+	public int hungerLevel, mana, manaMax, manaExperience, manaTicker;
 	
 	public EntityPlayer(int x, int y)
 	{
@@ -39,6 +39,7 @@ public class EntityPlayer extends EntityLiving
 		hungerLevel = 25200;
 		mana = 0;
 		manaMax = 10;
+		manaTicker = 300;
 	}
 	
 	@Override
@@ -59,7 +60,6 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void tick()
 	{
-		hungerLevel--;
 		for(int a = 0; a < 100; a++)
 		{
 			if(inventory[a] != null)
@@ -113,12 +113,28 @@ public class EntityPlayer extends EntityLiving
 			if(e.timeRemaining() <= 0) effects.remove(e);
 			else e.tick(this);
 		}
+		if(alive) hungerLevel--;
 		if(hungerLevel <= 0) health = 0;
 		alive = (health > 0);
 		if(!alive)
 		{
 			//TODO: die
 			return;
+		}
+		while(manaExperience >= 50)
+		{
+			manaExperience -= 50;
+			manaMax++;
+			Game.message("Your max mana has increased to "+manaMax+"!");
+		}
+		manaTicker--;
+		if(manaTicker <= 0)
+		{
+			if(mana < manaMax)
+			{
+				mana++;
+				manaTicker = 300;
+			}
 		}
 		//0-9 -> 7-16
 		if(viewingInventory)

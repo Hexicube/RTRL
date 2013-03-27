@@ -39,6 +39,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 			nameDiscovered = true;
 			((EntityPlayer)entity).hungerLevel++;
 			durability--;
+			if(durability == 0) Game.message("The "+getName()+" broke...");
 		}
 	}
 	@Override
