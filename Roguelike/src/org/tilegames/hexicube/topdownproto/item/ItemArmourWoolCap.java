@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemArmourWoolCap extends ItemArmour
 {
-	private static Texture tex = Game.loadImage("armour", "woolcap");
+	private static Texture tex = Game.loadImage("armour/woolcap");
 	
 	@Override
 	public double getProtectionMod(DamageType type)

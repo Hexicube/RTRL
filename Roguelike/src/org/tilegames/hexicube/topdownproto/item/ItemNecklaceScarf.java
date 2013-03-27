@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemNecklaceScarf extends ItemAccessory
 {
-	private static Texture tex = Game.loadImage("necklace", "scarf");
+	private static Texture tex = Game.loadImage("necklace/scarf");
 	
 	@Override
 	public AccessorySlot getAccessoryType()

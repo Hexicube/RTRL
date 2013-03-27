@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemArmourJumper extends ItemArmour
 {
-	private static Texture tex = Game.loadImage("armour", "jumper");
+	private static Texture tex = Game.loadImage("armour/jumper");
 	
 	@Override
 	public double getProtectionMod(DamageType type)

@@ -14,7 +14,7 @@ public class ItemWeaponBone extends ItemWeapon
 	private int durability;
 	private int spriteID;
 	
-	private static Texture tex = Game.loadImage("weapon", "bone");
+	private static Texture tex = Game.loadImage("weapon/bone");
 	
 	public ItemWeaponBone(int dur)
 	{

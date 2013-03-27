@@ -1,10 +1,6 @@
 package org.tilegames.hexicube.topdownproto;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,7 +27,6 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static SpriteBatch spriteBatch;
 	
-	public static File optionsFile;
 	public static int volume;
 	
 	public static boolean gameActive;
@@ -67,8 +62,6 @@ public class Game implements ApplicationListener, InputProcessor
 		You just entered a cave for shelter from a blizzard which has recently calmed down. You try to leave, but an evil force prevents you from doing so. You have to confront it at some point, but it's best to find tools in the cave first.
 		*/
 		
-		rand = new Random();
-		
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
 		invHighlightTex = loadImage("highlight");
@@ -76,10 +69,12 @@ public class Game implements ApplicationListener, InputProcessor
 		statusTex = loadImage("status");
 		statusBarsTex = loadImage("statusbars");
 		
+		rand = new Random();
+		
 		Texture[] images = new Texture[3];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("necklace", "necklace"+(a+1));
+			images[a] = loadImage("necklace/necklace"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemNecklaceFeeding.tex = images[0];
@@ -88,7 +83,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[2];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("weapon", "sword"+(a+1));
+			images[a] = loadImage("weapon/sword"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemWeaponBadSword.tex = images[0];
@@ -96,15 +91,15 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("item", "potion"+(a+1));
+			images[a] = loadImage("item/potion"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemPotionHealing.tex = images[0];
 		
-		images = new Texture[0];
+		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("item", "bracelet"+(a+1));
+			images[a] = loadImage("item/bracelet"+(a+1));
 		}
 		images = shuffleTex(images);
 		ItemBraceletCredits.tex = images[0];
@@ -441,52 +436,23 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static Texture loadImage(String name)
 	{
-		return new Texture(Gdx.files.internal("images" + File.separator + name + ".png"));
-	}
-	
-	public static Texture loadImage(String subFolder, String name)
-	{
-		return new Texture(Gdx.files.internal("images" + File.separator + subFolder + File.separator + name + ".png"));
+		name = "images/" + name;
+		if(!File.separator.equals("/")) name.replace("/", File.separator);
+		return new Texture(Gdx.files.internal(name + ".png"));
 	}
 	
 	public static Sound loadSound(String name)
 	{
-		return Gdx.audio.newSound(Gdx.files.internal("sounds" + File.separator + name + ".ogg"));
+		name = "sounds/" + name;
+		if(!File.separator.equals("/")) name.replace("/", File.separator);
+		return Gdx.audio.newSound(Gdx.files.internal(name + ".ogg"));
 	}
 	
 	public static Music loadMusic(String name)
 	{
-		return Gdx.audio.newMusic(Gdx.files.internal("sounds" + File.separator + name + ".ogg"));
-	}
-	
-	public static BufferedReader loadTextFile(String name, String folder)
-	{
-		return getFileReader(loadFile(name, folder));
-	}
-	
-	public static File loadFile(String name, String folder)
-	{
-		File f = new File(folder+File.separator+name);
-		if(!f.exists())
-		{
-			System.out.println(name+" doesn't exist, creating...");
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return f;
-	}
-	
-	public static BufferedReader getFileReader(File f)
-	{
-		try {
-			return new BufferedReader(new FileReader(f));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+		name = "sounds/" + name;
+		if(!File.separator.equals("/")) name.replace("/", File.separator);
+		return Gdx.audio.newMusic(Gdx.files.internal(name + ".ogg"));
 	}
 	
 	public static void tick()

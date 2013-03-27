@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemKey extends Item
 {
-	private static Texture tex = Game.loadImage("item", "key");
-	private static Texture tex2 = Game.loadImage("item", "keyskeleton");
+	private static Texture tex = Game.loadImage("item/key");
+	private static Texture tex2 = Game.loadImage("item/keyskeleton");
 	
 	public KeyType type;
 	
