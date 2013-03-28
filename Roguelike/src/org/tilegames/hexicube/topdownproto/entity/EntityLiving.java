@@ -31,7 +31,11 @@ public abstract class EntityLiving extends Entity
 	{
 		if(amount < 0) return;
 		long max = healthMax - health;
-		if(max == 0) return;
+		if(max == 0)
+		{
+			Game.addEntity(new EntityDamageHealthDisplay(true, 0, xPos, yPos), map, false);
+			return;
+		}
 		if(max < amount) amount = max;
 		health += amount;
 		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);

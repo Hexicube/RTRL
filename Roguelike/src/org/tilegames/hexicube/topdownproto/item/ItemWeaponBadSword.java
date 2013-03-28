@@ -34,15 +34,6 @@ public class ItemWeaponBadSword extends ItemWeapon
 		modDiscovered = false;
 	}
 	
-	public ItemWeaponBadSword(ItemModifier mod, int dur)
-	{
-		modifier = mod;
-		durability = dur;
-		
-		nameDiscovered = false;
-		modDiscovered = false;
-	}
-	
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{

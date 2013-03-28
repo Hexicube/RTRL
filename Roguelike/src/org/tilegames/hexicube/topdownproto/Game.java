@@ -71,7 +71,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		rand = new Random();
 		
-		Texture[] images = new Texture[3];
+		Texture[] images = new Texture[4];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("necklace/necklace"+(a+1));
@@ -88,8 +88,9 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		images = shuffleTex(images);
 		ItemWeaponBadSword.tex = images[0];
+		ItemWeaponDagger.tex = images[1];
 		
-		images = new Texture[1];
+		images = new Texture[2];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("item/potion"+(a+1));
@@ -105,9 +106,9 @@ public class Game implements ApplicationListener, InputProcessor
 		images = shuffleTex(images);
 		ItemBraceletCredits.tex = images[0];
 		
-		maps = new Map[5];
+		maps = new Map[15];
 		int[] ladderPos = new int[2];
-		for(int a = 0; a < 5; a++)
+		for(int a = 0; a < maps.length; a++)
 		{
 			Map m = new Map(120, 120);
 			int[][] data = new Generator().gen(120, 120, (a==0)?null:ladderPos, a!=4);
@@ -179,7 +180,6 @@ public class Game implements ApplicationListener, InputProcessor
 			if(maps[0].tiles[x][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
-				player.heldItem = new ItemWeaponBadSword();
 				if(rand.nextBoolean())
 				{
 					player.armour[0] = new ItemArmourWoolCap();
@@ -216,7 +216,9 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionHealing());
 				items.add(new ItemBraceletCredits());
 				items.add(new ItemWeaponShortBow());
-				items.add(new ItemArrow(15));
+				items.add(new ItemArrow(30, ArrowType.ACIDIC));
+				items.add(new ItemWeaponBadSword());
+				items.add(new ItemWeaponDagger());
 				shuffleItems(items);
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;

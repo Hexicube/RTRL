@@ -48,11 +48,12 @@ public class ItemWeaponShortBow extends ItemWeapon
 					Item i = p.getItemInSlot(x, y);
 					if(i instanceof ItemArrow)
 					{
-						if(((ItemArrow)i).getStackSize() <= 1) p.setItemInSlot(x, y, null);
-						else ((ItemArrow)i).setStackSize(((ItemArrow)i).getStackSize()-1);
-						EntityArrow arrow = new EntityArrow(p.xPos, p.yPos, 4, 1+((mod==ItemModifier.SHODDY)?0:1), p.facingDir);
-						Game.addEntity(arrow, p.map, false);
-						arrow.move(p.facingDir);
+						ItemArrow arrow = (ItemArrow)i;
+						if(arrow.getStackSize() <= 1) p.setItemInSlot(x, y, null);
+						else arrow.setStackSize(arrow.getStackSize()-1);
+						EntityArrow entityArrow = new EntityArrow(p.xPos, p.yPos, 4, 1+((mod==ItemModifier.SHODDY)?0:1), p.facingDir, arrow.getType());
+						Game.addEntity(entityArrow, p.map, false);
+						entityArrow.move(p.facingDir);
 						if(!modDiscovered && mod == ItemModifier.SHODDY)
 						{
 							modDiscovered = true;

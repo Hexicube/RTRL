@@ -14,9 +14,12 @@ public class ItemArrow extends ItemStack
 	
 	private static Texture tex = Game.loadImage("item/arrow");
 	
-	public ItemArrow(int count)
+	private ArrowType type;
+	
+	public ItemArrow(int count, ArrowType type)
 	{
 		stack = count;
+		this.type = type;
 	}
 	@Override
 	public int getStackSize()
@@ -37,21 +40,31 @@ public class ItemArrow extends ItemStack
 	@Override
 	public boolean canStack(Item item)
 	{
-		return (item instanceof ItemArrow);
+		if(item instanceof ItemArrow)
+		{
+			return ((ItemArrow)item).type == type;
+		}
+		else return false;
 	}
 	@Override
 	public int stackItem(Item item)
 	{
-		if(!(item instanceof ItemArrow)) return 0;
+		if(!canStack(item)) return 0;
 		ItemArrow i = (ItemArrow)item;
 		int totalAllowed = getMaxStack() - getStackSize();
 		if(totalAllowed > i.getStackSize())
 		{
-			stack += i.getStackSize();
+			totalAllowed = i.getStackSize();
+			stack += totalAllowed;
 			i.setStackSize(0);
-			return i.getStackSize();
+			return totalAllowed;
 		}
-		return 0;
+		else
+		{
+			i.setStackSize(i.getStackSize() - totalAllowed);
+			stack += totalAllowed;
+			return totalAllowed;
+		}
 	}
 	@Override
 	public boolean isWeapon()
@@ -71,6 +84,10 @@ public class ItemArrow extends ItemStack
 	@Override
 	public String getName()
 	{
+		if(type == ArrowType.PLAIN) return "Arrow";
+		if(type == ArrowType.FLAMING) return "Flaming Arrow";
+		if(type == ArrowType.ACIDIC) return "Acidic Arrow";
+		if(type == ArrowType.MAGICICE) return "Icicle Arrow";
 		return "Arrow";
 	}
 	@Override
@@ -95,5 +112,9 @@ public class ItemArrow extends ItemStack
 	{
 		batch.draw(tex, x, y);
 		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x+2, y+9, false);
+	}
+	public ArrowType getType()
+	{
+		return type;
 	}
 }

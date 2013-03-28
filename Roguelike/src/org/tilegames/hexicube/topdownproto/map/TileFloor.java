@@ -91,7 +91,7 @@ public class TileFloor extends Tile
 										found = true;
 									}
 								}
-								Game.message("Collected item: "+player.inventory[a].getName()+((count>1)?" x"+count:""));
+								Game.message("Collected item: "+player.inventory[a].getName()+((count!=1)?" x"+count:""));
 							}
 						}
 						else if(player.inventory[a] == null)

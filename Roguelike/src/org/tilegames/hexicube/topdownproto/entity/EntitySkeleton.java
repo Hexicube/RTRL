@@ -60,6 +60,7 @@ public class EntitySkeleton extends EntityLiving
 			int xDist = Game.player.xPos - xPos;
 			int yDist = Game.player.yPos - yPos;
 			int dist = Math.abs(xDist) + Math.abs(yDist);
+			if(!Game.player.alive) dist = 999999; 
 			if(!Game.player.visible(this)) dist = 999999;
 			if(Game.player.map != map) dist = 999999;
 			if(dist < 6) chasing = true;
