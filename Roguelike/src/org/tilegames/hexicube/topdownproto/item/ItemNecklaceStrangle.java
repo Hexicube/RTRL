@@ -63,7 +63,7 @@ public class ItemNecklaceStrangle extends ItemAccessory
 			if(ticker == 0)
 			{
 				ticker = 20;
-				if(p.alive) p.hurt(Game.rollDice(6, 2), DamageType.GENERIC); //TODO: involve oxygen system
+				if(p.alive) p.hurt(Game.rollDice(6, 2), DamageType.GENERIC);
 			}
 			durability--;
 			if(durability == 0) Game.message("The "+getName()+" broke...");

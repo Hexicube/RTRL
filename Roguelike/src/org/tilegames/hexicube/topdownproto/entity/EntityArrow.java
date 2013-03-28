@@ -1,6 +1,7 @@
 package org.tilegames.hexicube.topdownproto.entity;
 
 import org.tilegames.hexicube.topdownproto.Game;
+import org.tilegames.hexicube.topdownproto.item.ArrowType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,10 +11,11 @@ public class EntityArrow extends Entity
 	private int damageSides, damageDice;
 	private Direction direction;
 	private int timer;
+	private ArrowType type;
 	
 	private static Texture tex = Game.loadImage("entity/arrow");
 	
-	public EntityArrow(int x, int y, int dmgS, int dmgD, Direction dir)
+	public EntityArrow(int x, int y, int dmgS, int dmgD, Direction dir, ArrowType type)
 	{
 		damageSides = dmgS;
 		damageDice = dmgD;
@@ -21,6 +23,7 @@ public class EntityArrow extends Entity
 		timer = 5;
 		xPos = x;
 		yPos = y;
+		this.type = type;
 	}
 	
 	@Override
@@ -49,7 +52,13 @@ public class EntityArrow extends Entity
 	{
 		if(entity instanceof EntityLiving)
 		{
-			((EntityLiving)entity).hurt(Game.rollDice(damageSides, damageDice), DamageType.SHARP);
+			DamageType dmgType;
+			if(type == ArrowType.PLAIN) dmgType = DamageType.SHARP;
+			else if(type == ArrowType.FLAMING) dmgType = DamageType.FIRE;
+			else if(type == ArrowType.ACIDIC) dmgType = DamageType.ACID;
+			else if(type == ArrowType.MAGICICE) dmgType = DamageType.ICE;
+			else dmgType = DamageType.GENERIC;
+			((EntityLiving)entity).hurt(Game.rollDice(damageSides, damageDice), dmgType);
 		}
 		Game.removeEntity(this);
 	}
