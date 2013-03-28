@@ -48,6 +48,7 @@ public class ItemNecklaceStrangle extends ItemAccessory
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
+		if(!cursed) modDiscovered = true;
 		if(entity instanceof EntityPlayer && equipped)
 		{
 			EntityPlayer p = (EntityPlayer)entity;

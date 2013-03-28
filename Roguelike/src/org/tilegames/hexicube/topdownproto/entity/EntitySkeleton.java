@@ -11,11 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntitySkeleton extends EntityLiving
 {
-	//private static Texture tex = Game.loadImage("skeleton"); //TODO: make this image
+	private static Texture tex = Game.loadImage("entity/skeleton");
 	
 	private int movementTimer;
 	
 	private boolean chasing;
+	
+	private Direction facingDir;
 	
 	public EntitySkeleton(int x, int y)
 	{
@@ -23,6 +25,7 @@ public class EntitySkeleton extends EntityLiving
 		alive = true;
 		xPos = x;
 		yPos = y;
+		facingDir = Direction.UP;
 	}
 	
 	@Override
@@ -65,29 +68,49 @@ public class EntitySkeleton extends EntityLiving
 			{
 				if(dist == 1)
 				{
+					if(yDist == 0)
+					{
+						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+					}
+					else
+					{
+						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+					}
 					Game.player.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
 				}
 				else
 				{
 					if(yDist == 0)
 					{
-						move((xDist>0)?Direction.RIGHT:Direction.LEFT);
+						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+						move(facingDir);
 					}
 					else if(xDist == 0)
 					{
-						move((yDist>0)?Direction.UP:Direction.DOWN);
+						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+						move(facingDir);
 					}
 					else if(Game.rand.nextBoolean())
 					{
 						int oldX = xPos;
-						move((xDist>0)?Direction.RIGHT:Direction.LEFT);
-						if(oldX == xPos) move((yDist>0)?Direction.UP:Direction.DOWN);
+						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+						move(facingDir);
+						if(oldX == xPos)
+						{
+							facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+							move(facingDir);
+						}
 					}
 					else
 					{
 						int oldY = yPos;
-						move((yDist>0)?Direction.UP:Direction.DOWN);
-						if(oldY == yPos) move((xDist>0)?Direction.RIGHT:Direction.LEFT);
+						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+						move(facingDir);
+						if(oldY == yPos)
+						{
+							facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+							move(facingDir);
+						}
 					}
 				}
 			}
@@ -97,10 +120,11 @@ public class EntitySkeleton extends EntityLiving
 				for(int a = 0; a < 5; a++)
 				{
 					int rand = Game.rand.nextInt(4);
-					if(rand == 0) move(Direction.UP);
-					else if(rand == 1) move(Direction.DOWN);
-					else if(rand == 2) move(Direction.LEFT);
-					else if(rand == 3) move(Direction.RIGHT);
+					if(rand == 0) facingDir = Direction.UP;
+					else if(rand == 1) facingDir = Direction.DOWN;
+					else if(rand == 2) facingDir = Direction.LEFT;
+					else if(rand == 3) facingDir = Direction.RIGHT;
+					move(facingDir);
 					if(xPos != oldX || yPos != oldY) break;
 				}
 			}
@@ -110,8 +134,10 @@ public class EntitySkeleton extends EntityLiving
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		//TODO: proper rendering
-		batch.draw(EntityPlayer.tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, 0, 0, 32, 32, false, false);
+		int texX = 0, texY = 0;
+		if(facingDir == Direction.DOWN || facingDir == Direction.RIGHT) texX += 32;
+		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
+		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, texX, texY, 32, 32, false, false);
 	}
 	@Override
 	public void collide(Entity entity) {}

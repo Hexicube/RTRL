@@ -54,8 +54,8 @@ public abstract class Entity
 			Entity e = map.tiles[newX][newY].getCurrentEntity();
 			if(e != null)
 			{
-				e.collide(this);
 				this.collide(e);
+				e.collide(this);
 			}
 			else if(map.tiles[newX][newY].onWalkAttempt(this))
 			{

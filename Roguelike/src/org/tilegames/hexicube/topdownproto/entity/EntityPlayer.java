@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntityPlayer extends EntityLiving
 {	
-	public static Texture tex = Game.loadImage("player");
+	public static Texture tex = Game.loadImage("entity/player");
 	
-	private Direction facingDir = Direction.UP;
+	public Direction facingDir = Direction.UP;
 	
 	private int walkDelay, useDelay;
 	
@@ -319,6 +319,7 @@ public class EntityPlayer extends EntityLiving
 					else
 					{
 						useDelay = heldItem.useDelay();
+						walkDelay += 7;
 						heldItem.use(this, facingDir);
 					}
 				}

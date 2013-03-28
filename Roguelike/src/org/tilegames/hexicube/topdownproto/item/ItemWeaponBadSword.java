@@ -125,7 +125,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		if(entity instanceof EntityPlayer && equipped)
 		{
-			if(!nameDiscovered) Game.message("Discovered item: Badsword");
+			if(!nameDiscovered) Game.message("Discovered weapon: Badsword");
 			nameDiscovered = true;
 			if(!modDiscovered)
 			{

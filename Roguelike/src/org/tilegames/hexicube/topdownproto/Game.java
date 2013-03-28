@@ -23,7 +23,7 @@ public class Game implements ApplicationListener, InputProcessor
 	public static final int xOffset = 384, yOffset = 284;
 	
 	public static final String gameName = "Numpad Explorer";
-	public static final String versionText = "Alpha 1";
+	public static final String versionText = "Alpha 2";
 	
 	private static SpriteBatch spriteBatch;
 	
@@ -215,6 +215,8 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemBraceletCredits());
+				items.add(new ItemWeaponShortBow());
+				items.add(new ItemArrow(15));
 				shuffleItems(items);
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
@@ -225,7 +227,7 @@ public class Game implements ApplicationListener, InputProcessor
 		//TODO: spawn slimes randomly in levels 8-14
 		//TODO: spawn rats in levels 0-5
 		//TODO: spawn plain snakes in levels 2-10
-		//TODO: spawn venemous snakes in level 14 (lowest level, these things should be deadly mostly)
+		//TODO: spawn venomous snakes in level 14 (lowest level, these things should be deadly mostly)
 		
 		for(int x = player.xPos-5; x <= player.xPos+5; x++)
 		{
@@ -324,12 +326,22 @@ public class Game implements ApplicationListener, InputProcessor
 			spriteBatch.draw(invHighlightTex, 204 + player.invX*40, 464 - player.invY*40, 32, 32, 32, 0, 32, 32, false, false);
 			Item curItem = player.getItemInSlot(player.invX, player.invY);
 			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
+			if(curItem instanceof ItemStack)
+			{
+				int size1 = ((ItemStack)curItem).getStackSize();
+				if(size1 != 1) itemName += " x"+size1;
+			}
 			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " ("+(curItem.getCurrentDurability()*100/curItem.getMaxDurability())+"%)";
 			if(curItem != null && curItem instanceof ItemWeapon) itemName = "["+((ItemWeapon)curItem).getWeaponDamageRange()+"] "+itemName;
 			if(player.invSelectY != -1)
 			{
 				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
 				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
+				if(otherItem instanceof ItemStack)
+				{
+					int size1 = ((ItemStack)otherItem).getStackSize();
+					if(size1 != 1) itemName2 += " x"+size1;
+				}
 				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
 				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName2;
 				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);

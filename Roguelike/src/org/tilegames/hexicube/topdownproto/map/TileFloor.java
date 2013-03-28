@@ -7,6 +7,7 @@ import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityChest;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.item.ItemStack;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -70,10 +71,38 @@ public class TileFloor extends Tile
 					boolean found = false;
 					for(int a = 0; a < player.inventory.length && !found; a++)
 					{
-						if(player.inventory[a] == null)
+						if(player.inventory[a] instanceof ItemStack)
+						{
+							Item i = items.get(0);
+							if(((ItemStack)player.inventory[a]).canStack(i))
+							{
+								int count = ((ItemStack)player.inventory[a]).stackItem(i);
+								if(!(i instanceof ItemStack))
+								{
+									items.remove(0);
+									found = true;
+								}
+								else
+								{
+									ItemStack i2 = (ItemStack)i;
+									if(i2.getStackSize() == 0)
+									{
+										items.remove(0);
+										found = true;
+									}
+								}
+								Game.message("Collected item: "+player.inventory[a].getName()+((count>1)?" x"+count:""));
+							}
+						}
+						else if(player.inventory[a] == null)
 						{
 							player.inventory[a] = items.remove(0);
-							Game.message("Collected item: "+player.inventory[a].getName());
+							int size = 1;
+							if(player.inventory[a] instanceof ItemStack)
+							{
+								size = ((ItemStack)player.inventory[a]).getStackSize();
+							}
+							Game.message("Collected item: "+player.inventory[a].getName()+((size!=1)?" x"+size:""));
 							found = true;
 						}
 					}
