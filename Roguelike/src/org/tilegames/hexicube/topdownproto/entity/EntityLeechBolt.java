@@ -24,6 +24,7 @@ public class EntityLeechBolt extends Entity
 	@Override
 	public void tick()
 	{
+		if(map == null) return;
 		timer--;
 		if(timer == 0)
 		{
