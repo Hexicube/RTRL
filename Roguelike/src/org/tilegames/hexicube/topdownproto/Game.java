@@ -147,11 +147,11 @@ public class Game implements ApplicationListener, InputProcessor
 					}
 					else if(data[x][y] == 6)
 					{
-						m.tiles[x][y] = new TileLadder(false, a);
+						m.tiles[x][y] = new TileStair(false, a);
 					}
 					else if(data[x][y] == 7)
 					{
-						m.tiles[x][y] = new TileLadder(true, a);
+						m.tiles[x][y] = new TileStair(true, a);
 						ladderPos[0] = x;
 						ladderPos[1] = y;
 					}
@@ -709,7 +709,7 @@ public class Game implements ApplicationListener, InputProcessor
 			spawnTimer--;
 			return;
 		}
-		spawnTimer = 120;
+		int spawned = 0;
 		int entCount = map.entities.size();
 		if(entCount >= 100) return;
 		if(floor < 5)
@@ -722,6 +722,7 @@ public class Game implements ApplicationListener, InputProcessor
 				{
 					EntitySkeleton e = new EntitySkeleton(x, y);
 					addEntity(e, map, true);
+					spawned++;
 				}
 			}
 		}
@@ -757,5 +758,6 @@ public class Game implements ApplicationListener, InputProcessor
 			{
 			}
 		}
+		spawnTimer = spawned * 30;
 	}
 }
