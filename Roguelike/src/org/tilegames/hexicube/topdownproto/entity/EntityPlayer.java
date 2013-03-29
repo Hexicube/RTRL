@@ -37,8 +37,8 @@ public class EntityPlayer extends EntityLiving
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
 		hungerLevel = 25200;
-		mana = 0;
-		manaMax = 10;
+		mana = 20;
+		manaMax = 20;
 		manaTicker = 300;
 	}
 	
@@ -119,11 +119,12 @@ public class EntityPlayer extends EntityLiving
 		if(!alive)
 		{
 			//TODO: die
+			viewingInventory = false;
 			return;
 		}
-		while(manaExperience >= 50)
+		while(manaExperience >= 5*manaMax)
 		{
-			manaExperience -= 50;
+			manaExperience -= 5*manaMax;
 			manaMax++;
 			Game.message("Your max mana has increased to "+manaMax+"!");
 		}

@@ -106,6 +106,14 @@ public class Game implements ApplicationListener, InputProcessor
 		images = shuffleTex(images);
 		ItemBraceletCredits.tex = images[0];
 		
+		images = new Texture[1];
+		for(int a = 0; a < images.length; a++)
+		{
+			images[a] = loadImage("weapon/wand"+(a+1));
+		}
+		images = shuffleTex(images);
+		ItemWandLeechLife.tex = images[0];
+		
 		maps = new Map[15];
 		int[] ladderPos = new int[2];
 		for(int a = 0; a < maps.length; a++)
@@ -219,6 +227,7 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemArrow(30, ArrowType.ACIDIC));
 				items.add(new ItemWeaponBadSword());
 				items.add(new ItemWeaponDagger());
+				items.add(new ItemWandLeechLife());
 				shuffleItems(items);
 				addEntity(new EntityChest(x2, y2, items), maps[0], true);
 				break;
