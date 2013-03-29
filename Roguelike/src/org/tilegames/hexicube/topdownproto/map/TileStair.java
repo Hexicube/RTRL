@@ -20,7 +20,7 @@ public class TileStair extends Tile
 	@Override
 	public boolean onWalkAttempt(Entity entity)
 	{
-		Game.message("Use the stairs to go "+(down?"down":"up")+" a level!");
+		if(entity instanceof EntityPlayer) Game.message("Use the stairs to go "+(down?"down":"up")+" a level!");
 		return false;
 	}
 

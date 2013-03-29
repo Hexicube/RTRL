@@ -26,7 +26,8 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public String getWeaponDamageRange()
 	{
-		return "2d10 GENERIC";
+		if(nameDiscovered) return "2d10 GENERIC";
+		return "???";
 	}
 	@Override
 	public boolean use(Entity source, Direction dir)
@@ -42,6 +43,11 @@ public class ItemWandLeechLife extends ItemWeapon
 			e.move(p.facingDir);
 			durability--;
 			if(durability == 0) Game.message("The "+getName()+" broke...");
+			if(!nameDiscovered)
+			{
+				nameDiscovered = true;
+				Game.message("Discovered wand: Vampirism");
+			}
 			return true;
 		}
 		else
@@ -74,11 +80,6 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
-		if(entity instanceof EntityPlayer && equipped && !nameDiscovered)
-		{
-			nameDiscovered = true;
-			Game.message("Discovered wand: Vampirism");
-		}
 	}
 	@Override
 	public int getMaxDurability()

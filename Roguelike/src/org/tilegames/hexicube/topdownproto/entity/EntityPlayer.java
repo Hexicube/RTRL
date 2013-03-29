@@ -134,7 +134,7 @@ public class EntityPlayer extends EntityLiving
 			if(mana < manaMax)
 			{
 				mana++;
-				manaTicker = 300;
+				manaTicker = 900/(int)Math.sqrt(manaMax);
 			}
 		}
 		//0-9 -> 7-16

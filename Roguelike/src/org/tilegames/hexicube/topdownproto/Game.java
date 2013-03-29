@@ -234,29 +234,6 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 		}
 		
-		Entity e = new EntitySkeleton(0, 0); //TODO: make me spawn randomly in levels 0-4
-		//TODO: spawn slimes randomly in levels 8-14
-		//TODO: spawn rats in levels 0-5
-		//TODO: spawn plain snakes in levels 2-10
-		//TODO: spawn venomous snakes in level 14 (lowest level, these things should be deadly mostly)
-		
-		for(int x = player.xPos-5; x <= player.xPos+5; x++)
-		{
-			for(int y = player.yPos-5; y <= player.yPos+5; y++)
-			{
-				e.xPos = x;
-				e.yPos = y;
-				if(maps[0].tiles[x][y] instanceof TileFloor)
-				{
-					if(addEntity(e, maps[0], true))
-					{
-						x = player.xPos+5;
-						y = player.yPos+5;
-					}
-				}
-			}
-		}
-		
 		messages = new ArrayList<Message>();
 		
 		curMap = maps[0];
@@ -487,6 +464,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(paused) return;
 		for(int z = 0; z < maps.length; z++)
 		{
+			spawnEntities(maps[z], z);
 			if(maps[z].needsLighting) updateLighting(maps[z]);
 			Object[] list = maps[z].entities.toArray();
 			for(int a = 0; a < list.length; a++)
@@ -720,6 +698,64 @@ public class Game implements ApplicationListener, InputProcessor
 		while(newList.size() > 0)
 		{
 			items.add(newList.remove(0));
+		}
+	}
+	
+	private static int spawnTimer = 120;
+	private static void spawnEntities(Map map, int floor)
+	{
+		if(spawnTimer > 0)
+		{
+			spawnTimer--;
+			return;
+		}
+		spawnTimer = 120;
+		int entCount = map.entities.size();
+		if(entCount >= 100) return;
+		if(floor < 5)
+		{
+			int x = rand.nextInt(map.tiles.length);
+			int y = rand.nextInt(map.tiles[x].length);
+			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			{
+				if(map.tiles[x][y] instanceof TileFloor)
+				{
+					EntitySkeleton e = new EntitySkeleton(x, y);
+					addEntity(e, map, true);
+				}
+			}
+		}
+		if(floor > 1 && floor < 11) //plain snakes
+		{
+			int x = rand.nextInt(map.tiles.length);
+			int y = rand.nextInt(map.tiles[x].length);
+			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			{
+			}
+		}
+		if(floor < 6) //rats
+		{
+			int x = rand.nextInt(map.tiles.length);
+			int y = rand.nextInt(map.tiles[x].length);
+			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			{
+			}
+		}
+		if(floor > 7) //slimes
+		{
+			int x = rand.nextInt(map.tiles.length);
+			int y = rand.nextInt(map.tiles[x].length);
+			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			{
+			}
+		}
+		if(floor > 13) //venomous snakes
+		{
+			int x = rand.nextInt(map.tiles.length);
+			int y = rand.nextInt(map.tiles[x].length);
+			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			{
+			}
 		}
 	}
 }

@@ -56,6 +56,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 			{
 				nameDiscovered = true;
 				Game.message("Discovered necklace: Mana Exercise");
+				if(shoddy) Game.message("You realise the Necklace of Mana Exercise is wasteful...");
 			}
 			EntityPlayer p = (EntityPlayer)entity;
 			if(p.mana > 0)
