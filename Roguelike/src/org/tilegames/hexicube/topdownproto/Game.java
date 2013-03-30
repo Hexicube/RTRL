@@ -20,10 +20,10 @@ import com.badlogic.gdx.InputProcessor;
 
 public class Game implements ApplicationListener, InputProcessor
 {
-	public static final int xOffset = 384, yOffset = 284;
+	public static int xOffset = 384, yOffset = 284;
 	
 	public static final String gameName = "Numpad Explorer";
-	public static final String versionText = "Alpha 2";
+	public static final String versionText = "Alpha 3";
 	
 	private static SpriteBatch spriteBatch;
 	
@@ -97,6 +97,7 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		images = shuffleTex(images);
 		ItemPotionHealing.tex = images[0];
+		ItemPotionMana.tex = images[1];
 		
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
@@ -222,6 +223,9 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
+				items.add(new ItemPotionMana());
+				items.add(new ItemPotionMana());
+				items.add(new ItemPotionMana());
 				items.add(new ItemBraceletCredits());
 				items.add(new ItemWeaponShortBow());
 				items.add(new ItemArrow(30, ArrowType.ACIDIC));
@@ -272,19 +276,32 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		Gdx.graphics.getGLCommon().glClearColor(0, 0, 0, 1);
 		Gdx.graphics.getGLCommon().glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		
+		int screenW = Gdx.graphics.getWidth();
+		int screenH = Gdx.graphics.getHeight();
 	
 		for(int x = 0; x < curMap.tiles.length; x++)
 		{
 			for(int y = 0; y < curMap.tiles[x].length; y++)
 			{
+				int tX = x - camX;
+				int tY = y - camY;
+				int tileX = tX * 32;
+				int tileY = tY * 32;
+				if(tileX + xOffset > screenW || tileY + yOffset > screenH || tileX + xOffset + 32 < 0 || tileY + yOffset + 32 < 0) continue;
 				spriteBatch.setColor((float)(curMap.tiles[x][y].lightLevel[0]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[1]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[2]+3)/18f, 1);
-				curMap.tiles[x][y].render(spriteBatch, x-camX, y-camY);
+				curMap.tiles[x][y].render(spriteBatch, tX, tY);
 			}
 		}
 		int size = curMap.entities.size();
 		for(int a = 0; a < size; a++)
 		{
 			Entity e = curMap.entities.get(a);
+			int eX = e.xPos - camX;
+			int eY = e.yPos - camY;
+			int entX = eX * 32;
+			int entY = eY * 32;
+			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
 			Tile t = curMap.tiles[e.xPos][e.yPos];
 			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, 1);
 			curMap.entities.get(a).render(spriteBatch, camX, camY);
@@ -293,7 +310,9 @@ public class Game implements ApplicationListener, InputProcessor
 		spriteBatch.setColor(1, 1, 1, 1);
 		if(player.viewingInventory)
 		{
-			spriteBatch.draw(invTex, 200, 28);
+			int xPos = screenW / 2 - 200;
+			int yPos = screenH / 2 - 240 - 32; 
+			spriteBatch.draw(invTex, xPos, yPos);
 			for(int x = 0; x < 10; x++)
 			{
 				for(int y = 0; y < 11; y++)
@@ -301,17 +320,17 @@ public class Game implements ApplicationListener, InputProcessor
 					Item i = player.getItemInSlot(x, y);
 					if(i != null)
 					{
-						i.render(spriteBatch, 204+x*40, 464-y*40, y==0);
+						i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y==0);
 						if(i.getMaxDurability() > 1)
 						{
 							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
 							if(stage == 16) stage = 15;
-							spriteBatch.draw(invUsedBar, 204+x*40, 462-y*40, 32, 2, 0, 30-stage*2, 32, 2, false, false);
+							spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30-stage*2, 32, 2, false, false);
 						}
 					}
 				}
 			}
-			spriteBatch.draw(invHighlightTex, 204 + player.invX*40, 464 - player.invY*40, 32, 32, 32, 0, 32, 32, false, false);
+			spriteBatch.draw(invHighlightTex, xPos + 4 + player.invX * 40, 436 + yPos - player.invY * 40, 32, 32, 32, 0, 32, 32, false, false);
 			Item curItem = player.getItemInSlot(player.invX, player.invY);
 			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
 			if(curItem instanceof ItemStack)
@@ -332,14 +351,14 @@ public class Game implements ApplicationListener, InputProcessor
 				}
 				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
 				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName2;
-				spriteBatch.draw(invHighlightTex, 204 + player.invSelectX*40, 464 - player.invSelectY*40, 32, 32, 0, 0, 32, 32, false, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), 204, 536, false);
+				spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), xPos + 4, 508 + yPos, false); 
 			}
-			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), 204, 536, false);
+			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
 		
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
-		FontHolder.render(spriteBatch, tickRateText, 796-FontHolder.getTextWidth(tickRateText, true), 594, true);
+		FontHolder.render(spriteBatch, tickRateText, screenW - 6 - FontHolder.getTextWidth(tickRateText, true), screenH - 6, true);
 		
 		size = messages.size();
 		for(int a = 0; a < size; a++)
@@ -355,17 +374,17 @@ public class Game implements ApplicationListener, InputProcessor
 			else
 			{
 				spriteBatch.setColor(1, 1, 1, (m.timeLeft<300)?((float)m.timeLeft/300f):1);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, 606-(size-a)*10, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
 			}
 		}
 		spriteBatch.setColor(1, 1, 1, 1);
-		spriteBatch.draw(statusTex, 672, 0);
+		spriteBatch.draw(statusTex, screenW - 128, 0);
 		int healthAmount = (int)Math.ceil((double)player.health * 100 / (double)player.healthMax);
-		spriteBatch.draw(statusBarsTex, 695, 31, healthAmount, 8, healthAmount-1, 0, 1, 1, false, false);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 31, healthAmount, 8, healthAmount-1, 0, 1, 1, false, false);
 		int manaAmount = (int)Math.ceil((double)player.mana * 100 / (double)player.manaMax);
-		spriteBatch.draw(statusBarsTex, 695, 18, manaAmount, 8, manaAmount-1, 1, 1, 1, false, false);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 18, manaAmount, 8, manaAmount-1, 1, 1, 1, false, false);
 		int foodAmount = (int)Math.ceil((double)player.hungerLevel / 252D);
-		spriteBatch.draw(statusBarsTex, 695, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
 		
 		spriteBatch.end();
 	}
@@ -373,11 +392,9 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public void resize(int width, int height)
 	{
-		if(width != 800 || height != 600)
-		{
-			Gdx.graphics.setDisplayMode(800, 600, false);
-		}
-		else spriteBatch = new SpriteBatch();
+		xOffset = width / 2 - 16;
+		yOffset = height / 2 - 16;
+		spriteBatch = new SpriteBatch(); 
 	}
 	
 	@Override

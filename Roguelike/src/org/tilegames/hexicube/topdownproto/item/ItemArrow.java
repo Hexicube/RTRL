@@ -110,7 +110,13 @@ public class ItemArrow extends ItemStack
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y);
+		int t;
+		if(type == ArrowType.PLAIN) t = 0;
+		else if(type == ArrowType.FLAMING) t = 1;
+		else if(type == ArrowType.ACIDIC) t = 2;
+		else if(type == ArrowType.MAGICICE) t = 3;
+		else t = -1;
+		batch.draw(tex, x, y, 32, 32, t*32, 0, 32, 32, false, false);
 		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x+2, y+9, false);
 	}
 	public ArrowType getType()
