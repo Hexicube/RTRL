@@ -10,6 +10,7 @@ import org.tilegames.hexicube.topdownproto.map.*;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
@@ -431,6 +432,15 @@ public class Game implements ApplicationListener, InputProcessor
 	public boolean keyDown(int key)
 	{
 		//System.out.println(key);
+		if(key == 254)
+		{
+			if(Gdx.graphics.isFullscreen()) Gdx.graphics.setDisplayMode(800, 600, false);
+			else
+			{
+				DisplayMode d = Gdx.graphics.getDesktopDisplayMode();
+				Gdx.graphics.setDisplayMode(d.width, d.height, true);
+			}
+		}
 		keysDown[key] = true;
 		keyPress[key] = true;
 		return false;

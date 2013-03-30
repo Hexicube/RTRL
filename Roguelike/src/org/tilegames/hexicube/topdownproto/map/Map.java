@@ -19,7 +19,7 @@ public class Map
 		mapImage = new Pixmap(Game.nextPowerTwo(width), Game.nextPowerTwo(height), Pixmap.Format.RGBA8888);
 		mapImage.setColor(0, 0, 0, 0);
 		mapImage.fill();
-		mapImage.setColor(0, 0, 1, 1);
+		mapImage.setColor(0, 0, 0, 1);
 		mapImage.fillRectangle(0, 0, width, height);
 		mapTex = new Texture(mapImage);
 	}
