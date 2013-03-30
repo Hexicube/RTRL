@@ -38,8 +38,8 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static Random rand;
 	
-	private static int ticks, frameRate;
-	private static long time;
+	private static int ticks, frameRate, renderPercent, tickPercent;
+	private static long time, tickTime, renderTime;
 	
 	private static boolean paused = false;
 	
@@ -260,18 +260,15 @@ public class Game implements ApplicationListener, InputProcessor
 	{
 		currentDeltaPassed += Gdx.graphics.getDeltaTime();
 		if(currentDeltaPassed > .1f) currentDeltaPassed = .1f; //anti mega lag, makes it do 6 ticks after large lag
+		long start = TimeUtils.nanoTime();
 		while(currentDeltaPassed >= .01667f) //about 60tps
 		{
 			currentDeltaPassed -= .01667f;
 			tick();
 		}
-		ticks++;
-		if(TimeUtils.nanoTime() - time >= 1000000000)
-		{
-			frameRate = ticks;
-			ticks = 0;
-			time = TimeUtils.nanoTime();
-		}
+		long end = TimeUtils.nanoTime();
+		tickTime += (end - start);
+		start = TimeUtils.nanoTime();
 		spriteBatch.begin();
 		
 		Gdx.graphics.getGLCommon().glClearColor(0, 0, 0, 1);
@@ -357,8 +354,14 @@ public class Game implements ApplicationListener, InputProcessor
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
 		
-		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate));
+		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate)+"fps");
 		FontHolder.render(spriteBatch, tickRateText, screenW - 6 - FontHolder.getTextWidth(tickRateText, true), screenH - 6, true);
+		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent)+"% frame");
+		FontHolder.render(spriteBatch, tickTimeText, screenW - 6 - FontHolder.getTextWidth(tickTimeText, true), screenH - 24, true);
+		char[] renderTimeText = FontHolder.getCharList(String.valueOf(renderPercent)+"% render");
+		FontHolder.render(spriteBatch, renderTimeText, screenW - 6 - FontHolder.getTextWidth(renderTimeText, true), screenH - 42, true);
+		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100-renderPercent-tickPercent)+"% idle");
+		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 60, true);
 		
 		size = messages.size();
 		for(int a = 0; a < size; a++)
@@ -387,6 +390,20 @@ public class Game implements ApplicationListener, InputProcessor
 		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
 		
 		spriteBatch.end();
+		end = TimeUtils.nanoTime();
+		renderTime += (end - start);
+		
+		ticks++;
+		if(TimeUtils.nanoTime() - time >= 1000000000)
+		{
+			frameRate = ticks;
+			ticks = 0;
+			renderPercent = (int) (renderTime / 10000000);
+			tickPercent = (int) (tickTime / 10000000);
+			time = TimeUtils.nanoTime();
+			renderTime = 0;
+			tickTime = 0;
+		}
 	}
 	
 	@Override
