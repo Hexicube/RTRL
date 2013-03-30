@@ -198,6 +198,7 @@ public class Game implements ApplicationListener, InputProcessor
 				else player.armour[1] = new ItemArmourHoodie();
 				player.armour[2] = new ItemArmourJeans();
 				player.armour[3] = new ItemArmourTrainers();
+				player.heldItem = new ItemPickaxe();
 				addEntity(player, maps[0], true);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
@@ -354,14 +355,18 @@ public class Game implements ApplicationListener, InputProcessor
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
 		
+		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
+		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
+		else spriteBatch.setColor(0, 1, 0, 1);
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate)+"fps");
 		FontHolder.render(spriteBatch, tickRateText, screenW - 6 - FontHolder.getTextWidth(tickRateText, true), screenH - 6, true);
-		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent)+"% frame");
-		FontHolder.render(spriteBatch, tickTimeText, screenW - 6 - FontHolder.getTextWidth(tickTimeText, true), screenH - 24, true);
+		spriteBatch.setColor(1, 1, 1, 1);
+		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent)+"% tick");
+		FontHolder.render(spriteBatch, tickTimeText, screenW - 6 - FontHolder.getTextWidth(tickTimeText, true), screenH - 26, true);
 		char[] renderTimeText = FontHolder.getCharList(String.valueOf(renderPercent)+"% render");
-		FontHolder.render(spriteBatch, renderTimeText, screenW - 6 - FontHolder.getTextWidth(renderTimeText, true), screenH - 42, true);
+		FontHolder.render(spriteBatch, renderTimeText, screenW - 6 - FontHolder.getTextWidth(renderTimeText, true), screenH - 46, true);
 		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100-renderPercent-tickPercent)+"% idle");
-		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 60, true);
+		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 66, true);
 		
 		size = messages.size();
 		for(int a = 0; a < size; a++)
@@ -495,6 +500,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static void tick()
 	{
+		if(spawnTimer > 0) spawnTimer--;
 		if(paused) return;
 		for(int z = 0; z < maps.length; z++)
 		{
@@ -738,11 +744,6 @@ public class Game implements ApplicationListener, InputProcessor
 	private static int spawnTimer = 120;
 	private static void spawnEntities(Map map, int floor)
 	{
-		if(spawnTimer > 0)
-		{
-			spawnTimer--;
-			return;
-		}
 		int spawned = 0;
 		int entCount = map.entities.size();
 		if(entCount >= 100) return;
