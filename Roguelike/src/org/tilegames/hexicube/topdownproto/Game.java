@@ -200,6 +200,7 @@ public class Game implements ApplicationListener, InputProcessor
 				player.armour[3] = new ItemArmourTrainers();
 				player.heldItem = new ItemPickaxe();
 				addEntity(player, maps[0], true);
+				maps[0].updateTexture(x, y);
 				int x2 = x, y2 = y;
 				if(maps[0].tiles[x-1][y] instanceof TileFloor)
 				{
@@ -393,6 +394,8 @@ public class Game implements ApplicationListener, InputProcessor
 		spriteBatch.draw(statusBarsTex, screenW - 105, 18, manaAmount, 8, manaAmount-1, 1, 1, 1, false, false);
 		int foodAmount = (int)Math.ceil((double)player.hungerLevel / 252D);
 		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
+		
+		spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));
 		
 		spriteBatch.end();
 		end = TimeUtils.nanoTime();
@@ -794,5 +797,10 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 		}
 		spawnTimer = spawned * 30;
+	}
+	
+	public static int nextPowerTwo(int val)
+	{
+		return (int)Math.pow(2, Math.ceil(Math.log(val)/Math.log(2)));
 	}
 }

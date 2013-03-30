@@ -81,6 +81,8 @@ public class ItemPickaxe extends ItemUsable
 				}
 			}
 			Game.removeLight(source.map, targX, targY);
+			source.map.updateTexture(targX, targY);
+			Game.updateLighting(source.map);
 			source.map.needsLighting = true;
 			if(durability == 0) Game.message("The Pickaxe broke...");
 			return true;

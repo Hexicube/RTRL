@@ -273,6 +273,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					walkDelay = 15;
 					move(Direction.UP);
+					map.updateTexture(xPos, yPos);
 				}
 				facingDir = Direction.UP;
 			}
@@ -282,6 +283,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					walkDelay = 15;
 					move(Direction.DOWN);
+					map.updateTexture(xPos, yPos);
 				}
 				facingDir = Direction.DOWN;
 			}
@@ -291,6 +293,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					walkDelay = 15;
 					move(Direction.LEFT);
+					map.updateTexture(xPos, yPos);
 				}
 				facingDir = Direction.LEFT;
 			}
@@ -300,6 +303,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					walkDelay = 15;
 					move(Direction.RIGHT);
+					map.updateTexture(xPos, yPos);
 				}
 				facingDir = Direction.RIGHT;
 			}
