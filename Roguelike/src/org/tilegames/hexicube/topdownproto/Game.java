@@ -11,6 +11,9 @@ import org.tilegames.hexicube.topdownproto.map.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
@@ -44,7 +47,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarsTex;
+	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarsTex, touchInputTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -54,6 +57,8 @@ public class Game implements ApplicationListener, InputProcessor
 	private static ArrayList<Message> messages;
 	
 	public static EntityPlayer player;
+	
+	public static boolean hasTouch;
 	
 	@Override
 	public void create()
@@ -69,6 +74,12 @@ public class Game implements ApplicationListener, InputProcessor
 		invUsedBar = loadImage("usagebar");
 		statusTex = loadImage("status");
 		statusBarsTex = loadImage("statusbars");
+		
+		hasTouch = Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen);
+		if(hasTouch)
+		{
+			touchInputTex = loadImage("touchbuttons");
+		}
 		
 		rand = new Random();
 		
@@ -357,6 +368,12 @@ public class Game implements ApplicationListener, InputProcessor
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
 		
+		if(hasTouch)
+		{
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(touchInputTex, 0, 0); //TODO: fix co-ords
+		}
+		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
 		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
 		else spriteBatch.setColor(0, 1, 0, 1);
@@ -463,12 +480,32 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button)
 	{
+		if(hasTouch)
+		{
+			if(button == Input.Buttons.LEFT)
+			{
+				int key = getTouchKeyAtPos(x, y);
+				if(key != -1) keysDown[key] = false;
+			}
+		} 
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button)
 	{
+		if(hasTouch)
+		{
+			if(button == Input.Buttons.LEFT)
+			{
+				int key = getTouchKeyAtPos(x, y);
+				if(key != -1)
+				{
+					keysDown[key] = true;
+					keyPress[key] = true;
+				}
+			}
+		} 
 		return false;
 	}
 
@@ -812,5 +849,15 @@ public class Game implements ApplicationListener, InputProcessor
 	public static int nextPowerTwo(int val)
 	{
 		return (int)Math.pow(2, Math.ceil(Math.log(val)/Math.log(2)));
+	}
+	
+	public int getTouchKeyAtPos(int x, int y)
+	{
+		int screenW = Gdx.graphics.getWidth();
+		int screenH = Gdx.graphics.getHeight();
+		y = screenH - y;
+		//TODO: check co-ords
+		System.out.println(x+":"+y);
+		return -1;
 	}
 }
