@@ -10,6 +10,7 @@
 * In-game:
     * 0: Open inventory  
     * 1: Use current item on self if applicable (potions mainly, i.e. invisibility potion)  
+    * 2: Face a direction using movement keys  
     * 4/5/6/8: left/down/right/up (movement)  
     * 7: Use tiles (open/close doors, unlock doors, collect all items from chest)  
     * 9: Use current item (sword, potion, whatever) in the direction you're facing  
