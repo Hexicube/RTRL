@@ -196,9 +196,9 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		while(true)
 		{
-			int x = rand.nextInt(maps[0].tiles.length);
+			int x = rand.nextInt(maps[0].tiles.length-1)+1;
 			int y = rand.nextInt(maps[0].tiles[x].length);
-			if(maps[0].tiles[x][y] instanceof TileFloor)
+			if(maps[0].tiles[x][y] instanceof TileFloor && maps[0].tiles[x-1][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
 				if(rand.nextBoolean())
@@ -213,23 +213,6 @@ public class Game implements ApplicationListener, InputProcessor
 				player.heldItem = new ItemPickaxe();
 				addEntity(player, maps[0], true);
 				maps[0].updateTexture(x, y);
-				int x2 = x, y2 = y;
-				if(maps[0].tiles[x-1][y] instanceof TileFloor)
-				{
-					x2 = x-1;
-				}
-				else if(maps[0].tiles[x+1][y] instanceof TileFloor)
-				{
-					x2 = x+1;
-				}
-				else if(maps[0].tiles[x][y-1] instanceof TileFloor)
-				{
-					y2 = y-1;
-				}
-				else if(maps[0].tiles[x][y+1] instanceof TileFloor)
-				{
-					y2 = y+1;
-				}
 				ArrayList<Item> items = new ArrayList<Item>();
 				items.add(new ItemNecklaceFeeding());
 				items.add(new ItemNecklaceStrangle());
@@ -247,7 +230,7 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemWeaponDagger());
 				items.add(new ItemWandLeechLife());
 				shuffleItems(items);
-				addEntity(new EntityChest(x2, y2, items), maps[0], true);
+				addEntity(new EntityChest(x-1, y, items), maps[0], true);
 				break;
 			}
 		}
