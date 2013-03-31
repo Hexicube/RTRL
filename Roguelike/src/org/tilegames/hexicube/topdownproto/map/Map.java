@@ -43,7 +43,7 @@ public class Map
 				catch(IndexOutOfBoundsException e){}
 			}
 		}
-		mapTex = new Texture(mapImage);
+		mapTex.draw(mapImage, 0, 0);
 	}
 	
 	public ArrayList<Entity> entities;
