@@ -461,13 +461,13 @@ public class Game implements ApplicationListener, InputProcessor
 	}
 
 	@Override
-	public boolean touchUp(int x, int y, int poniter, int button)
+	public boolean touchUp(int x, int y, int pointer, int button)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean touchDown(int x, int y, int poniter, int button)
+	public boolean touchDown(int x, int y, int pointer, int button)
 	{
 		return false;
 	}

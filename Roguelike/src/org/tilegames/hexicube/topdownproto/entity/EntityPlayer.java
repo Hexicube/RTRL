@@ -198,6 +198,7 @@ public class EntityPlayer extends EntityLiving
 								setItemInSlot(invX, invY, null);
 								Game.message("Item added to new chest.");
 							}
+							else Game.message("Something is blocking the spot in front of you.");
 						}
 						else Game.message("Something is blocking the spot in front of you.");
 					}
@@ -240,7 +241,8 @@ public class EntityPlayer extends EntityLiving
 		{
 			//0 -> open inventory
 			//1 -> use on self
-			//2/3 -> unused
+			//2 -> face direction
+			//3 -> unused
 			//4/5/6/8 -> left/down/right/up
 			//7 -> open door
 			//9 -> use held item
@@ -269,7 +271,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			if(Game.keysDown[15])
 			{
-				if(walkDelay == 0)
+				if(walkDelay == 0 && !Game.keysDown[9])
 				{
 					walkDelay = 15;
 					move(Direction.UP);
@@ -279,7 +281,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			else if(Game.keysDown[12])
 			{
-				if(walkDelay == 0)
+				if(walkDelay == 0 && !Game.keysDown[9])
 				{
 					walkDelay = 15;
 					move(Direction.DOWN);
@@ -289,7 +291,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			else if(Game.keysDown[11])
 			{
-				if(walkDelay == 0)
+				if(walkDelay == 0 && !Game.keysDown[9])
 				{
 					walkDelay = 15;
 					move(Direction.LEFT);
@@ -299,7 +301,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			else if(Game.keysDown[13])
 			{
-				if(walkDelay == 0)
+				if(walkDelay == 0 && !Game.keysDown[9])
 				{
 					walkDelay = 15;
 					move(Direction.RIGHT);
