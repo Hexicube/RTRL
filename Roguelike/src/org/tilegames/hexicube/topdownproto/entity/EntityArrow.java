@@ -10,7 +10,7 @@ public class EntityArrow extends Entity
 {
 	private int damageSides, damageDice;
 	private Direction direction;
-	private int timer;
+	private int timer, flightTime;
 	private ArrowType type;
 	
 	private static Texture tex = Game.loadImage("entity/arrow");
@@ -24,6 +24,7 @@ public class EntityArrow extends Entity
 		xPos = x;
 		yPos = y;
 		this.type = type;
+		flightTime = 0;
 	}
 	
 	@Override
@@ -36,7 +37,8 @@ public class EntityArrow extends Entity
 			timer = 5;
 			int oldX = xPos, oldY = yPos;
 			move(direction);
-			if(oldX == xPos && oldY == yPos) Game.removeEntity(this);
+			flightTime++;
+			if((oldX == xPos && oldY == yPos) || flightTime >= 10) Game.removeEntity(this);
 		}
 	}
 	@Override

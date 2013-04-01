@@ -10,7 +10,7 @@ public class EntityLeechBolt extends Entity
 	private static Texture tex = Game.loadImage("entity/leechbolt");
 	
 	private Direction direction;
-	private int timer;
+	private int timer, flightTime;
 	private Entity source;
 	
 	public EntityLeechBolt(Direction dir, Entity src, int x, int y)
@@ -20,6 +20,7 @@ public class EntityLeechBolt extends Entity
 		timer = 5;
 		xPos = x;
 		yPos = y;
+		flightTime = 0;
 	}
 	@Override
 	public void tick()
@@ -29,7 +30,10 @@ public class EntityLeechBolt extends Entity
 		if(timer == 0)
 		{
 			timer = 5;
+			int oldX = xPos, oldY = yPos;
 			move(direction);
+			flightTime++;
+			if((oldX == xPos && oldY == yPos) || flightTime >= 10) Game.removeEntity(this);
 		}
 	}
 	@Override

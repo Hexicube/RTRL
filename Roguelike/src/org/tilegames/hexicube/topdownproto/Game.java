@@ -12,7 +12,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -24,6 +23,8 @@ import com.badlogic.gdx.InputProcessor;
 
 public class Game implements ApplicationListener, InputProcessor
 {
+	private static Music backgroundMusic;
+	
 	public static int xOffset = 384, yOffset = 284;
 	
 	public static final String gameName = "Numpad Explorer";
@@ -68,6 +69,10 @@ public class Game implements ApplicationListener, InputProcessor
 		You just entered a cave for shelter from a blizzard which has recently calmed down. You try to leave, but an evil force prevents you from doing so. You have to confront it at some point, but it's best to find tools in the cave first.
 		*/
 		
+		backgroundMusic = loadMusic("bg");
+		backgroundMusic.setLooping(true);
+		backgroundMusic.setVolume(0.2f);
+		
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
 		invHighlightTex = loadImage("highlight");
@@ -102,7 +107,7 @@ public class Game implements ApplicationListener, InputProcessor
 		ItemWeaponBadSword.tex = images[0];
 		ItemWeaponDagger.tex = images[1];
 		
-		images = new Texture[2];
+		images = new Texture[4];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("item/potion"+(a+1));
@@ -110,6 +115,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = shuffleTex(images);
 		ItemPotionHealing.tex = images[0];
 		ItemPotionMana.tex = images[1];
+		ItemPotionInvisibility.tex = images[2];
 		
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
@@ -219,10 +225,10 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemNecklaceManaTraining());
 				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionHealing());
-				items.add(new ItemPotionHealing());
 				items.add(new ItemPotionMana());
 				items.add(new ItemPotionMana());
-				items.add(new ItemPotionMana());
+				items.add(new ItemPotionInvisibility());
+				items.add(new ItemPotionInvisibility());
 				items.add(new ItemBraceletCredits());
 				items.add(new ItemWeaponShortBow());
 				items.add(new ItemArrow(30, ArrowType.ACIDIC));
@@ -238,6 +244,8 @@ public class Game implements ApplicationListener, InputProcessor
 		messages = new ArrayList<Message>();
 		
 		curMap = maps[0];
+		
+		backgroundMusic.play();
 		
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
@@ -297,7 +305,8 @@ public class Game implements ApplicationListener, InputProcessor
 			int entY = eY * 32;
 			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
 			Tile t = curMap.tiles[e.xPos][e.yPos];
-			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, 1);
+			boolean invis = curMap.entities.get(a).visible(player);
+			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, invis?((curMap.entities.get(a) == player)?0.5f:0):1);
 			curMap.entities.get(a).render(spriteBatch, camX, camY);
 		}
 		

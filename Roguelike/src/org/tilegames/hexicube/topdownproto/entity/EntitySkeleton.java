@@ -26,6 +26,7 @@ public class EntitySkeleton extends EntityLiving
 		xPos = x;
 		yPos = y;
 		facingDir = Direction.UP;
+		effects = new ArrayList<Effect>();
 	}
 	
 	@Override

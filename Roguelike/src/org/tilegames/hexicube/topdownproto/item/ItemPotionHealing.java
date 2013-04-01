@@ -47,7 +47,7 @@ public class ItemPotionHealing extends ItemUsable
 		EntityLiving e = (EntityLiving)target;
 		if(!e.alive) return false;
 		e.heal(25);
-		if(!nameDiscovered)
+		if(source instanceof EntityPlayer && !nameDiscovered)
 		{
 			nameDiscovered = true;
 			Game.message("Discovered potion type: Healing");

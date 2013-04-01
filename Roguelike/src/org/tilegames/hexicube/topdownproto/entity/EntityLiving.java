@@ -52,7 +52,8 @@ public abstract class EntityLiving extends Entity
 		int size = effects.size();
 		for(int a = 0; a < size; a++)
 		{
-			if(effects.get(a).getEffectType() == EffectType.INVISIBLE && effects.get(a).getEffectStrength() > 0) return false;
+			Effect e = effects.get(a);
+			if(e.getEffectType() == EffectType.INVISIBLE && e.getEffectStrength() > 0) return false;
 		}
 		return true;
 	}
