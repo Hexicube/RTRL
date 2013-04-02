@@ -23,12 +23,10 @@ import com.badlogic.gdx.InputProcessor;
 
 public class Game implements ApplicationListener, InputProcessor
 {
-	private static Music backgroundMusic;
-	
 	public static int xOffset = 384, yOffset = 284;
 	
 	public static final String gameName = "Numpad Explorer";
-	public static final String versionText = "Alpha 3";
+	public static final String versionText = "Alpha 4";
 	
 	private static SpriteBatch spriteBatch;
 	
@@ -68,10 +66,6 @@ public class Game implements ApplicationListener, InputProcessor
 		Game plot idea:
 		You just entered a cave for shelter from a blizzard which has recently calmed down. You try to leave, but an evil force prevents you from doing so. You have to confront it at some point, but it's best to find tools in the cave first.
 		*/
-		
-		backgroundMusic = loadMusic("bg");
-		backgroundMusic.setLooping(true);
-		backgroundMusic.setVolume(0.2f);
 		
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
@@ -244,8 +238,6 @@ public class Game implements ApplicationListener, InputProcessor
 		messages = new ArrayList<Message>();
 		
 		curMap = maps[0];
-		
-		backgroundMusic.play();
 		
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
