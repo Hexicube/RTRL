@@ -297,7 +297,7 @@ public class Game implements ApplicationListener, InputProcessor
 			int entY = eY * 32;
 			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
 			Tile t = curMap.tiles[e.xPos][e.yPos];
-			boolean invis = curMap.entities.get(a).visible(player);
+			boolean invis = !curMap.entities.get(a).visible(player);
 			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, invis?((curMap.entities.get(a) == player)?0.5f:0):1);
 			curMap.entities.get(a).render(spriteBatch, camX, camY);
 		}
