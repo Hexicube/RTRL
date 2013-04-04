@@ -308,6 +308,12 @@ public class Game implements ApplicationListener, InputProcessor
 			int xPos = screenW / 2 - 200;
 			int yPos = screenH / 2 - 240 - 32; 
 			spriteBatch.draw(invTex, xPos, yPos);
+			size = player.effects.size();
+			for(int a = 0; a < size; a++)
+			{
+				Effect e = player.effects.get(a);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(e.getEffectType()+": "+(e.timeRemaining()/60)+"s"), xPos+402, yPos+508-a*9, false);
+			}
 			for(int x = 0; x < 10; x++)
 			{
 				for(int y = 0; y < 11; y++)

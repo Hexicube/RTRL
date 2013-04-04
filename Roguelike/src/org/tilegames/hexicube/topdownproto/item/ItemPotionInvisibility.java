@@ -27,7 +27,7 @@ public class ItemPotionInvisibility extends ItemUsable
 		{
 			if(source instanceof EntityLiving)
 			{
-				((EntityLiving)source).effects.add(new EffectInvisibilityPotion(900));
+				((EntityLiving)source).effects.add(new EffectInvisibilityPotion(7200));
 				if(source instanceof EntityPlayer && !nameDiscovered)
 				{
 					nameDiscovered = true;
