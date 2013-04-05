@@ -308,11 +308,111 @@ public class Game implements ApplicationListener, InputProcessor
 			int xPos = screenW / 2 - 200;
 			int yPos = screenH / 2 - 240 - 32; 
 			spriteBatch.draw(invTex, xPos, yPos);
+			int harmTimer = -1, harmStrength = 0,
+				slowTimer = -1, slowStrength = 0,
+				healTimer = -1, healStrength = 0,
+				invisTimer = -1, invulTimer = -1,
+				ghostTimer = -1;
 			size = player.effects.size();
 			for(int a = 0; a < size; a++)
 			{
 				Effect e = player.effects.get(a);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(e.getEffectType()+": "+(e.timeRemaining()/60)+"s"), xPos+402, yPos+508-a*9, false);
+				int str = e.getEffectStrength();
+				int time = e.timeRemaining();
+				if(e.getEffectType() == EffectType.HARM)
+				{
+					if(str > harmStrength)
+					{
+						harmStrength = str;
+						harmTimer = time;
+					}
+					else if(str == harmStrength && time > harmTimer)
+					{
+						harmTimer = time;
+					}
+				}
+				else if(e.getEffectType() == EffectType.SLOW)
+				{
+					if(str > slowStrength)
+					{
+						slowStrength = str;
+						slowTimer = time;
+					}
+					else if(str == slowStrength && time > slowTimer)
+					{
+						slowTimer = time;
+					}
+				}
+				else if(e.getEffectType() == EffectType.HEAL)
+				{
+					if(str > healStrength)
+					{
+						healStrength = str;
+						healTimer = time;
+					}
+					else if(str == healStrength && time > healTimer)
+					{
+						healTimer = time;
+					}
+				}
+				else if(e.getEffectType() == EffectType.INVISIBLE)
+				{
+					if(str > 0 && time > invisTimer)
+					{
+						invisTimer = time;
+					}
+				}
+				else if(e.getEffectType() == EffectType.INVULNERABLE)
+				{
+					if(str > 0 && time > invulTimer)
+					{
+						invulTimer = time;
+					}
+				}
+				else if(e.getEffectType() == EffectType.GHOSTLY)
+				{
+					if(str > 0 && time > ghostTimer)
+					{
+						ghostTimer = time;
+					}
+				}
+			}
+			int posY = yPos+508;
+			if(harmStrength > 0)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Harm "+romanNumerals(harmStrength)), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
+			}
+			if(slowStrength > 0)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Slow "+romanNumerals(slowStrength)), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
+			}
+			if(healStrength > 0)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Heal "+romanNumerals(healStrength)), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
+			}
+			if(invisTimer > -1)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
+			}
+			if(invulTimer > -1)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
+			}
+			if(ghostTimer > -1)
+			{
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos+402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer/60)+"s"), xPos+422, posY-9, false);
+				posY -= 18;
 			}
 			for(int x = 0; x < 10; x++)
 			{
@@ -421,7 +521,7 @@ public class Game implements ApplicationListener, InputProcessor
 			tickTime = 0;
 		}
 	}
-	
+
 	@Override
 	public void resize(int width, int height)
 	{
@@ -849,5 +949,40 @@ public class Game implements ApplicationListener, InputProcessor
 		//TODO: check co-ords
 		System.out.println(x+":"+y);
 		return -1;
+	}
+	
+	public static String romanNumerals(int val)
+	{
+		String str = "";
+		while(val >= 1000)
+		{
+			str += "M";
+			val -= 1000;
+		}
+		if(val >= 500)
+		{
+			str += "D";
+			val -= 500;
+		}
+		while(val > 100)
+		{
+			str += "C";
+			val -= 100;
+		}
+		while(val > 10)
+		{
+			str += "X";
+			val -= 10;
+		}
+		if(val == 1) str += "I";
+		else if(val == 2) str += "II";
+		else if(val == 3) str += "III";
+		else if(val == 4) str += "IV";
+		else if(val == 5) str += "V";
+		else if(val == 6) str += "VI";
+		else if(val == 7) str += "VII";
+		else if(val == 8) str += "VIII";
+		else if(val == 9) str += "IX";
+		return str;
 	}
 }
