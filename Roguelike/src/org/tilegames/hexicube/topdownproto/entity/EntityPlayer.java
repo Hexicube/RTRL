@@ -60,6 +60,7 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void tick()
 	{
+		if(rider != null) rider.tick();
 		for(int a = 0; a < 100; a++)
 		{
 			if(inventory[a] != null)
@@ -356,6 +357,7 @@ public class EntityPlayer extends EntityLiving
 		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
 		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, texX, texY, 32, 32, false, false);
 		//TODO: animation render (do I want to have animations?)
+		if(rider != null) rider.render(batch, camX, camY);
 	}
 	
 	@Override
