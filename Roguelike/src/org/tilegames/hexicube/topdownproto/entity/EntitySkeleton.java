@@ -143,4 +143,11 @@ public class EntitySkeleton extends EntityLiving
 	}
 	@Override
 	public void collide(Entity entity) {}
+	
+	@Override
+	public boolean mountable(Entity mounter)
+	{
+		//TODO: check this
+		return false;
+	}
 }

@@ -12,6 +12,7 @@ public abstract class EntityLiving extends Entity
 	public ArrayList<Effect> effects;
 	
 	public abstract long damageAfterResistance(long damage, DamageType type);
+	public abstract boolean mountable(Entity mounter);
 	
 	public int hurt(long damage, DamageType type)
 	{

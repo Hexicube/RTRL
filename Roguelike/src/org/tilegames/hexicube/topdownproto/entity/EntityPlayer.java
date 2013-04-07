@@ -527,4 +527,11 @@ public class EntityPlayer extends EntityLiving
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean mountable(Entity mounter)
+	{
+		//TODO: check for buffs and armour that blocks this
+		return true;
+	}
 }
