@@ -35,6 +35,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -1028,8 +1029,50 @@ public class Game implements ApplicationListener, InputProcessor
 		int screenW = Gdx.graphics.getWidth();
 		int screenH = Gdx.graphics.getHeight();
 		y = screenH - y;
-		// TODO: check co-ords
-		System.out.println(x + ":" + y);
+		
+		int startX = screenW - 190;
+		int startY = 52;
+		
+		//7-9
+		if(y >= startY + 64 * 3 && y <= startY + 64 * 3 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_7;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_8;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_9;
+		}
+		
+		//4-6
+		if(y >= startY + 64 * 2 && y <= startY + 64 * 2 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_4;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_5;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_6;
+		}
+		
+		//1-3
+		if(y >= startY + 64 && y <= startY + 64 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_1;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_2;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_3;
+		}
+		
+		//0
+		if(y >= startY && y <= startY + 60)
+		{
+			if(x >= startX && x <= startX + 124)
+				return Keys.NUM_0;
+		}		
+
 		return -1;
 	}
 	
