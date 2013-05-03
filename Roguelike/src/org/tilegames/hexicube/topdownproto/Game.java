@@ -503,6 +503,12 @@ public class Game implements ApplicationListener, InputProcessor
 			spriteBatch.draw(touchInputTex, 0, 0); // TODO: fix co-ords
 		}
 		
+		if(hasTouch)
+		{
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(touchInputTex, screenW - 192, 50);
+		}
+		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
 		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
 		else spriteBatch.setColor(0, 1, 0, 1);
