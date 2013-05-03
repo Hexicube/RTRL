@@ -350,6 +350,17 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			int xPos = screenW / 2 - 200;
 			int yPos = screenH / 2 - 240 - 32;
+
+			//move away from touch controls
+			if(hasTouch && xPos + 512 > screenW - 192)
+			{
+				xPos -= (xPos + 512) - (screenW - 192);
+				
+				//screen too small
+				if(xPos < 0)
+					xPos = 0;
+			}
+
 			spriteBatch.draw(invTex, xPos, yPos);
 			int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
 			size = player.effects.size();
