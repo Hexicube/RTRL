@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
@@ -60,6 +61,8 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static boolean[] keysDown;
 	public static boolean[] keyPress;
+	
+	private static HashMap<Integer, Integer> touchKeysDown;
 	
 	public static Random rand;
 	
@@ -214,7 +217,9 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		keysDown = new boolean[512];
 		keyPress = new boolean[512];
-		
+
+		touchKeysDown = new HashMap<Integer, Integer>();
+
 		time = TimeUtils.nanoTime();
 		ticks = 0;
 		frameRate = 0;
@@ -628,8 +633,12 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			if(button == Input.Buttons.LEFT)
 			{
-				int key = getTouchKeyAtPos(x, y);
-				if(key != -1) keysDown[key] = false;
+				Integer key = touchKeysDown.get(pointer);
+				if(key != null) 
+				{
+					keysDown[key] = false;
+					touchKeysDown.remove(pointer);
+				}
 			}
 		}
 		return false;
@@ -647,6 +656,8 @@ public class Game implements ApplicationListener, InputProcessor
 				{
 					keysDown[key] = true;
 					keyPress[key] = true;
+					
+					touchKeysDown.put(pointer, key);
 				}
 			}
 		}
