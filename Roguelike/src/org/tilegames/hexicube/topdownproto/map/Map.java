@@ -48,7 +48,12 @@ public class Map
 		}
 		mapTex.draw(mapImage, 0, 0);
 	}
-	
+
+	public void reloadTexture()
+	{
+		mapTex = new Texture(mapImage);
+	}
+
 	public ArrayList<Entity> entities;
 	public ArrayList<EntityDamageHealthDisplay> damageEntities;
 	public Tile[][] tiles;

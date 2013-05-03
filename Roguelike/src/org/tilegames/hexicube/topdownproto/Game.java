@@ -565,7 +565,10 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	@Override
 	public void resume()
-	{}
+	{
+		for(int a = 0; a < maps.length; a++)
+			maps[a].reloadTexture();
+	}
 	
 	@Override
 	public boolean keyDown(int key)
