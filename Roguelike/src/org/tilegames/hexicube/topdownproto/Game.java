@@ -20,6 +20,8 @@ import org.tilegames.hexicube.topdownproto.item.usable.ItemPickaxe;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionHealing;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionInvisibility;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionMana;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
+import org.tilegames.hexicube.topdownproto.item.weapon.ItemArrow;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWandLeechLife;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeapon;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponBadSword;

@@ -9,6 +9,7 @@ import org.tilegames.hexicube.topdownproto.item.accessory.ItemAccessory;
 import org.tilegames.hexicube.topdownproto.item.armour.ArmourSlot;
 import org.tilegames.hexicube.topdownproto.item.armour.ItemArmour;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 import org.tilegames.hexicube.topdownproto.map.Tile;
 
 import com.badlogic.gdx.graphics.Texture;

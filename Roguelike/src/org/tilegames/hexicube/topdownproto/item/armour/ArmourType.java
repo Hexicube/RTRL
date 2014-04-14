@@ -1,7 +1,7 @@
 package org.tilegames.hexicube.topdownproto.item.armour;
 
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.entity.DamageType;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
 public enum ArmourType
 {

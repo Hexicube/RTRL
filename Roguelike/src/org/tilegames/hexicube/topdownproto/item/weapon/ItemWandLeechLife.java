@@ -1,7 +1,6 @@
 package org.tilegames.hexicube.topdownproto.item.weapon;
 
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLeechBolt;
@@ -16,12 +15,22 @@ public class ItemWandLeechLife extends ItemWeapon
 	public static Texture tex;
 	
 	private static boolean nameDiscovered = false;
+	private boolean modDiscovered;
 	
 	private int durability;
+	
+	private ItemModifier modifier;
 	
 	public ItemWandLeechLife()
 	{
 		durability = Game.rand.nextInt(101) + 300;
+		int val = Game.rand.nextInt(10);
+		if(val < 3) modifier = ItemModifier.CONSERVATIVE;
+		else
+		{
+			modifier = ItemModifier.NONE;
+			modDiscovered = true;
+		}
 	}
 	
 	@Override
@@ -36,10 +45,12 @@ public class ItemWandLeechLife extends ItemWeapon
 	{
 		if(!(source instanceof EntityPlayer)) return false;
 		EntityPlayer p = (EntityPlayer) source;
-		if(p.mana >= 12)
+		int manaCost = 12;
+		if(modifier == ItemModifier.CONSERVATIVE) manaCost = 9;
+		if(p.mana >= manaCost)
 		{
-			p.mana -= 12;
-			p.manaExperience += 12;
+			p.mana -= manaCost;
+			p.manaExperience += manaCost;
 			EntityLeechBolt e = new EntityLeechBolt(p.facingDir, p, p.xPos, p.yPos);
 			Game.addEntity(e, p.map, false);
 			e.move(p.facingDir);
@@ -50,11 +61,16 @@ public class ItemWandLeechLife extends ItemWeapon
 				nameDiscovered = true;
 				Game.message("Discovered wand: Vampirism");
 			}
+			if(!modDiscovered)
+			{
+				modDiscovered = true;
+				Game.message("Discovered modifier: Conservative");
+			}
 			return true;
 		}
 		else
 		{
-			Game.message("You need 12 mana to do that! (You have " + p.mana + ")");
+			Game.message("You need "+manaCost+" mana to do that! (You have " + p.mana + ")");
 			return false;
 		}
 	}
@@ -74,13 +90,22 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public ItemModifier getModifier()
 	{
-		return ItemModifier.NONE;
+		return modifier;
 	}
 	
 	@Override
 	public String getName()
 	{
-		if(!nameDiscovered) return "Unknown Wand";
+		if(!nameDiscovered)
+		{
+			if(modifier == ItemModifier.CONSERVATIVE) return "Unusual Wand";
+			return "Unknown Wand";
+		}
+		if(modifier == ItemModifier.CONSERVATIVE)
+		{
+			if(modDiscovered) return "Conservative Wand of Vampirism";
+			return "Unusual Wand of Vampirism";
+		}
 		return "Wand of Vampirism";
 	}
 	

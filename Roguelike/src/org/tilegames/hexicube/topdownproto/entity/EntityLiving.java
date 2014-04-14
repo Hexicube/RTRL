@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.entity;
 import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
 public abstract class EntityLiving extends Entity
 {

@@ -1,10 +1,10 @@
 package org.tilegames.hexicube.topdownproto.item.usable;
 
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 import org.tilegames.hexicube.topdownproto.map.TileDoor;
 import org.tilegames.hexicube.topdownproto.map.TileFloor;
 import org.tilegames.hexicube.topdownproto.map.TileTorchWall;

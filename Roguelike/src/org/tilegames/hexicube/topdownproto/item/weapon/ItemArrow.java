@@ -1,9 +1,11 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.weapon;
 
 import org.tilegames.hexicube.topdownproto.FontHolder;
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.item.ItemModifier;
+import org.tilegames.hexicube.topdownproto.item.ItemStack;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -94,9 +96,17 @@ public class ItemArrow extends ItemStack
 	@Override
 	public String getName()
 	{
-		String typeName = type.regularName;
-		if(typeName == null) return "Arrow";
-		return typeName+" Arrow";
+		if(type == null) return "Arrow";
+		switch(type)
+		{
+			case ACID: return "Acidic Arrow";
+			case EXPLOSIVE: return "Explosive Arrow";
+			case FIRE: return "Flaming Arrow";
+			case ICE: return "Freezing Arrow";
+			default:
+				type = null;
+				return "Arrow";
+		}
 	}
 	
 	@Override

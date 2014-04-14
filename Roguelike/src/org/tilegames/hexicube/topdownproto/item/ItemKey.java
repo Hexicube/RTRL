@@ -1,8 +1,8 @@
 package org.tilegames.hexicube.topdownproto.item;
 
 import org.tilegames.hexicube.topdownproto.Game;
-import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
