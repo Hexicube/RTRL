@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.item.*;
+import org.tilegames.hexicube.topdownproto.item.accessory.AccessorySlot;
+import org.tilegames.hexicube.topdownproto.item.accessory.ItemAccessory;
+import org.tilegames.hexicube.topdownproto.item.armour.ArmourSlot;
+import org.tilegames.hexicube.topdownproto.item.armour.ItemArmour;
+import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
 import org.tilegames.hexicube.topdownproto.map.Tile;
 
 import com.badlogic.gdx.graphics.Texture;

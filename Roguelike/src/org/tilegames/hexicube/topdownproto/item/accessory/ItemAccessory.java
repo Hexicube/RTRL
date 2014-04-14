@@ -1,6 +1,7 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.accessory;
 
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
+import org.tilegames.hexicube.topdownproto.item.Item;
 
 public abstract class ItemAccessory extends Item
 {

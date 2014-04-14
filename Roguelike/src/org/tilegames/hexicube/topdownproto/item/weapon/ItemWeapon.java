@@ -1,4 +1,6 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.weapon;
+
+import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
 
 public abstract class ItemWeapon extends ItemUsable
 {

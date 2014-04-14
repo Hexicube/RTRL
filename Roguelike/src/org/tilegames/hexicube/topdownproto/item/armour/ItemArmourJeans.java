@@ -1,27 +1,29 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.armour;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class ItemArmourTrainers extends ItemArmour
+public class ItemArmourJeans extends ItemArmour
 {
-	private static Texture tex = Game.loadImage("armour/trainers");
+	private static Texture tex = Game.loadImage("armour/jeans");
 	
 	@Override
 	public double getProtectionMod(DamageType type)
 	{
-		if(type == DamageType.CRUSHING) return 0.6;
+		if(type == DamageType.FIRE) return 1.1;
+		if(type == DamageType.ICE) return 0.6;
 		return 1;
 	}
 	
 	@Override
 	public ArmourSlot getArmourType()
 	{
-		return ArmourSlot.FEET;
+		return ArmourSlot.LEGS;
 	}
 	
 	@Override
@@ -33,7 +35,7 @@ public class ItemArmourTrainers extends ItemArmour
 	@Override
 	public String getName()
 	{
-		return "Trainers";
+		return "Jeans";
 	}
 	
 	@Override
@@ -61,6 +63,6 @@ public class ItemArmourTrainers extends ItemArmour
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y);
+		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
 	}
 }

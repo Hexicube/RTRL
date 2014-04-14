@@ -1,15 +1,17 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.usable;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class ItemPotionMana extends ItemUsable
+public class ItemPotionHealing extends ItemUsable
 {
 	public static Texture tex;
 	
@@ -20,24 +22,39 @@ public class ItemPotionMana extends ItemUsable
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
+		Entity target = null;
 		if(dir == Direction.NONE)
 		{
-			if(source instanceof EntityPlayer)
+			if(source instanceof EntityLiving)
 			{
-				if(!nameDiscovered)
+				((EntityLiving) source).heal(25);
+				if(source instanceof EntityPlayer && !nameDiscovered)
 				{
 					nameDiscovered = true;
-					Game.message("Discovered potion type: Mana");
+					Game.message("Discovered potion type: Healing");
 				}
-				EntityPlayer p = (EntityPlayer) source;
 				used = true;
-				p.mana += 25;
-				if(p.mana > p.manaMax) p.mana = p.manaMax;
 				return true;
 			}
 			return false;
 		}
-		return false;
+		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos + 1].getCurrentEntity();
+		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos - 1].getCurrentEntity();
+		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos - 1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos + 1][source.yPos].getCurrentEntity();
+		else return false;
+		if(target == null) return false;
+		if(!(target instanceof EntityLiving)) return false;
+		EntityLiving e = (EntityLiving) target;
+		if(!e.alive) return false;
+		e.heal(25);
+		if(source instanceof EntityPlayer && !nameDiscovered)
+		{
+			nameDiscovered = true;
+			Game.message("Discovered potion type: Healing");
+		}
+		used = true;
+		return true;
 	}
 	
 	@Override
@@ -61,7 +78,7 @@ public class ItemPotionMana extends ItemUsable
 	@Override
 	public String getName()
 	{
-		if(nameDiscovered) return "Mana Potion";
+		if(nameDiscovered) return "Healing Potion";
 		return "Unknown Potion";
 	}
 	

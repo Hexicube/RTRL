@@ -1,15 +1,16 @@
-package org.tilegames.hexicube.topdownproto.item;
+package org.tilegames.hexicube.topdownproto.item.armour;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.DamageType;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class ItemArmourJumper extends ItemArmour
+public class ItemArmourHoodie extends ItemArmour
 {
-	private static Texture tex = Game.loadImage("armour/jumper");
+	private static Texture tex = Game.loadImage("armour/hoodie");
 	
 	@Override
 	public double getProtectionMod(DamageType type)
@@ -34,7 +35,7 @@ public class ItemArmourJumper extends ItemArmour
 	@Override
 	public String getName()
 	{
-		return "Jumper";
+		return "Hoodie";
 	}
 	
 	@Override
@@ -62,6 +63,6 @@ public class ItemArmourJumper extends ItemArmour
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
+		batch.draw(tex, x, y);
 	}
 }
