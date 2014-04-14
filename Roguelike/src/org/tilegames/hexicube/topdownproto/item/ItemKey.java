@@ -24,38 +24,47 @@ public class ItemKey extends Item
 	{
 		return false;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return null;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
-		return type+" Key";
+		return type + " Key";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return -1;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return -1;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

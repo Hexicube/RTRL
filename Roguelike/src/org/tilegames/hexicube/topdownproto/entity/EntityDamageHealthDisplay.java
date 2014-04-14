@@ -31,17 +31,21 @@ public class EntityDamageHealthDisplay extends Entity
 		if(timeLived >= 60) Game.removeEntity(this);
 		else renderOffset++;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		if(amount == 0) batch.setColor(1, 1, 1, (float)(60-timeLived)/60);
-		else if(damage) batch.setColor(1, 0, 0, (float)(60-timeLived)/60);
-		else batch.setColor(0, 1, 0, (float)(60-timeLived)/60);
-		char[] data = FontHolder.getCharList(Game.numToStr((int)amount, 0, "-"));
-		FontHolder.render(batch, data, Game.xOffset+(xPos-camX)*32-FontHolder.getTextWidth(data, false)/2+16, Game.yOffset+(yPos-camY)*32+renderOffset+24, false);
+		if(amount == 0) batch.setColor(1, 1, 1, (float) (60 - timeLived) / 60);
+		else if(damage) batch.setColor(1, 0, 0, (float) (60 - timeLived) / 60);
+		else batch.setColor(0, 1, 0, (float) (60 - timeLived) / 60);
+		char[] data = FontHolder.getCharList(Game.numToStr((int) amount, 0, "-"));
+		FontHolder.render(batch, data, Game.xOffset + (xPos - camX) * 32 - FontHolder.getTextWidth(data, false) / 2 + 16, Game.yOffset + (yPos - camY) * 32 + renderOffset + 24, false);
 	}
+	
 	@Override
-	public void collide(Entity entity){}
+	public void collide(Entity entity)
+	{}
+	
 	@Override
 	public boolean visible(Entity looker)
 	{

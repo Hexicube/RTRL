@@ -20,14 +20,19 @@ public class EntityItem extends Entity
 	}
 	
 	@Override
-	public void tick() {}
+	public void tick()
+	{}
+	
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		curItem.render(batch, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, false);
+		curItem.render(batch, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, false);
 	}
+	
 	@Override
-	public void collide(Entity entity) {}
+	public void collide(Entity entity)
+	{}
+	
 	@Override
 	public boolean visible(Entity looker)
 	{

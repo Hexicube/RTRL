@@ -3,7 +3,8 @@ package org.tilegames.hexicube.topdownproto;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class FontHolder {
+public class FontHolder
+{
 	public static Texture font, numberFont;
 	public static FontChar[] characterList;
 	
@@ -138,10 +139,11 @@ public class FontHolder {
 		for(int a = 0; a < charList.length; a++)
 		{
 			if(charList[a] == 255) xPos += 3;
-			else if(charList[a] == 254);
+			else if(charList[a] == 254)
+			;
 			else
 			{
-				xPos += characterList[charList[a]].width+1;
+				xPos += characterList[charList[a]].width + 1;
 			}
 		}
 		if(doubleScale) xPos *= 2;
@@ -153,12 +155,13 @@ public class FontHolder {
 		int xPos = 0;
 		for(int a = 0; a < charList.length; a++)
 		{
-			if(charList[a] == 255) xPos += doubleScale?6:3;
-			else if(charList[a] == 254);
+			if(charList[a] == 255) xPos += doubleScale ? 6 : 3;
+			else if(charList[a] == 254)
+			;
 			else
 			{
-				batch.draw(font, x + xPos, y - (doubleScale?18:9), (doubleScale?10:5), doubleScale?18:9, characterList[charList[a]].x*6, characterList[charList[a]].y*10, 5, 9, false, false);
-				xPos += (characterList[charList[a]].width+1)*(doubleScale?2:1);
+				batch.draw(font, x + xPos, y - (doubleScale ? 18 : 9), (doubleScale ? 10 : 5), doubleScale ? 18 : 9, characterList[charList[a]].x * 6, characterList[charList[a]].y * 10, 5, 9, false, false);
+				xPos += (characterList[charList[a]].width + 1) * (doubleScale ? 2 : 1);
 			}
 		}
 	}

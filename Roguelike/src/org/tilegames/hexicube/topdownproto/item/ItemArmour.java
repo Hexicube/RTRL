@@ -9,6 +9,7 @@ public abstract class ItemArmour extends Item
 	{
 		return false;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
@@ -16,5 +17,6 @@ public abstract class ItemArmour extends Item
 	}
 	
 	public abstract double getProtectionMod(DamageType type);
+	
 	public abstract ArmourSlot getArmourType();
 }

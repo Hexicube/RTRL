@@ -62,10 +62,11 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
-		/*
-		Game plot idea:
-		You just entered a cave for shelter from a blizzard which has recently calmed down. You try to leave, but an evil force prevents you from doing so. You have to confront it at some point, but it's best to find tools in the cave first.
-		*/
+		/* Game plot idea:
+		 * You just entered a cave for shelter from a blizzard which has
+		 * recently calmed down. You try to leave, but an evil force prevents
+		 * you from doing so. You have to confront it at some point, but it's
+		 * best to find tools in the cave first. */
 		
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
@@ -85,7 +86,7 @@ public class Game implements ApplicationListener, InputProcessor
 		Texture[] images = new Texture[4];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("necklace/necklace"+(a+1));
+			images[a] = loadImage("necklace/necklace" + (a + 1));
 		}
 		images = shuffleTex(images);
 		ItemNecklaceFeeding.tex = images[0];
@@ -95,7 +96,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[2];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("weapon/sword"+(a+1));
+			images[a] = loadImage("weapon/sword" + (a + 1));
 		}
 		images = shuffleTex(images);
 		ItemWeaponBadSword.tex = images[0];
@@ -104,7 +105,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[4];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("item/potion"+(a+1));
+			images[a] = loadImage("item/potion" + (a + 1));
 		}
 		images = shuffleTex(images);
 		ItemPotionHealing.tex = images[0];
@@ -114,7 +115,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("bracelet/bracelet"+(a+1));
+			images[a] = loadImage("bracelet/bracelet" + (a + 1));
 		}
 		images = shuffleTex(images);
 		ItemBraceletCredits.tex = images[0];
@@ -122,7 +123,7 @@ public class Game implements ApplicationListener, InputProcessor
 		images = new Texture[1];
 		for(int a = 0; a < images.length; a++)
 		{
-			images[a] = loadImage("weapon/wand"+(a+1));
+			images[a] = loadImage("weapon/wand" + (a + 1));
 		}
 		images = shuffleTex(images);
 		ItemWandLeechLife.tex = images[0];
@@ -132,7 +133,7 @@ public class Game implements ApplicationListener, InputProcessor
 		for(int a = 0; a < maps.length; a++)
 		{
 			Map m = new Map(120, 120);
-			int[][] data = new Generator().gen(120, 120, (a==0)?null:ladderPos, a!=4);
+			int[][] data = new Generator().gen(120, 120, (a == 0) ? null : ladderPos, a != 4);
 			for(int x = 0; x < 120; x++)
 			{
 				for(int y = 0; y < 120; y++)
@@ -142,7 +143,7 @@ public class Game implements ApplicationListener, InputProcessor
 					else if(data[x][y] == 2) m.tiles[x][y] = new TileFloor();
 					else if(data[x][y] == 3)
 					{
-						if(data[x][y-1] == 1) m.tiles[x][y] = new TileDoor(false, false);
+						if(data[x][y - 1] == 1) m.tiles[x][y] = new TileDoor(false, false);
 						else m.tiles[x][y] = new TileDoor(true, true);
 					}
 					else if(data[x][y] == 4)
@@ -155,8 +156,8 @@ public class Game implements ApplicationListener, InputProcessor
 					else if(data[x][y] == 5)
 					{
 						m.tiles[x][y] = new TileTorchWall();
-						int strength = rand.nextInt(6)+2;
-						addLight(m, x, y, strength+3, strength, 0);
+						int strength = rand.nextInt(6) + 2;
+						addLight(m, x, y, strength + 3, strength, 0);
 					}
 					else if(data[x][y] == 6)
 					{
@@ -183,7 +184,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		FontHolder.prep();
 		
-		Gdx.graphics.setTitle(gameName+" - "+versionText);
+		Gdx.graphics.setTitle(gameName + " - " + versionText);
 		
 		currentDeltaPassed = 0;
 		
@@ -196,9 +197,9 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		while(true)
 		{
-			int x = rand.nextInt(maps[0].tiles.length-1)+1;
+			int x = rand.nextInt(maps[0].tiles.length - 1) + 1;
 			int y = rand.nextInt(maps[0].tiles[x].length);
-			if(maps[0].tiles[x][y] instanceof TileFloor && maps[0].tiles[x-1][y] instanceof TileFloor)
+			if(maps[0].tiles[x][y] instanceof TileFloor && maps[0].tiles[x - 1][y] instanceof TileFloor)
 			{
 				player = new EntityPlayer(x, y);
 				if(rand.nextBoolean())
@@ -225,12 +226,12 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemPotionInvisibility());
 				items.add(new ItemBraceletCredits());
 				items.add(new ItemWeaponShortBow());
-				items.add(new ItemArrow(30, ArrowType.ACIDIC));
+				items.add(new ItemArrow(30, DamageType.ACID));
 				items.add(new ItemWeaponBadSword());
 				items.add(new ItemWeaponDagger());
 				items.add(new ItemWandLeechLife());
 				shuffleItems(items);
-				addEntity(new EntityChest(x-1, y, items), maps[0], true);
+				addEntity(new EntityChest(x - 1, y, items), maps[0], true);
 				break;
 			}
 		}
@@ -239,26 +240,27 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		curMap = maps[0];
 		
-		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
+		// Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 	}
 	
 	@Override
 	public void dispose()
-	{
-	}
+	{}
 	
 	@Override
 	public void pause()
-	{
-	}
+	{}
 	
 	@Override
 	public void render()
 	{
 		currentDeltaPassed += Gdx.graphics.getDeltaTime();
-		if(currentDeltaPassed > .1f) currentDeltaPassed = .1f; //anti mega lag, makes it do 6 ticks after large lag
+		if(currentDeltaPassed > .1f) currentDeltaPassed = .1f; // anti mega lag,
+																// makes it do 6
+																// ticks after
+																// large lag
 		long start = TimeUtils.nanoTime();
-		while(currentDeltaPassed >= .01667f) //about 60tps
+		while(currentDeltaPassed >= .01667f) // about 60tps
 		{
 			currentDeltaPassed -= .01667f;
 			tick();
@@ -273,7 +275,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		int screenW = Gdx.graphics.getWidth();
 		int screenH = Gdx.graphics.getHeight();
-	
+		
 		for(int x = 0; x < curMap.tiles.length; x++)
 		{
 			for(int y = 0; y < curMap.tiles[x].length; y++)
@@ -283,7 +285,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int tileX = tX * 32;
 				int tileY = tY * 32;
 				if(tileX + xOffset > screenW || tileY + yOffset > screenH || tileX + xOffset + 32 < 0 || tileY + yOffset + 32 < 0) continue;
-				spriteBatch.setColor((float)(curMap.tiles[x][y].lightLevel[0]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[1]+3)/18f, (float)(curMap.tiles[x][y].lightLevel[2]+3)/18f, 1);
+				spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
 				curMap.tiles[x][y].render(spriteBatch, tX, tY);
 			}
 		}
@@ -298,7 +300,7 @@ public class Game implements ApplicationListener, InputProcessor
 			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
 			Tile t = curMap.tiles[e.xPos][e.yPos];
 			boolean invis = !curMap.entities.get(a).visible(player);
-			spriteBatch.setColor((float)(t.lightLevel[0]+3)/18f, (float)(t.lightLevel[1]+3)/18f, (float)(t.lightLevel[2]+3)/18f, invis?((curMap.entities.get(a) == player)?0.5f:0):1);
+			spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
 			curMap.entities.get(a).render(spriteBatch, camX, camY);
 		}
 		
@@ -306,13 +308,9 @@ public class Game implements ApplicationListener, InputProcessor
 		if(player.viewingInventory)
 		{
 			int xPos = screenW / 2 - 200;
-			int yPos = screenH / 2 - 240 - 32; 
+			int yPos = screenH / 2 - 240 - 32;
 			spriteBatch.draw(invTex, xPos, yPos);
-			int harmTimer = -1, harmStrength = 0,
-				slowTimer = -1, slowStrength = 0,
-				healTimer = -1, healStrength = 0,
-				invisTimer = -1, invulTimer = -1,
-				ghostTimer = -1;
+			int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
 			size = player.effects.size();
 			for(int a = 0; a < size; a++)
 			{
@@ -377,41 +375,41 @@ public class Game implements ApplicationListener, InputProcessor
 					}
 				}
 			}
-			int posY = yPos+508;
+			int posY = yPos + 508;
 			if(harmStrength > 0)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Harm "+romanNumerals(harmStrength)), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Harm " + romanNumerals(harmStrength)), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			if(slowStrength > 0)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Slow "+romanNumerals(slowStrength)), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Slow " + romanNumerals(slowStrength)), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			if(healStrength > 0)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Heal "+romanNumerals(healStrength)), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Heal " + romanNumerals(healStrength)), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			if(invisTimer > -1)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			if(invulTimer > -1)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			if(ghostTimer > -1)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos+402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer/60)+"s"), xPos+422, posY-9, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos + 402, posY, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer / 60) + "s"), xPos + 422, posY - 9, false);
 				posY -= 18;
 			}
 			for(int x = 0; x < 10; x++)
@@ -421,39 +419,39 @@ public class Game implements ApplicationListener, InputProcessor
 					Item i = player.getItemInSlot(x, y);
 					if(i != null)
 					{
-						i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y==0);
+						i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y == 0);
 						if(i.getMaxDurability() > 1)
 						{
 							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
 							if(stage == 16) stage = 15;
-							spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30-stage*2, 32, 2, false, false);
+							spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
 						}
 					}
 				}
 			}
 			spriteBatch.draw(invHighlightTex, xPos + 4 + player.invX * 40, 436 + yPos - player.invY * 40, 32, 32, 32, 0, 32, 32, false, false);
 			Item curItem = player.getItemInSlot(player.invX, player.invY);
-			String itemName = curItem==null?player.getSlotName(player.invX, player.invY):curItem.getName();
+			String itemName = curItem == null ? player.getSlotName(player.invX, player.invY) : curItem.getName();
 			if(curItem instanceof ItemStack)
 			{
-				int size1 = ((ItemStack)curItem).getStackSize();
-				if(size1 != 1) itemName += " x"+size1;
+				int size1 = ((ItemStack) curItem).getStackSize();
+				if(size1 != 1) itemName += " x" + size1;
 			}
-			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " ("+(curItem.getCurrentDurability()*100/curItem.getMaxDurability())+"%)";
-			if(curItem != null && curItem instanceof ItemWeapon) itemName = "["+((ItemWeapon)curItem).getWeaponDamageRange()+"] "+itemName;
+			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " (" + (curItem.getCurrentDurability() * 100 / curItem.getMaxDurability()) + "%)";
+			if(curItem != null && curItem instanceof ItemWeapon) itemName = "[" + ((ItemWeapon) curItem).getWeaponDamageRange() + "] " + itemName;
 			if(player.invSelectY != -1)
 			{
 				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
-				String itemName2 = otherItem==null?player.getSlotName(player.invSelectX, player.invSelectY):otherItem.getName();
+				String itemName2 = otherItem == null ? player.getSlotName(player.invSelectX, player.invSelectY) : otherItem.getName();
 				if(otherItem instanceof ItemStack)
 				{
-					int size1 = ((ItemStack)otherItem).getStackSize();
-					if(size1 != 1) itemName2 += " x"+size1;
+					int size1 = ((ItemStack) otherItem).getStackSize();
+					if(size1 != 1) itemName2 += " x" + size1;
 				}
-				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " ("+(otherItem.getCurrentDurability()*100/otherItem.getMaxDurability())+"%)";
-				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "["+((ItemWeapon)otherItem).getWeaponDamageRange()+"] "+itemName2;
+				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
+				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
 				spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2+" <---> "+itemName), xPos + 4, 508 + yPos, false); 
+				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2 + " <---> " + itemName), xPos + 4, 508 + yPos, false);
 			}
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
@@ -461,20 +459,20 @@ public class Game implements ApplicationListener, InputProcessor
 		if(hasTouch)
 		{
 			spriteBatch.setColor(1, 1, 1, 1);
-			spriteBatch.draw(touchInputTex, 0, 0); //TODO: fix co-ords
+			spriteBatch.draw(touchInputTex, 0, 0); // TODO: fix co-ords
 		}
 		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
 		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
 		else spriteBatch.setColor(0, 1, 0, 1);
-		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate)+"fps");
+		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate) + "fps");
 		FontHolder.render(spriteBatch, tickRateText, screenW - 6 - FontHolder.getTextWidth(tickRateText, true), screenH - 6, true);
 		spriteBatch.setColor(1, 1, 1, 1);
-		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent)+"% tick");
+		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent) + "% tick");
 		FontHolder.render(spriteBatch, tickTimeText, screenW - 6 - FontHolder.getTextWidth(tickTimeText, true), screenH - 26, true);
-		char[] renderTimeText = FontHolder.getCharList(String.valueOf(renderPercent)+"% render");
+		char[] renderTimeText = FontHolder.getCharList(String.valueOf(renderPercent) + "% render");
 		FontHolder.render(spriteBatch, renderTimeText, screenW - 6 - FontHolder.getTextWidth(renderTimeText, true), screenH - 46, true);
-		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100-renderPercent-tickPercent)+"% idle");
+		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100 - renderPercent - tickPercent) + "% idle");
 		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 66, true);
 		
 		size = messages.size();
@@ -490,18 +488,18 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 			else
 			{
-				spriteBatch.setColor(1, 1, 1, (m.timeLeft<300)?((float)m.timeLeft/300f):1);
+				spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
 				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
 			}
 		}
 		spriteBatch.setColor(1, 1, 1, 1);
 		spriteBatch.draw(statusTex, screenW - 128, 0);
-		int healthAmount = (int)Math.ceil((double)player.health * 100 / (double)player.healthMax);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 31, healthAmount, 8, healthAmount-1, 0, 1, 1, false, false);
-		int manaAmount = (int)Math.ceil((double)player.mana * 100 / (double)player.manaMax);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 18, manaAmount, 8, manaAmount-1, 1, 1, 1, false, false);
-		int foodAmount = (int)Math.ceil((double)player.hungerLevel / 252D);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount-1, 2, 1, 1, false, false);
+		int healthAmount = (int) Math.ceil((double) player.health * 100 / (double) player.healthMax);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 31, healthAmount, 8, healthAmount - 1, 0, 1, 1, false, false);
+		int manaAmount = (int) Math.ceil((double) player.mana * 100 / (double) player.manaMax);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 18, manaAmount, 8, manaAmount - 1, 1, 1, 1, false, false);
+		int foodAmount = (int) Math.ceil((double) player.hungerLevel / 252D);
+		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount - 1, 2, 1, 1, false, false);
 		
 		spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));
 		
@@ -521,24 +519,23 @@ public class Game implements ApplicationListener, InputProcessor
 			tickTime = 0;
 		}
 	}
-
+	
 	@Override
 	public void resize(int width, int height)
 	{
 		xOffset = width / 2 - 16;
 		yOffset = height / 2 - 16;
-		spriteBatch = new SpriteBatch(); 
+		spriteBatch = new SpriteBatch();
 	}
 	
 	@Override
 	public void resume()
-	{
-	}
+	{}
 	
 	@Override
 	public boolean keyDown(int key)
 	{
-		//System.out.println(key);
+		// System.out.println(key);
 		if(key == 254)
 		{
 			if(Gdx.graphics.isFullscreen()) Gdx.graphics.setDisplayMode(800, 600, false);
@@ -556,17 +553,17 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyTyped(char character)
 	{
-		//TODO: use for input fields
+		// TODO: use for input fields
 		return false;
 	}
-
+	
 	@Override
 	public boolean keyUp(int key)
 	{
 		keysDown[key] = false;
 		return false;
 	}
-
+	
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button)
 	{
@@ -577,10 +574,10 @@ public class Game implements ApplicationListener, InputProcessor
 				int key = getTouchKeyAtPos(x, y);
 				if(key != -1) keysDown[key] = false;
 			}
-		} 
+		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button)
 	{
@@ -595,10 +592,10 @@ public class Game implements ApplicationListener, InputProcessor
 					keyPress[key] = true;
 				}
 			}
-		} 
+		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean touchDragged(int x, int y, int pointer)
 	{
@@ -649,7 +646,7 @@ public class Game implements ApplicationListener, InputProcessor
 			Object[] list = maps[z].entities.toArray();
 			for(int a = 0; a < list.length; a++)
 			{
-				((Entity)list[a]).tick();
+				((Entity) list[a]).tick();
 			}
 			if(maps[z].needsLighting) updateLighting(maps[z]);
 		}
@@ -735,54 +732,54 @@ public class Game implements ApplicationListener, InputProcessor
 		int maxB = t.lightSource[2];
 		if(x > 0)
 		{
-			Tile t2 = map.tiles[x-1][y];
+			Tile t2 = map.tiles[x - 1][y];
 			if(t2.givesLight())
 			{
-				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
-				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
-				if(t2.lightLevel[1]-1 > maxG) maxG = t2.lightLevel[1]-1;
-				if(t2.lightLevel[1]+1 < maxG) t2.lightLevel[1] = maxG-1;
-				if(t2.lightLevel[2]-1 > maxB) maxB = t2.lightLevel[2]-1;
-				if(t2.lightLevel[2]+1 < maxB) t2.lightLevel[2] = maxB-1;
+				if(t2.lightLevel[0] - 1 > maxR) maxR = t2.lightLevel[0] - 1;
+				if(t2.lightLevel[0] + 1 < maxR) t2.lightLevel[0] = maxR - 1;
+				if(t2.lightLevel[1] - 1 > maxG) maxG = t2.lightLevel[1] - 1;
+				if(t2.lightLevel[1] + 1 < maxG) t2.lightLevel[1] = maxG - 1;
+				if(t2.lightLevel[2] - 1 > maxB) maxB = t2.lightLevel[2] - 1;
+				if(t2.lightLevel[2] + 1 < maxB) t2.lightLevel[2] = maxB - 1;
 			}
 		}
-		if(x < map.tiles.length-1)
+		if(x < map.tiles.length - 1)
 		{
-			Tile t2 = map.tiles[x+1][y];
+			Tile t2 = map.tiles[x + 1][y];
 			if(t2.givesLight())
 			{
-				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
-				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
-				if(t2.lightLevel[1]-1 > maxG) maxG = t2.lightLevel[1]-1;
-				if(t2.lightLevel[1]+1 < maxG) t2.lightLevel[1] = maxG-1;
-				if(t2.lightLevel[2]-1 > maxB) maxB = t2.lightLevel[2]-1;
-				if(t2.lightLevel[2]+1 < maxB) t2.lightLevel[2] = maxB-1;
+				if(t2.lightLevel[0] - 1 > maxR) maxR = t2.lightLevel[0] - 1;
+				if(t2.lightLevel[0] + 1 < maxR) t2.lightLevel[0] = maxR - 1;
+				if(t2.lightLevel[1] - 1 > maxG) maxG = t2.lightLevel[1] - 1;
+				if(t2.lightLevel[1] + 1 < maxG) t2.lightLevel[1] = maxG - 1;
+				if(t2.lightLevel[2] - 1 > maxB) maxB = t2.lightLevel[2] - 1;
+				if(t2.lightLevel[2] + 1 < maxB) t2.lightLevel[2] = maxB - 1;
 			}
 		}
 		if(y > 0)
 		{
-			Tile t2 = map.tiles[x][y-1];
+			Tile t2 = map.tiles[x][y - 1];
 			if(t2.givesLight())
 			{
-				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
-				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
-				if(t2.lightLevel[1]-1 > maxG) maxG = t2.lightLevel[1]-1;
-				if(t2.lightLevel[1]+1 < maxG) t2.lightLevel[1] = maxG-1;
-				if(t2.lightLevel[2]-1 > maxB) maxB = t2.lightLevel[2]-1;
-				if(t2.lightLevel[2]+1 < maxB) t2.lightLevel[2] = maxB-1;
+				if(t2.lightLevel[0] - 1 > maxR) maxR = t2.lightLevel[0] - 1;
+				if(t2.lightLevel[0] + 1 < maxR) t2.lightLevel[0] = maxR - 1;
+				if(t2.lightLevel[1] - 1 > maxG) maxG = t2.lightLevel[1] - 1;
+				if(t2.lightLevel[1] + 1 < maxG) t2.lightLevel[1] = maxG - 1;
+				if(t2.lightLevel[2] - 1 > maxB) maxB = t2.lightLevel[2] - 1;
+				if(t2.lightLevel[2] + 1 < maxB) t2.lightLevel[2] = maxB - 1;
 			}
 		}
-		if(y < map.tiles[x].length-1)
+		if(y < map.tiles[x].length - 1)
 		{
-			Tile t2 = map.tiles[x][y+1];
+			Tile t2 = map.tiles[x][y + 1];
 			if(t2.givesLight())
 			{
-				if(t2.lightLevel[0]-1 > maxR) maxR = t2.lightLevel[0]-1;
-				if(t2.lightLevel[0]+1 < maxR) t2.lightLevel[0] = maxR-1;
-				if(t2.lightLevel[1]-1 > maxG) maxG = t2.lightLevel[1]-1;
-				if(t2.lightLevel[1]+1 < maxG) t2.lightLevel[1] = maxG-1;
-				if(t2.lightLevel[2]-1 > maxB) maxB = t2.lightLevel[2]-1;
-				if(t2.lightLevel[2]+1 < maxB) t2.lightLevel[2] = maxB-1;
+				if(t2.lightLevel[0] - 1 > maxR) maxR = t2.lightLevel[0] - 1;
+				if(t2.lightLevel[0] + 1 < maxR) t2.lightLevel[0] = maxR - 1;
+				if(t2.lightLevel[1] - 1 > maxG) maxG = t2.lightLevel[1] - 1;
+				if(t2.lightLevel[1] + 1 < maxG) t2.lightLevel[1] = maxG - 1;
+				if(t2.lightLevel[2] - 1 > maxB) maxB = t2.lightLevel[2] - 1;
+				if(t2.lightLevel[2] + 1 < maxB) t2.lightLevel[2] = maxB - 1;
 			}
 		}
 		if(t.lightLevel[0] != maxR || t.lightLevel[1] != maxG || t.lightLevel[2] != maxB) map.needsLighting = true;
@@ -794,7 +791,8 @@ public class Game implements ApplicationListener, InputProcessor
 	public static String numToStr(int num, int len, String filler)
 	{
 		String temp = String.valueOf(num);
-		while(temp.length() < len) temp = filler + temp;
+		while(temp.length() < len)
+			temp = filler + temp;
 		String[] digits = temp.split("");
 		String result = "";
 		int mod = digits.length % 3;
@@ -802,7 +800,7 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			result += digits[a];
 			a++;
-			if(a%3 == mod && a < digits.length) result += ",";
+			if(a % 3 == mod && a < digits.length) result += ",";
 		}
 		return result;
 	}
@@ -817,7 +815,7 @@ public class Game implements ApplicationListener, InputProcessor
 		int count = 0;
 		for(int a = 0; a < amount; a++)
 		{
-			count += rand.nextInt(sides)+1;
+			count += rand.nextInt(sides) + 1;
 		}
 		return count;
 	}
@@ -834,7 +832,7 @@ public class Game implements ApplicationListener, InputProcessor
 		else if(r < 12) type = KeyType.VIOLET;
 		else type = KeyType.SKELETON;
 		list.add(new ItemKey(type));
-		//TODO: make this actually do something
+		// TODO: make this actually do something
 	}
 	
 	public static void insertRandomLoot(ArrayList<Item> list, EntityLiving source)
@@ -845,11 +843,11 @@ public class Game implements ApplicationListener, InputProcessor
 			int count = rollDice(2, 3);
 			for(int a = 0; a < count; a++)
 			{
-				list.add(new ItemWeaponBone(rand.nextInt(101)+100));
+				list.add(new ItemWeaponBone(rand.nextInt(101) + 100));
 			}
-			//TODO: rare bonesword?
+			// TODO: rare bonesword?
 		}
-		//TODO: make this include loot for harder things
+		// TODO: make this include loot for harder things
 	}
 	
 	public static Texture[] shuffleTex(Texture[] images)
@@ -857,7 +855,7 @@ public class Game implements ApplicationListener, InputProcessor
 		Texture[] images2 = new Texture[images.length];
 		for(int a = 0; a < images.length; a++)
 		{
-			int pos = rand.nextInt(images.length-a);
+			int pos = rand.nextInt(images.length - a);
 			for(int b = 0; b <= pos; b++)
 			{
 				if(images[b] == null) pos++;
@@ -882,6 +880,7 @@ public class Game implements ApplicationListener, InputProcessor
 	}
 	
 	private static int spawnTimer = 120;
+	
 	private static void spawnEntities(Map map, int floor)
 	{
 		int spawned = 0;
@@ -891,7 +890,7 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			int x = rand.nextInt(map.tiles.length);
 			int y = rand.nextInt(map.tiles[x].length);
-			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
+			if(Math.abs(x - player.xPos) > 15 && Math.abs(y - player.yPos) > 9)
 			{
 				if(map.tiles[x][y] instanceof TileFloor)
 				{
@@ -901,44 +900,40 @@ public class Game implements ApplicationListener, InputProcessor
 				}
 			}
 		}
-		if(floor > 1 && floor < 11) //plain snakes
+		if(floor > 1 && floor < 11) // plain snakes
 		{
 			int x = rand.nextInt(map.tiles.length);
 			int y = rand.nextInt(map.tiles[x].length);
-			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
-			{
-			}
+			if(Math.abs(x - player.xPos) > 15 && Math.abs(y - player.yPos) > 9)
+			{}
 		}
-		if(floor < 6) //rats
+		if(floor < 6) // rats
 		{
 			int x = rand.nextInt(map.tiles.length);
 			int y = rand.nextInt(map.tiles[x].length);
-			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
-			{
-			}
+			if(Math.abs(x - player.xPos) > 15 && Math.abs(y - player.yPos) > 9)
+			{}
 		}
-		if(floor > 7) //slimes
+		if(floor > 7) // slimes
 		{
 			int x = rand.nextInt(map.tiles.length);
 			int y = rand.nextInt(map.tiles[x].length);
-			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
-			{
-			}
+			if(Math.abs(x - player.xPos) > 15 && Math.abs(y - player.yPos) > 9)
+			{}
 		}
-		if(floor > 13) //venomous snakes
+		if(floor > 13) // venomous snakes
 		{
 			int x = rand.nextInt(map.tiles.length);
 			int y = rand.nextInt(map.tiles[x].length);
-			if(Math.abs(x-player.xPos) > 15 && Math.abs(y-player.yPos) > 9)
-			{
-			}
+			if(Math.abs(x - player.xPos) > 15 && Math.abs(y - player.yPos) > 9)
+			{}
 		}
 		spawnTimer = spawned * 30;
 	}
 	
 	public static int nextPowerTwo(int val)
 	{
-		return (int)Math.pow(2, Math.ceil(Math.log(val)/Math.log(2)));
+		return (int) Math.pow(2, Math.ceil(Math.log(val) / Math.log(2)));
 	}
 	
 	public int getTouchKeyAtPos(int x, int y)
@@ -946,8 +941,8 @@ public class Game implements ApplicationListener, InputProcessor
 		int screenW = Gdx.graphics.getWidth();
 		int screenH = Gdx.graphics.getHeight();
 		y = screenH - y;
-		//TODO: check co-ords
-		System.out.println(x+":"+y);
+		// TODO: check co-ords
+		System.out.println(x + ":" + y);
 		return -1;
 	}
 	

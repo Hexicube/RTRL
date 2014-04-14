@@ -15,36 +15,44 @@ public class ItemNecklaceScarf extends ItemAccessory
 	{
 		return AccessorySlot.NECKLACE;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
 		return "Scarf";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
+		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
 	}
 }

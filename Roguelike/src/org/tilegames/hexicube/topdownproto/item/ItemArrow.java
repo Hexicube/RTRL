@@ -14,43 +14,49 @@ public class ItemArrow extends ItemStack
 	
 	private static Texture tex = Game.loadImage("item/arrow");
 	
-	private ArrowType type;
+	private DamageType type;
 	
-	public ItemArrow(int count, ArrowType type)
+	public ItemArrow(int count, DamageType type)
 	{
 		stack = count;
 		this.type = type;
 	}
+	
 	@Override
 	public int getStackSize()
 	{
 		return stack;
 	}
+	
 	@Override
 	public void setStackSize(int stack)
 	{
 		if(stack > 99) stack = 99;
+		if(stack < 1) stack = 1;
 		this.stack = stack;
 	}
+	
 	@Override
 	public int getMaxStack()
 	{
 		return 99;
 	}
+	
 	@Override
 	public boolean canStack(Item item)
 	{
 		if(item instanceof ItemArrow)
 		{
-			return ((ItemArrow)item).type == type;
+			return ((ItemArrow) item).type == type;
 		}
 		else return false;
 	}
+	
 	@Override
 	public int stackItem(Item item)
 	{
 		if(!canStack(item)) return 0;
-		ItemArrow i = (ItemArrow)item;
+		ItemArrow i = (ItemArrow) item;
 		int totalAllowed = getMaxStack() - getStackSize();
 		if(totalAllowed > i.getStackSize())
 		{
@@ -66,61 +72,60 @@ public class ItemArrow extends ItemStack
 			return totalAllowed;
 		}
 	}
+	
 	@Override
 	public boolean isWeapon()
 	{
 		return false;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
-		return DamageType.SHARP;
+		return type;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return ItemModifier.NONE;
 	}
+	
 	@Override
 	public String getName()
 	{
-		if(type == ArrowType.PLAIN) return "Arrow";
-		if(type == ArrowType.FLAMING) return "Flaming Arrow";
-		if(type == ArrowType.ACIDIC) return "Acidic Arrow";
-		if(type == ArrowType.MAGICICE) return "Icicle Arrow";
-		return "Arrow";
+		String typeName = type.regularName;
+		if(typeName == null) return "Arrow";
+		return typeName+" Arrow";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		int t;
-		if(type == ArrowType.PLAIN) t = 0;
-		else if(type == ArrowType.FLAMING) t = 1;
-		else if(type == ArrowType.ACIDIC) t = 2;
-		else if(type == ArrowType.MAGICICE) t = 3;
-		else t = -1;
-		batch.draw(tex, x, y, 32, 32, t*32, 0, 32, 32, false, false);
-		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x+2, y+9, false);
-	}
-	public ArrowType getType()
-	{
-		return type;
+		int t = type.ID;
+		batch.draw(tex, x, y, 32, 32, (t/4) * 32, (t%4) * 32, 32, 32, false, false);
+		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x + 2, y + 9, false);
 	}
 }

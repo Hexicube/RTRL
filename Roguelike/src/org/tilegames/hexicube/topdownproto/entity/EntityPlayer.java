@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntityPlayer extends EntityLiving
-{	
+{
 	public static Texture tex = Game.loadImage("entity/player");
 	
 	public Direction facingDir = Direction.UP;
@@ -53,7 +53,7 @@ public class EntityPlayer extends EntityLiving
 				mult += armour[a].getProtectionMod(type);
 			}
 		}
-		damage *= mult/4;
+		damage *= mult / 4;
 		return damage;
 	}
 	
@@ -110,7 +110,7 @@ public class EntityPlayer extends EntityLiving
 		Object[] o = effects.toArray();
 		for(int a = 0; a < o.length; a++)
 		{
-			Effect e = (Effect)o[a];
+			Effect e = (Effect) o[a];
 			if(e.timeRemaining() <= 0) effects.remove(e);
 			else e.tick(this);
 		}
@@ -119,35 +119,35 @@ public class EntityPlayer extends EntityLiving
 		alive = (health > 0);
 		if(!alive)
 		{
-			//TODO: die
+			// TODO: die
 			viewingInventory = false;
 			return;
 		}
-		while(manaExperience >= 5*manaMax)
+		while(manaExperience >= 5 * manaMax)
 		{
-			manaExperience -= 5*manaMax;
+			manaExperience -= 5 * manaMax;
 			manaMax++;
-			Game.message("Your max mana has increased to "+manaMax+"!");
+			Game.message("Your max mana has increased to " + manaMax + "!");
 		}
-		manaTicker--;
+		if(manaTicker > 0) manaTicker--;
 		if(manaTicker <= 0)
 		{
 			if(mana < manaMax)
 			{
 				mana++;
-				manaTicker = 900/(int)Math.sqrt(manaMax);
+				manaTicker = 900 / (int) Math.sqrt(manaMax);
 			}
 		}
-		//0-9 -> 7-16
+		// 0-9 -> 7-16
 		if(viewingInventory)
 		{
-			//0 -> close inventory
-			//1 -> Select item/Swap with selected
-			//2 -> Drop item or place in chest
-			//3 -> Dispose of item
-			//4/5/6/8 -> left/down/right/up
-			//7 -> use on self
-			//9 -> unused
+			// 0 -> close inventory
+			// 1 -> Select item/Swap with selected
+			// 2 -> Drop item or place in chest
+			// 3 -> Dispose of item
+			// 4/5/6/8 -> left/down/right/up
+			// 7 -> use on self
+			// 9 -> unused
 			if(Game.keyPress[8])
 			{
 				if(invSelectY == -1 && canMoveItem(invX, invY))
@@ -186,7 +186,7 @@ public class EntityPlayer extends EntityLiving
 						Entity e = target.getCurrentEntity();
 						if(e instanceof EntityChest)
 						{
-							((EntityChest)e).contents.add(i);
+							((EntityChest) e).contents.add(i);
 							setItemInSlot(invX, invY, null);
 							Game.message("Item added to chest.");
 						}
@@ -195,7 +195,7 @@ public class EntityPlayer extends EntityLiving
 							e = new EntityChest(targetX, targetY, new ArrayList<Item>());
 							if(Game.addEntity(e, map, true))
 							{
-								((EntityChest)e).contents.add(i);
+								((EntityChest) e).contents.add(i);
 								setItemInSlot(invX, invY, null);
 								Game.message("Item added to new chest.");
 							}
@@ -231,7 +231,7 @@ public class EntityPlayer extends EntityLiving
 				{
 					if(getItemInSlot(invX, invY) instanceof ItemUsable)
 					{
-						ItemUsable i = (ItemUsable)getItemInSlot(invX, invY);
+						ItemUsable i = (ItemUsable) getItemInSlot(invX, invY);
 						useDelay = i.useDelay();
 						i.use(this, Direction.NONE);
 					}
@@ -240,13 +240,13 @@ public class EntityPlayer extends EntityLiving
 		}
 		else
 		{
-			//0 -> open inventory
-			//1 -> use on self
-			//2 -> face direction
-			//3 -> unused
-			//4/5/6/8 -> left/down/right/up
-			//7 -> open door
-			//9 -> use held item
+			// 0 -> open inventory
+			// 1 -> use on self
+			// 2 -> face direction
+			// 3 -> unused
+			// 4/5/6/8 -> left/down/right/up
+			// 7 -> open door
+			// 9 -> use held item
 			if(Game.keysDown[14])
 			{
 				if(useDelay == 0)
@@ -254,19 +254,19 @@ public class EntityPlayer extends EntityLiving
 					useDelay = 15;
 					if(facingDir == Direction.DOWN)
 					{
-						if(yPos > 0) map.tiles[xPos][yPos-1].use(this);
+						if(yPos > 0) map.tiles[xPos][yPos - 1].use(this);
 					}
 					if(facingDir == Direction.UP)
 					{
-						if(yPos < map.tiles[xPos].length-1) map.tiles[xPos][yPos+1].use(this);
+						if(yPos < map.tiles[xPos].length - 1) map.tiles[xPos][yPos + 1].use(this);
 					}
 					if(facingDir == Direction.LEFT)
 					{
-						if(xPos > 0) map.tiles[xPos-1][yPos].use(this);
+						if(xPos > 0) map.tiles[xPos - 1][yPos].use(this);
 					}
 					if(facingDir == Direction.RIGHT)
 					{
-						if(xPos < map.tiles.length-1) map.tiles[xPos+1][yPos].use(this);
+						if(xPos < map.tiles.length - 1) map.tiles[xPos + 1][yPos].use(this);
 					}
 				}
 			}
@@ -355,8 +355,8 @@ public class EntityPlayer extends EntityLiving
 		int texX = 0, texY = 0;
 		if(facingDir == Direction.DOWN || facingDir == Direction.RIGHT) texX += 32;
 		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
-		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, texX, texY, 32, 32, false, false);
-		//TODO: animation render (do I want to have animations?)
+		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, 32, 32, texX, texY, 32, 32, false, false);
+		// TODO: animation render (do I want to have animations?)
 		if(rider != null) rider.render(batch, camX, camY);
 	}
 	
@@ -370,14 +370,14 @@ public class EntityPlayer extends EntityLiving
 				if(inventory[a] == null)
 				{
 					Game.removeEntity(entity);
-					inventory[a] = ((EntityItem)entity).curItem;
-					Game.message("Collected item: "+inventory[a].getName());
+					inventory[a] = ((EntityItem) entity).curItem;
+					Game.message("Collected item: " + inventory[a].getName());
 					return;
 				}
 			}
 			Game.message("Your inventory is full!");
 		}
-		//TODO: check more collision things, such as pushing a boulder
+		// TODO: check more collision things, such as pushing a boulder
 	}
 	
 	public Item getItemInSlot(int x, int y)
@@ -392,7 +392,7 @@ public class EntityPlayer extends EntityLiving
 			if(x == 8) return bracelet1;
 			if(x == 9) return bracelet2;
 		}
-		else return inventory[(y-1)*10+x];
+		else return inventory[(y - 1) * 10 + x];
 		return null;
 	}
 	
@@ -409,7 +409,7 @@ public class EntityPlayer extends EntityLiving
 				}
 				if(item instanceof ItemArmour)
 				{
-					ItemArmour i = (ItemArmour)item;
+					ItemArmour i = (ItemArmour) item;
 					if(x == 0 && i.getArmourType() != ArmourSlot.HEAD) return false;
 					if(x == 1 && i.getArmourType() != ArmourSlot.CHEST) return false;
 					if(x == 2 && i.getArmourType() != ArmourSlot.LEGS) return false;
@@ -423,13 +423,13 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(item == null || item instanceof ItemUsable)
 				{
-					heldItem = (ItemUsable)item;
+					heldItem = (ItemUsable) item;
 					return true;
 				}
 				return false;
 			}
 			if(!(item instanceof ItemAccessory) && item != null) return false;
-			ItemAccessory i = (ItemAccessory)item;
+			ItemAccessory i = (ItemAccessory) item;
 			if(x == 5)
 			{
 				if(i != null && i.getAccessoryType() != AccessorySlot.NECKLACE) return false;
@@ -463,7 +463,7 @@ public class EntityPlayer extends EntityLiving
 		}
 		else
 		{
-			inventory[(y-1)*10+x] = item;
+			inventory[(y - 1) * 10 + x] = item;
 			return true;
 		}
 		return false;
@@ -531,7 +531,7 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public boolean mountable(Entity mounter)
 	{
-		//TODO: check for buffs and armour that blocks this
+		// TODO: check for buffs and armour that blocks this
 		return true;
 	}
 }

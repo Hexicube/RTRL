@@ -17,19 +17,22 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	
 	public ItemNecklaceFeeding()
 	{
-		durability = Game.rand.nextInt(27001)+27001;
+		durability = Game.rand.nextInt(27001) + 27001;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
 		if(!nameDiscovered) return "Unknown Necklace";
 		return "Necklace of Feeding";
 	}
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
@@ -37,34 +40,39 @@ public class ItemNecklaceFeeding extends ItemAccessory
 		{
 			if(!nameDiscovered) Game.message("Discovered necklace: Feeding");
 			nameDiscovered = true;
-			((EntityPlayer)entity).hungerLevel++;
+			((EntityPlayer) entity).hungerLevel++;
 			durability--;
-			if(durability == 0) Game.message("The "+getName()+" broke...");
+			if(durability == 0) Game.message("The " + getName() + " broke...");
 		}
 	}
+	
 	@Override
 	public AccessorySlot getAccessoryType()
 	{
 		return AccessorySlot.NECKLACE;
 	}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 54000;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
+		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
 	}
 }

@@ -27,63 +27,74 @@ public class ItemWeaponBone extends ItemWeapon
 	{
 		return "1d4 BLUNT";
 	}
+	
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
 		Entity target = null;
 		if(dir == Direction.NONE) return false;
-		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos+1].getCurrentEntity();
-		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos-1].getCurrentEntity();
-		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos-1][source.yPos].getCurrentEntity();
-		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos+1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos + 1].getCurrentEntity();
+		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos - 1].getCurrentEntity();
+		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos - 1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos + 1][source.yPos].getCurrentEntity();
 		else return false;
 		if(target == null) return false;
 		if(!(target instanceof EntityLiving)) return false;
 		if(durability <= 0) return false;
-		EntityLiving e = (EntityLiving)target;
+		EntityLiving e = (EntityLiving) target;
 		if(!e.alive) return false;
 		e.hurt(Game.rollDice(4, 1), DamageType.BLUNT);
 		durability--;
 		if(durability == 0) Game.message("Your Bone Club breaks.");
 		return true;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.BLUNT;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
 		return "Bone Club";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 200;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, spriteID*32, 0, 32, 32, false, false);
+		batch.draw(tex, x, y, 32, 32, spriteID * 32, 0, 32, 32, false, false);
 	}
+	
 	@Override
 	public int useDelay()
 	{

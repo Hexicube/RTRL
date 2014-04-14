@@ -23,6 +23,7 @@ public class ItemPickaxe extends ItemUsable
 	{
 		durability = 30;
 	}
+	
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
@@ -30,7 +31,7 @@ public class ItemPickaxe extends ItemUsable
 		if(dir == Direction.NONE) return false;
 		else if(dir == Direction.UP)
 		{
-			if(targY >= source.map.tiles[source.xPos].length-2) return false;
+			if(targY >= source.map.tiles[source.xPos].length - 2) return false;
 			targY++;
 		}
 		else if(dir == Direction.DOWN)
@@ -45,37 +46,37 @@ public class ItemPickaxe extends ItemUsable
 		}
 		else if(dir == Direction.RIGHT)
 		{
-			if(targX >= source.map.tiles.length-2) return false;
+			if(targX >= source.map.tiles.length - 2) return false;
 			targX++;
 		}
 		else return false;
 		if(source.map.tiles[targX][targY] instanceof TileWall || source.map.tiles[targX][targY] instanceof TileTorchWall || source.map.tiles[targX][targY] instanceof TileDoor)
 		{
-			if(source.map.tiles[targX+1][targY] instanceof TileDoor)
+			if(source.map.tiles[targX + 1][targY] instanceof TileDoor)
 			{
 				Game.message("Remove the door first!");
 				return false;
 			}
-			if(source.map.tiles[targX-1][targY] instanceof TileDoor)
+			if(source.map.tiles[targX - 1][targY] instanceof TileDoor)
 			{
 				Game.message("Remove the door first!");
 				return false;
 			}
-			if(source.map.tiles[targX][targY+1] instanceof TileDoor)
+			if(source.map.tiles[targX][targY + 1] instanceof TileDoor)
 			{
 				Game.message("Remove the door first!");
 				return false;
 			}
-			if(source.map.tiles[targX][targY-1] instanceof TileDoor)
+			if(source.map.tiles[targX][targY - 1] instanceof TileDoor)
 			{
 				Game.message("Remove the door first!");
 				return false;
 			}
 			durability--;
 			source.map.tiles[targX][targY] = new TileFloor();
-			for(int x = targX-1; x <= targX+1; x++)
+			for(int x = targX - 1; x <= targX + 1; x++)
 			{
-				for(int y = targY-1; y <= targY+1; y++)
+				for(int y = targY - 1; y <= targY + 1; y++)
 				{
 					if(source.map.tiles[x][y] instanceof TileVoid) source.map.tiles[x][y] = new TileWall();
 				}
@@ -89,48 +90,59 @@ public class ItemPickaxe extends ItemUsable
 		}
 		return false;
 	}
+	
 	@Override
 	public int useDelay()
 	{
 		return 60;
 	}
+	
 	@Override
 	public boolean isWeapon()
 	{
 		return false;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return null;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return ItemModifier.NONE;
 	}
+	
 	@Override
 	public String getName()
 	{
 		return "Pickaxe";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 30;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

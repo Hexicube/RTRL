@@ -9,6 +9,7 @@ public abstract class ItemAccessory extends Item
 	{
 		return false;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{

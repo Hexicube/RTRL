@@ -43,6 +43,7 @@ public class EntityRat extends EntityLiving
 		if(type == DamageType.SHARP) return (long) (damage * 0.75);
 		return 0;
 	}
+	
 	@Override
 	public void tick()
 	{
@@ -61,7 +62,7 @@ public class EntityRat extends EntityLiving
 			int xDist = Game.player.xPos - xPos;
 			int yDist = Game.player.yPos - yPos;
 			int dist = Math.abs(xDist) + Math.abs(yDist);
-			if(!Game.player.alive) dist = 999999; 
+			if(!Game.player.alive) dist = 999999;
 			if(!Game.player.visible(this)) dist = 999999;
 			if(Game.player.map != map) dist = 999999;
 			if(dist < 6) chasing = true;
@@ -72,11 +73,11 @@ public class EntityRat extends EntityLiving
 				{
 					if(yDist == 0)
 					{
-						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+						facingDir = (xDist > 0) ? Direction.RIGHT : Direction.LEFT;
 					}
 					else
 					{
-						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+						facingDir = (yDist > 0) ? Direction.UP : Direction.DOWN;
 					}
 					Game.player.hurt(Game.rollDice(3, 1), DamageType.SHARP);
 				}
@@ -84,33 +85,33 @@ public class EntityRat extends EntityLiving
 				{
 					if(yDist == 0)
 					{
-						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+						facingDir = (xDist > 0) ? Direction.RIGHT : Direction.LEFT;
 						move(facingDir);
 					}
 					else if(xDist == 0)
 					{
-						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+						facingDir = (yDist > 0) ? Direction.UP : Direction.DOWN;
 						move(facingDir);
 					}
 					else if(Game.rand.nextBoolean())
 					{
 						int oldX = xPos;
-						facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+						facingDir = (xDist > 0) ? Direction.RIGHT : Direction.LEFT;
 						move(facingDir);
 						if(oldX == xPos)
 						{
-							facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+							facingDir = (yDist > 0) ? Direction.UP : Direction.DOWN;
 							move(facingDir);
 						}
 					}
 					else
 					{
 						int oldY = yPos;
-						facingDir = (yDist>0)?Direction.UP:Direction.DOWN;
+						facingDir = (yDist > 0) ? Direction.UP : Direction.DOWN;
 						move(facingDir);
 						if(oldY == yPos)
 						{
-							facingDir = (xDist>0)?Direction.RIGHT:Direction.LEFT;
+							facingDir = (xDist > 0) ? Direction.RIGHT : Direction.LEFT;
 							move(facingDir);
 						}
 					}
@@ -133,21 +134,24 @@ public class EntityRat extends EntityLiving
 		}
 		else movementTimer--;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
 		int texX = 0, texY = 0;
 		if(facingDir == Direction.DOWN || facingDir == Direction.RIGHT) texX += 32;
 		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
-		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32, 32, 32, texX, texY, 32, 32, false, false);
+		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, 32, 32, texX, texY, 32, 32, false, false);
 	}
+	
 	@Override
-	public void collide(Entity entity) {}
+	public void collide(Entity entity)
+	{}
 	
 	@Override
 	public boolean mountable(Entity mounter)
 	{
-		//TODO: check this
+		// TODO: check this
 		return false;
 	}
 }

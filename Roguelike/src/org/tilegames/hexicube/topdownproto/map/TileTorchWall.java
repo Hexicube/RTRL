@@ -12,12 +12,12 @@ public class TileTorchWall extends Tile
 	{
 		return false;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		batch.setColor(1, 1, 1, 1);
-		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 64, 0, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 64, 0, 32, 32, false, false);
 	}
 	
 	@Override
@@ -45,5 +45,6 @@ public class TileTorchWall extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity) {}
+	public void use(Entity entity)
+	{}
 }

@@ -51,19 +51,22 @@ public class TileDoor extends Tile
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		boolean doorHorizontal = (horizontal ^ opened);
-		int tileX = x+Game.camX;
-		int tileY = y+Game.camY;
+		int tileX = x + Game.camX;
+		int tileY = y + Game.camY;
 		if(!opened)
 		{
-			Tile t2 = map.tiles[doorHorizontal?tileX:(tileX+1)][doorHorizontal?(tileY-1):tileY];
-			int[] light = new int[]{t2.lightLevel[0], t2.lightLevel[1], t2.lightLevel[2]};
+			Tile t2 = map.tiles[doorHorizontal ? tileX : (tileX + 1)][doorHorizontal ? (tileY - 1) : tileY];
+			int[] light = new int[]
+			{
+					t2.lightLevel[0], t2.lightLevel[1], t2.lightLevel[2]
+			};
 			if(light[0] == 0) light[0] = 1;
 			if(light[1] == 0) light[1] = 1;
 			if(light[2] == 0) light[2] = 1;
-			batch.setColor((float)(light[0]+2)/18f, (float)(light[1]+2)/18f, (float)(light[2]+2)/18f, 1);
+			batch.setColor((float) (light[0] + 2) / 18f, (float) (light[1] + 2) / 18f, (float) (light[2] + 2) / 18f, 1);
 		}
-		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 0, 0, 32, 32, false, false);
-		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1); 
+		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 0, 0, 32, 32, false, false);
+		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1);
 		else if(requiredKey == KeyType.RED) batch.setColor(1, 0, 0, 1);
 		else if(requiredKey == KeyType.ORANGE) batch.setColor(1, 0.6f, 0, 1);
 		else if(requiredKey == KeyType.YELLOW) batch.setColor(1, 1, 0, 1);
@@ -71,21 +74,27 @@ public class TileDoor extends Tile
 		else if(requiredKey == KeyType.BLUE) batch.setColor(0, 0, 1, 1);
 		else if(requiredKey == KeyType.VIOLET) batch.setColor(0.6f, 0, 1, 1);
 		else batch.setColor(0.2f, 0.2f, 0.2f, 1);
-		/*if(!opened)
-		{
-			Tile t2 = map.tiles[doorHorizontal?tileX:(tileX+1)][doorHorizontal?(tileY-1):tileY];
-			Tile t3 = map.tiles[doorHorizontal?tileX:(tileX-1)][doorHorizontal?(tileY+1):tileY];
-			int[] light = new int[]{t2.lightLevel[0], t2.lightLevel[1], t2.lightLevel[2]};
-			if(t3.lightLevel[0] > light[0]) light[0] = t3.lightLevel[0];
-			if(t3.lightLevel[1] > light[0]) light[1] = t3.lightLevel[1];
-			if(t3.lightLevel[2] > light[0]) light[2] = t3.lightLevel[2];
-			if(light[0] == 0) light[0] = 1;
-			if(light[1] == 0) light[1] = 1;
-			if(light[2] == 0) light[2] = 1;
-			batch.setColor((float)(light[0]+2)/18f, (float)(light[1]+2)/18f, (float)(light[2]+2)/18f, 1);
-		}*/
-		int texX = doorHorizontal?0:32;
-		batch.draw(tex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, texX, 0, 32, 32, false, false);
+		/* if(!opened)
+		 * {
+		 * Tile t2 =
+		 * map.tiles[doorHorizontal?tileX:(tileX+1)][doorHorizontal?(tileY
+		 * -1):tileY];
+		 * Tile t3 =
+		 * map.tiles[doorHorizontal?tileX:(tileX-1)][doorHorizontal?(tileY
+		 * +1):tileY];
+		 * int[] light = new int[]{t2.lightLevel[0], t2.lightLevel[1],
+		 * t2.lightLevel[2]};
+		 * if(t3.lightLevel[0] > light[0]) light[0] = t3.lightLevel[0];
+		 * if(t3.lightLevel[1] > light[0]) light[1] = t3.lightLevel[1];
+		 * if(t3.lightLevel[2] > light[0]) light[2] = t3.lightLevel[2];
+		 * if(light[0] == 0) light[0] = 1;
+		 * if(light[1] == 0) light[1] = 1;
+		 * if(light[2] == 0) light[2] = 1;
+		 * batch.setColor((float)(light[0]+2)/18f, (float)(light[1]+2)/18f,
+		 * (float)(light[2]+2)/18f, 1);
+		 * } */
+		int texX = doorHorizontal ? 0 : 32;
+		batch.draw(tex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, texX, 0, 32, 32, false, false);
 	}
 	
 	@Override
@@ -119,8 +128,8 @@ public class TileDoor extends Tile
 	{
 		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer)entity;
-			ArrayList<Item> items = ((EntityChest)curEnt).contents;
+			EntityPlayer player = (EntityPlayer) entity;
+			ArrayList<Item> items = ((EntityChest) curEnt).contents;
 			if(items.size() == 0)
 			{
 				Game.message("The chest is empty!");
@@ -136,7 +145,7 @@ public class TileDoor extends Tile
 						if(player.inventory[a] == null)
 						{
 							player.inventory[a] = items.remove(0);
-							Game.message("Collected item: "+player.inventory[a].getName());
+							Game.message("Collected item: " + player.inventory[a].getName());
 							found = true;
 						}
 					}
@@ -169,12 +178,12 @@ public class TileDoor extends Tile
 		}
 		else if(entity instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer)entity;
+			EntityPlayer player = (EntityPlayer) entity;
 			for(int a = 0; a < 100; a++)
 			{
 				if(player.inventory[a] instanceof ItemKey)
 				{
-					ItemKey key = (ItemKey)player.inventory[a];
+					ItemKey key = (ItemKey) player.inventory[a];
 					if(key.type == requiredKey)
 					{
 						player.inventory[a] = null;
@@ -190,7 +199,7 @@ public class TileDoor extends Tile
 					}
 				}
 			}
-			Game.message("You need a "+requiredKey+" key or a skeleton key to open that!");
+			Game.message("You need a " + requiredKey + " key or a skeleton key to open that!");
 		}
 	}
 }

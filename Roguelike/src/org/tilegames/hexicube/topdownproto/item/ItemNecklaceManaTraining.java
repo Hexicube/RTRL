@@ -22,17 +22,19 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 		if(Game.rand.nextInt(10) < 3) shoddy = true;
 		else shoddy = false;
 	}
+	
 	@Override
 	public AccessorySlot getAccessoryType()
 	{
 		return AccessorySlot.NECKLACE;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
-		return shoddy?ItemModifier.SHODDY:ItemModifier.NONE;
+		return shoddy ? ItemModifier.SHODDY : ItemModifier.NONE;
 	}
-
+	
 	@Override
 	public String getName()
 	{
@@ -47,6 +49,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 			else return "Unknown Necklace";
 		}
 	}
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
@@ -58,7 +61,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 				Game.message("Discovered necklace: Mana Exercise");
 				if(shoddy) Game.message("You realise the Necklace of Mana Exercise is wasteful...");
 			}
-			EntityPlayer p = (EntityPlayer)entity;
+			EntityPlayer p = (EntityPlayer) entity;
 			if(p.mana > 0)
 			{
 				p.mana--;
@@ -68,28 +71,32 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 					if(Game.rand.nextBoolean()) p.manaExperience++;
 				}
 				else p.manaExperience++;
-				if(durability == 0) Game.message("The "+getName()+" broke...");
+				if(durability == 0) Game.message("The " + getName() + " broke...");
 			}
 		}
 	}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 100;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
+		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
 	}
 }

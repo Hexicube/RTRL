@@ -9,7 +9,10 @@ public class TileWall extends Tile
 {
 	public TileWall()
 	{
-		lightSource = new int[]{15, 15, 15};
+		lightSource = new int[]
+		{
+				15, 15, 15
+		};
 	}
 	
 	@Override
@@ -17,11 +20,11 @@ public class TileWall extends Tile
 	{
 		return false;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y)
 	{
-		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 32, 0, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 32, 0, 32, 32, false, false);
 	}
 	
 	@Override
@@ -49,5 +52,6 @@ public class TileWall extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity) {}
+	public void use(Entity entity)
+	{}
 }

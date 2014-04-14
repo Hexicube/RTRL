@@ -65,7 +65,7 @@ public enum ArmourType
 			if(type == DamageType.CRUSHING) return 0.7;
 			if(type == DamageType.FALLING) return 1;
 		}
-		Game.message("Unimplemented armour/damage type: "+type+" vs "+this);
+		Game.message("Unimplemented armour/damage type: " + type + " vs " + this);
 		return 1;
 	}
 }

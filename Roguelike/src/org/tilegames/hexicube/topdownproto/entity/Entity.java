@@ -13,8 +13,11 @@ public abstract class Entity
 	public Entity rider, riding;
 	
 	public abstract void tick();
+	
 	public abstract void render(SpriteBatch batch, int camX, int camY);
+	
 	public abstract void collide(Entity entity);
+	
 	public abstract boolean visible(Entity looker);
 	
 	public void move(Direction dir)
@@ -43,8 +46,8 @@ public abstract class Entity
 		}
 		else return;
 		int dirX = 0, dirY = 0;
-		if(horizontal) dirX = amount/Math.abs(amount);
-		else dirY = amount/Math.abs(amount);
+		if(horizontal) dirX = amount / Math.abs(amount);
+		else dirY = amount / Math.abs(amount);
 		for(int a = 0; a < Math.abs(amount); a++)
 		{
 			int newX = xPos + dirX;

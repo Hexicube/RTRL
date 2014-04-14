@@ -20,14 +20,14 @@ public class TileStair extends Tile
 	@Override
 	public boolean onWalkAttempt(Entity entity)
 	{
-		if(entity instanceof EntityPlayer) Game.message("Use the stairs to go "+(down?"down":"up")+" a level!");
+		if(entity instanceof EntityPlayer) Game.message("Use the stairs to go " + (down ? "down" : "up") + " a level!");
 		return false;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y)
 	{
-		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 0, down?32:64, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 0, down ? 32 : 64, 32, 32, false, false);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class TileStair extends Tile
 	{
 		if(entity instanceof EntityPlayer)
 		{
-			if(Game.addEntity(entity, Game.maps[floor+(down?1:-1)], true)) Game.curMap = entity.map;
+			if(Game.addEntity(entity, Game.maps[floor + (down ? 1 : -1)], true)) Game.curMap = entity.map;
 		}
 	}
 }

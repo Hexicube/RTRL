@@ -39,26 +39,27 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		Entity target = null;
 		if(dir == Direction.NONE) return false;
-		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos+1].getCurrentEntity();
-		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos-1].getCurrentEntity();
-		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos-1][source.yPos].getCurrentEntity();
-		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos+1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos + 1].getCurrentEntity();
+		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos - 1].getCurrentEntity();
+		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos - 1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos + 1][source.yPos].getCurrentEntity();
 		else return false;
 		if(target == null) return false;
 		if(!(target instanceof EntityLiving)) return false;
 		if(durability <= 0) return false;
 		if(!modDiscovered)
 		{
-			Game.message("You realise the Badsword is "+(modifier==ItemModifier.SHODDY?"shoddy":"sharp")+"...");
+			Game.message("You realise the Badsword is " + (modifier == ItemModifier.SHODDY ? "shoddy" : "sharp") + "...");
 			modDiscovered = true;
 		}
-		EntityLiving e = (EntityLiving)target;
+		EntityLiving e = (EntityLiving) target;
 		if(!e.alive) return false;
-		e.hurt((modifier==ItemModifier.SHARPENED?Game.rollDice(2, 4):(Game.rollDice(4, 1)-(modifier==ItemModifier.SHODDY?1:0))), DamageType.SHARP);
+		e.hurt((modifier == ItemModifier.SHARPENED ? Game.rollDice(2, 4) : (Game.rollDice(4, 1) - (modifier == ItemModifier.SHODDY ? 1 : 0))), DamageType.SHARP);
 		durability--;
-		if(durability == 0) Game.message("The "+getName()+" broke...");
+		if(durability == 0) Game.message("The " + getName() + " broke...");
 		return true;
 	}
+	
 	@Override
 	public String getWeaponDamageRange()
 	{
@@ -68,32 +69,35 @@ public class ItemWeaponBadSword extends ItemWeapon
 		if(modifier == ItemModifier.SHODDY) return "1d4-1 SHARP";
 		return "1d4 SHARP";
 	}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 200;
 	}
-
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
-
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.SHARP;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return modifier;
 	}
+	
 	@Override
 	public String getName()
 	{
-		if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true; 
+		if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true;
 		if(!nameDiscovered)
 		{
 			if(modDiscovered) return "Unknown Sword";
@@ -106,11 +110,12 @@ public class ItemWeaponBadSword extends ItemWeapon
 		else if(modifier == ItemModifier.SHODDY) return "Really Badsword";
 		else
 		{
-			System.out.println("Removed bad modifier on badsword: "+modifier);
+			System.out.println("Removed bad modifier on badsword: " + modifier);
 			modifier = ItemModifier.NONE;
 		}
 		return "Badsword";
 	}
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
@@ -129,12 +134,13 @@ public class ItemWeaponBadSword extends ItemWeapon
 			}
 		}
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return !(modifier == ItemModifier.CURSED);
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

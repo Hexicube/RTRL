@@ -17,38 +17,47 @@ public class ItemArmourTrainers extends ItemArmour
 		if(type == DamageType.CRUSHING) return 0.6;
 		return 1;
 	}
+	
 	@Override
 	public ArmourSlot getArmourType()
 	{
 		return ArmourSlot.FEET;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
 		return "Trainers";
 	}
+	
 	@Override
-	public void tick(Entity entity, boolean equipped) {}
+	public void tick(Entity entity, boolean equipped)
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return 0;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

@@ -10,32 +10,22 @@ public class ItemBraceletCredits extends ItemAccessory
 {
 	private static final String[][] credits = new String[][]
 	{
-		new String[]
-		{
-			"CREDITS"
-		},
-		new String[]
-		{
-			"Concept: Hexicube",
-			"Artwork: allyally",
-			"Artwork: Daft Freak",
-			"Programming: Hexicube",
-			"HTML port: Daft Freak",
-			"Inspiration: geckojsc"
-		},
-		new String[]
-		{
-			"SPECIAL THANKS TO"
-		},
-		new String[]
-		{
-			"allyally",
-			"Daft Freak"
-		},
-		new String[]
-		{
-			"THANKS FOR LISTENING!"
-		}
+			new String[]
+			{
+				"CREDITS"
+			}, new String[]
+			{
+					"Concept: Hexicube", "Artwork: allyally", "Artwork: Daft Freak", "Programming: Hexicube", "HTML port: Daft Freak", "Inspiration: geckojsc"
+			}, new String[]
+			{
+				"SPECIAL THANKS TO"
+			}, new String[]
+			{
+					"allyally", "Daft Freak"
+			}, new String[]
+			{
+				"THANKS FOR LISTENING!"
+			}
 	};
 	
 	private int timer1, timer2, creditsPos, durability;
@@ -55,17 +45,19 @@ public class ItemBraceletCredits extends ItemAccessory
 	{
 		return AccessorySlot.BRACELET;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return null;
 	}
+	
 	@Override
 	public String getName()
 	{
 		return "Memory Bracelet";
 	}
-
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
@@ -73,11 +65,11 @@ public class ItemBraceletCredits extends ItemAccessory
 		{
 			timer2 = 0;
 			timer1++;
-			if(creditsPos == 0 || timer1 == credits[creditsPos-1].length*30+150)
+			if(creditsPos == 0 || timer1 == credits[creditsPos - 1].length * 30 + 150)
 			{
 				Game.message("-----------------");
 				timer1 = 0;
-				for(int a = credits[creditsPos].length-1; a >= 0; a--)
+				for(int a = credits[creditsPos].length - 1; a >= 0; a--)
 				{
 					Game.message(credits[creditsPos][a]);
 				}
@@ -102,25 +94,28 @@ public class ItemBraceletCredits extends ItemAccessory
 			}
 		}
 	}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 1;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		batch.draw(tex, x, y, 32, 32, equipped?32:0, 0, 32, 32, false, false);
+		batch.draw(tex, x, y, 32, 32, equipped ? 32 : 0, 0, 32, 32, false, false);
 	}
 }

@@ -20,11 +20,11 @@ public class TileFloor extends Tile
 	{
 		return true;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y)
 	{
-		batch.draw(Game.tileTex, Game.xOffset+x*32, Game.yOffset+y*32, 32, 32, 0, 0, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 0, 0, 32, 32, false, false);
 	}
 	
 	@Override
@@ -57,8 +57,8 @@ public class TileFloor extends Tile
 	{
 		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer)entity;
-			ArrayList<Item> items = ((EntityChest)curEnt).contents;
+			EntityPlayer player = (EntityPlayer) entity;
+			ArrayList<Item> items = ((EntityChest) curEnt).contents;
 			if(items.size() == 0)
 			{
 				Game.message("The chest is empty!");
@@ -74,9 +74,9 @@ public class TileFloor extends Tile
 						if(player.inventory[a] instanceof ItemStack)
 						{
 							Item i = items.get(0);
-							if(((ItemStack)player.inventory[a]).canStack(i))
+							if(((ItemStack) player.inventory[a]).canStack(i))
 							{
-								int count = ((ItemStack)player.inventory[a]).stackItem(i);
+								int count = ((ItemStack) player.inventory[a]).stackItem(i);
 								if(!(i instanceof ItemStack))
 								{
 									items.remove(0);
@@ -84,14 +84,14 @@ public class TileFloor extends Tile
 								}
 								else
 								{
-									ItemStack i2 = (ItemStack)i;
+									ItemStack i2 = (ItemStack) i;
 									if(i2.getStackSize() == 0)
 									{
 										items.remove(0);
 										found = true;
 									}
 								}
-								Game.message("Collected item: "+player.inventory[a].getName()+((count!=1)?" x"+count:""));
+								Game.message("Collected item: " + player.inventory[a].getName() + ((count != 1) ? " x" + count : ""));
 							}
 						}
 						else if(player.inventory[a] == null)
@@ -100,9 +100,9 @@ public class TileFloor extends Tile
 							int size = 1;
 							if(player.inventory[a] instanceof ItemStack)
 							{
-								size = ((ItemStack)player.inventory[a]).getStackSize();
+								size = ((ItemStack) player.inventory[a]).getStackSize();
 							}
-							Game.message("Collected item: "+player.inventory[a].getName()+((size!=1)?" x"+size:""));
+							Game.message("Collected item: " + player.inventory[a].getName() + ((size != 1) ? " x" + size : ""));
 							found = true;
 						}
 					}

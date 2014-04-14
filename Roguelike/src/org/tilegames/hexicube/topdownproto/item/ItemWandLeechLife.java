@@ -20,7 +20,7 @@ public class ItemWandLeechLife extends ItemWeapon
 	
 	public ItemWandLeechLife()
 	{
-		durability = Game.rand.nextInt(101)+300;
+		durability = Game.rand.nextInt(101) + 300;
 	}
 	
 	@Override
@@ -29,11 +29,12 @@ public class ItemWandLeechLife extends ItemWeapon
 		if(nameDiscovered) return "2d10 GENERIC";
 		return "???";
 	}
+	
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
 		if(!(source instanceof EntityPlayer)) return false;
-		EntityPlayer p = (EntityPlayer)source;
+		EntityPlayer p = (EntityPlayer) source;
 		if(p.mana >= 12)
 		{
 			p.mana -= 12;
@@ -42,7 +43,7 @@ public class ItemWandLeechLife extends ItemWeapon
 			Game.addEntity(e, p.map, false);
 			e.move(p.facingDir);
 			durability--;
-			if(durability == 0) Game.message("The "+getName()+" broke...");
+			if(durability == 0) Game.message("The " + getName() + " broke...");
 			if(!nameDiscovered)
 			{
 				nameDiscovered = true;
@@ -52,51 +53,58 @@ public class ItemWandLeechLife extends ItemWeapon
 		}
 		else
 		{
-			Game.message("You need 12 mana to do that! (You have "+p.mana+")");
+			Game.message("You need 12 mana to do that! (You have " + p.mana + ")");
 			return false;
 		}
 	}
+	
 	@Override
 	public int useDelay()
 	{
 		return 120;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.GENERIC;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return ItemModifier.NONE;
 	}
+	
 	@Override
 	public String getName()
 	{
 		if(!nameDiscovered) return "Unknown Wand";
 		return "Wand of Vampirism";
 	}
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
-	{
-	}
+	{}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 400;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

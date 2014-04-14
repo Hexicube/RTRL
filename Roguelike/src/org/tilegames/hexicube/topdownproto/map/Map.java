@@ -26,9 +26,9 @@ public class Map
 	
 	public void updateTexture(int x, int y)
 	{
-		for(int x2 = x-2; x2 <= x+2; x2++)
+		for(int x2 = x - 2; x2 <= x + 2; x2++)
 		{
-			for(int y2 = y-2; y2 <= y+2; y2++)
+			for(int y2 = y - 2; y2 <= y + 2; y2++)
 			{
 				try
 				{
@@ -38,9 +38,10 @@ public class Map
 					else if(tiles[x2][y2] instanceof TileDoor) mapImage.setColor(1, 0, 0, 1);
 					else if(tiles[x2][y2] instanceof TileStair) mapImage.setColor(0, 1, 0, 1);
 					else mapImage.setColor(0, 1, 1, 1);
-					mapImage.drawPixel(x2, tiles[0].length-y2-1);
+					mapImage.drawPixel(x2, tiles[0].length - y2 - 1);
 				}
-				catch(IndexOutOfBoundsException e){}
+				catch(IndexOutOfBoundsException e)
+				{}
 			}
 		}
 		mapTex.draw(mapImage, 0, 0);

@@ -28,7 +28,7 @@ public class ItemWeaponDagger extends ItemWeapon
 		else if(rand < 9) mod = ItemModifier.NONE;
 		else mod = ItemModifier.SHARPENED;
 		
-		durability = Game.rand.nextInt(101)+50;
+		durability = Game.rand.nextInt(101) + 50;
 	}
 	
 	@Override
@@ -40,49 +40,54 @@ public class ItemWeaponDagger extends ItemWeapon
 		if(mod == ItemModifier.SHARPENED) return "3d3 SHARP";
 		return "2d3 SHARP";
 	}
+	
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
 		Entity target = null;
 		if(dir == Direction.NONE) return false;
-		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos+1].getCurrentEntity();
-		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos-1].getCurrentEntity();
-		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos-1][source.yPos].getCurrentEntity();
-		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos+1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.UP) target = source.map.tiles[source.xPos][source.yPos + 1].getCurrentEntity();
+		else if(dir == Direction.DOWN) target = source.map.tiles[source.xPos][source.yPos - 1].getCurrentEntity();
+		else if(dir == Direction.LEFT) target = source.map.tiles[source.xPos - 1][source.yPos].getCurrentEntity();
+		else if(dir == Direction.RIGHT) target = source.map.tiles[source.xPos + 1][source.yPos].getCurrentEntity();
 		else return false;
 		if(target == null) return false;
 		if(!(target instanceof EntityLiving)) return false;
 		if(durability <= 0) return false;
 		if(!modDiscovered)
 		{
-			Game.message("You realise the Dagger is "+(mod==ItemModifier.SHODDY?"rusty":"pointy")+"...");
+			Game.message("You realise the Dagger is " + (mod == ItemModifier.SHODDY ? "rusty" : "pointy") + "...");
 			modDiscovered = true;
 		}
-		EntityLiving e = (EntityLiving)target;
+		EntityLiving e = (EntityLiving) target;
 		if(!e.alive) return false;
 		int rolls = 2;
 		if(mod == ItemModifier.SHODDY) rolls = 1;
 		else if(mod == ItemModifier.SHARPENED) rolls = 3;
 		e.hurt(Game.rollDice(3, rolls), DamageType.SHARP);
 		durability--;
-		if(durability == 0) Game.message("The "+getName()+" broke...");
+		if(durability == 0) Game.message("The " + getName() + " broke...");
 		return true;
 	}
+	
 	@Override
 	public int useDelay()
 	{
 		return 15;
 	}
+	
 	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.SHARP;
 	}
+	
 	@Override
 	public ItemModifier getModifier()
 	{
 		return mod;
 	}
+	
 	@Override
 	public String getName()
 	{
@@ -94,7 +99,7 @@ public class ItemWeaponDagger extends ItemWeapon
 				if(mod == ItemModifier.CURSED) return "Cursed Dagger";
 				if(mod == ItemModifier.SHODDY) return "Rusted Dagger";
 				if(mod == ItemModifier.SHARPENED) return "Pointy Dagger";
-				System.out.println("Removed bad modifier on dagger: "+mod);
+				System.out.println("Removed bad modifier on dagger: " + mod);
 				mod = ItemModifier.NONE;
 				return "Dagger";
 			}
@@ -106,6 +111,7 @@ public class ItemWeaponDagger extends ItemWeapon
 			return "Unusual Sword";
 		}
 	}
+	
 	@Override
 	public void tick(Entity entity, boolean equipped)
 	{
@@ -130,21 +136,25 @@ public class ItemWeaponDagger extends ItemWeapon
 			}
 		}
 	}
+	
 	@Override
 	public int getMaxDurability()
 	{
 		return 150;
 	}
+	
 	@Override
 	public int getCurrentDurability()
 	{
 		return durability;
 	}
+	
 	@Override
 	public boolean canMove()
 	{
-		return !(mod==ItemModifier.CURSED);
+		return !(mod == ItemModifier.CURSED);
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{

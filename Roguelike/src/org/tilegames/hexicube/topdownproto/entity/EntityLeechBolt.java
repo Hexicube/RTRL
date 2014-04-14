@@ -22,6 +22,7 @@ public class EntityLeechBolt extends Entity
 		yPos = y;
 		flightTime = 0;
 	}
+	
 	@Override
 	public void tick()
 	{
@@ -36,21 +37,24 @@ public class EntityLeechBolt extends Entity
 			if((oldX == xPos && oldY == yPos) || flightTime >= 10) Game.removeEntity(this);
 		}
 	}
+	
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		batch.draw(tex, Game.xOffset+(xPos-camX)*32, Game.yOffset+(yPos-camY)*32);
+		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32);
 	}
+	
 	@Override
 	public void collide(Entity entity)
 	{
 		if(entity instanceof EntityLiving)
 		{
-			int dmg = ((EntityLiving)entity).hurt(Game.rollDice(10, 2), DamageType.GENERIC);
-			if(source instanceof EntityLiving) ((EntityLiving)source).heal(dmg);
+			int dmg = ((EntityLiving) entity).hurt(Game.rollDice(10, 2), DamageType.GENERIC);
+			if(source instanceof EntityLiving) ((EntityLiving) source).heal(dmg);
 		}
 		Game.removeEntity(this);
 	}
+	
 	@Override
 	public boolean visible(Entity looker)
 	{

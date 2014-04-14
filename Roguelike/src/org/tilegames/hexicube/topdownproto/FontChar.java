@@ -1,6 +1,7 @@
 package org.tilegames.hexicube.topdownproto;
 
-public class FontChar {
+public class FontChar
+{
 	public FontChar(int character, int x, int y, int width)
 	{
 		this.character = character;

@@ -12,6 +12,7 @@ public abstract class EntityLiving extends Entity
 	public ArrayList<Effect> effects;
 	
 	public abstract long damageAfterResistance(long damage, DamageType type);
+	
 	public abstract boolean mountable(Entity mounter);
 	
 	public int hurt(long damage, DamageType type)
@@ -29,7 +30,7 @@ public abstract class EntityLiving extends Entity
 				health = 0;
 			}
 			alive = (health > 0);
-			return (int)damage;
+			return (int) damage;
 		}
 	}
 	
@@ -45,8 +46,9 @@ public abstract class EntityLiving extends Entity
 		if(max < amount) amount = max;
 		health += amount;
 		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);
-		return (int)amount;
+		return (int) amount;
 	}
+	
 	@Override
 	public boolean visible(Entity looker)
 	{
