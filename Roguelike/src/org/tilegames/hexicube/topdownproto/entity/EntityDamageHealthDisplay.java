@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class EntityDamageHealthDisplay extends Entity
 {
 	private boolean damage;
-	private long amount;
+	private double amount;
 	
 	private int renderOffset;
 	
 	private short timeLived;
 	
-	public EntityDamageHealthDisplay(boolean damage, long amount, int x, int y)
+	public EntityDamageHealthDisplay(boolean damage, double amount, int x, int y)
 	{
 		this.damage = damage;
 		this.amount = amount;

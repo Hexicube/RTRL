@@ -31,7 +31,7 @@ public class EntityRat extends EntityLiving
 	}
 	
 	@Override
-	public long damageAfterResistance(long damage, DamageType type)
+	public double damageAfterResistance(double damage, DamageType type)
 	{
 		if(type == DamageType.ACID) return (long) (damage * 1.5);
 		if(type == DamageType.BLUNT) return damage * 2;

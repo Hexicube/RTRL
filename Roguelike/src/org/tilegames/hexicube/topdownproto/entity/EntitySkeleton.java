@@ -31,7 +31,7 @@ public class EntitySkeleton extends EntityLiving
 	}
 	
 	@Override
-	public long damageAfterResistance(long damage, DamageType type)
+	public double damageAfterResistance(double damage, DamageType type)
 	{
 		if(type == DamageType.ACID) return damage * 2;
 		if(type == DamageType.BLUNT) return (long) (damage * 1.5);

@@ -7,16 +7,16 @@ import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
 public abstract class EntityLiving extends Entity
 {
-	public long health, healthMax;
+	public double health, healthMax;
 	public boolean alive;
 	
 	public ArrayList<Effect> effects;
 	
-	public abstract long damageAfterResistance(long damage, DamageType type);
+	public abstract double damageAfterResistance(double damage, DamageType type);
 	
 	public abstract boolean mountable(Entity mounter);
 	
-	public int hurt(long damage, DamageType type)
+	public int hurt(double damage, DamageType type)
 	{
 		if(damage < 0) return 0;
 		damage = damageAfterResistance(damage, type);
@@ -35,10 +35,10 @@ public abstract class EntityLiving extends Entity
 		}
 	}
 	
-	public int heal(long amount)
+	public int heal(double amount)
 	{
 		if(amount < 0) return 0;
-		long max = healthMax - health;
+		double max = healthMax - health;
 		if(max == 0)
 		{
 			Game.addEntity(new EntityDamageHealthDisplay(true, 0, xPos, yPos), map, false);

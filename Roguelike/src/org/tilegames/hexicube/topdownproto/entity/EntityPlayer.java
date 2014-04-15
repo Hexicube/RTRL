@@ -32,7 +32,7 @@ public class EntityPlayer extends EntityLiving
 	
 	public boolean viewingInventory;
 	
-	public int hungerLevel, mana, manaMax, manaExperience, manaTicker;
+	public int hungerLevel, hungerLevelMax, hungerTicker, mana, manaMax, manaExperience, manaTicker;
 	
 	public EntityPlayer(int x, int y)
 	{
@@ -42,14 +42,14 @@ public class EntityPlayer extends EntityLiving
 		inventory = new Item[100];
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();
-		hungerLevel = 25200;
+		hungerLevel = hungerLevelMax = 25200;
 		mana = 20;
 		manaMax = 20;
 		manaTicker = 300;
 	}
 	
 	@Override
-	public long damageAfterResistance(long damage, DamageType type)
+	public double damageAfterResistance(double damage, DamageType type)
 	{
 		double mult = 0;
 		for(int a = 0; a < armour.length; a++)
@@ -122,7 +122,23 @@ public class EntityPlayer extends EntityLiving
 			else e.tick(this);
 		}
 		if(alive) hungerLevel--;
-		if(hungerLevel <= 0) health = 0;
+		double hungerAmount = (double)hungerLevel / (double)hungerLevelMax;
+		double rate;
+		if(hungerAmount < 0.1) rate = hungerAmount*10 - 1;
+		else if(hungerAmount > 0.75) rate = (hungerAmount-0.75)*4;
+		else rate = 0;
+		if(rate == 0) hungerTicker = 60;
+		else
+		{
+			if(hungerTicker > 0) hungerTicker--;
+			else
+			{
+				hungerTicker = 60;
+				int amount = ((int)rate * 3);
+				health += amount;
+				if(health > healthMax) health = healthMax;
+			}
+		}
 		alive = (health > 0);
 		if(!alive)
 		{
