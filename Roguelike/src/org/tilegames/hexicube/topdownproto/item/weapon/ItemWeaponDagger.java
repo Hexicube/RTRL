@@ -25,7 +25,8 @@ public class ItemWeaponDagger extends ItemWeapon
 		int rand = Game.rand.nextInt(10);
 		if(rand < 2) mod = ItemModifier.CURSED;
 		else if(rand < 5) mod = ItemModifier.SHODDY;
-		else if(rand < 9) mod = ItemModifier.NONE;
+		else if(rand == 9) mod = ItemModifier.QUICK;
+		else if(rand != 8) mod = ItemModifier.NONE;
 		else mod = ItemModifier.SHARPENED;
 		
 		durability = Game.rand.nextInt(101) + 50;
@@ -56,7 +57,7 @@ public class ItemWeaponDagger extends ItemWeapon
 		if(durability <= 0) return false;
 		if(!modDiscovered)
 		{
-			Game.message("You realise the Dagger is " + (mod == ItemModifier.SHODDY ? "rusty" : "pointy") + "...");
+			Game.message("You realise the Dagger is " + (mod == ItemModifier.SHODDY ? "rusty" : (mod == ItemModifier.QUICK ? "quick" : "pointy")) + "...");
 			modDiscovered = true;
 		}
 		EntityLiving e = (EntityLiving) target;
@@ -73,7 +74,7 @@ public class ItemWeaponDagger extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return 15;
+		return (mod == ItemModifier.QUICK) ? 9 : 15;
 	}
 	
 	@Override
@@ -99,6 +100,7 @@ public class ItemWeaponDagger extends ItemWeapon
 				if(mod == ItemModifier.CURSED) return "Cursed Dagger";
 				if(mod == ItemModifier.SHODDY) return "Rusted Dagger";
 				if(mod == ItemModifier.SHARPENED) return "Pointy Dagger";
+				if(mod == ItemModifier.QUICK) return "Quick Dagger";
 				System.out.println("Removed bad modifier on dagger: " + mod);
 				mod = ItemModifier.NONE;
 				return "Dagger";
