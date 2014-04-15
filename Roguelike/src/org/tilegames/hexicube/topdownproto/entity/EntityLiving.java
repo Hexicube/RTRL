@@ -10,7 +10,7 @@ public abstract class EntityLiving extends Entity
 	public double health, healthMax;
 	public boolean alive;
 	
-	private int ticksSinceLastDamage = 41;
+	private int ticksSinceLastDamage = 51;
 	private EntityDamageHealthDisplay lastDamageIndicator;
 	
 	public ArrayList<Effect> effects;
@@ -33,10 +33,12 @@ public abstract class EntityLiving extends Entity
 		else
 		{
 			health -= damage;
-			if(ticksSinceLastDamage <= 40)
+			if(ticksSinceLastDamage <= 50)
 			{
 				lastDamageIndicator.amount += damage;
 				lastDamageIndicator.timeLived = 0;
+				lastDamageIndicator.xPos = xPos;
+				lastDamageIndicator.yPos = yPos;
 			}
 			else
 			{
