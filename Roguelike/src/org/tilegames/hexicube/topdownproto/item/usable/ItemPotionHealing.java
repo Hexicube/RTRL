@@ -123,4 +123,10 @@ public class ItemPotionHealing extends ItemUsable
 	{
 		return 15;
 	}
+	
+	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
 }

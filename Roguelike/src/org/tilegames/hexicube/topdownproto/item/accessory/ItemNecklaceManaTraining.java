@@ -16,13 +16,20 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	private static boolean nameDiscovered = false;
 	
 	private int durability;
-	private boolean shoddy;
+	private boolean modDiscovered;
+	private ItemModifier mod;
 	
 	public ItemNecklaceManaTraining()
 	{
 		durability = 100;
-		if(Game.rand.nextInt(10) < 3) shoddy = true;
-		else shoddy = false;
+		int val = Game.rand.nextInt(10);
+		if(val < 3) mod = ItemModifier.CONSERVATIVE;
+		else if(val < 9) mod = ItemModifier.SHODDY;
+		else
+		{
+			mod = null;
+			modDiscovered = true;
+		}
 	}
 	
 	@Override
@@ -34,7 +41,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	@Override
 	public ItemModifier getModifier()
 	{
-		return shoddy ? ItemModifier.SHODDY : ItemModifier.NONE;
+		return mod;
 	}
 	
 	@Override
@@ -42,13 +49,19 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	{
 		if(nameDiscovered)
 		{
-			if(shoddy) return "Wasteful Necklace of Mana Exercise";
-			else return "Necklace of Mana Exercise";
+			if(modDiscovered)
+			{
+				if(mod == ItemModifier.SHODDY) return "Wasteful Necklace of Mana Exercise";
+				if(mod == ItemModifier.CONSERVATIVE) return "Efficient Necklace of Mana Exercise";
+				mod = null;
+				return "Necklace of Mana Exercise";
+			}
+			else return "Unusual Necklace of Mana Exercise";
 		}
 		else
 		{
-			if(shoddy) return "Unusual Necklace";
-			else return "Unknown Necklace";
+			if(mod == null) return "Unknown Necklace";
+			else return "Unusual Necklace";
 		}
 	}
 	
@@ -61,15 +74,26 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 			{
 				nameDiscovered = true;
 				Game.message("Discovered necklace: Mana Exercise");
-				if(shoddy) Game.message("You realise the Necklace of Mana Exercise is wasteful...");
+			}
+			if(!modDiscovered)
+			{
+				if(mod == ItemModifier.CONSERVATIVE) Game.message("You realise the Necklace of Mana Exercise is efficient...");
+				if(mod == ItemModifier.SHODDY) Game.message("You realise the Necklace of Mana Exercise is wasteful...");
+				modDiscovered = true;
 			}
 			EntityPlayer p = (EntityPlayer) entity;
 			if(p.mana > 0)
 			{
 				p.mana--;
 				durability--;
-				if(shoddy)
+				if(mod == ItemModifier.SHODDY)
 				{
+					if(Game.rand.nextBoolean()) p.manaExperience++;
+				}
+				else if(mod == ItemModifier.CONSERVATIVE)
+				{
+					p.manaExperience++;
+					if(Game.rand.nextBoolean()) p.manaExperience++;
 					if(Game.rand.nextBoolean()) p.manaExperience++;
 				}
 				else p.manaExperience++;

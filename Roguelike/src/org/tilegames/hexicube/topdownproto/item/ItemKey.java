@@ -80,14 +80,13 @@ public class ItemKey extends Item
 			batch.draw(tex2, x, y);
 			return;
 		}
-		if(type == KeyType.RED) batch.setColor(1, 0, 0, 1);
-		else if(type == KeyType.ORANGE) batch.setColor(1, 0.6f, 0, 1);
-		else if(type == KeyType.YELLOW) batch.setColor(1, 1, 0, 1);
-		else if(type == KeyType.GREEN) batch.setColor(0, 1, 0, 1);
-		else if(type == KeyType.BLUE) batch.setColor(0, 0, 1, 1);
-		else if(type == KeyType.VIOLET) batch.setColor(0.6f, 0, 1, 1);
-		else batch.setColor(0.2f, 0.2f, 0.2f, 1);
+		if(type == KeyType.RED) batch.getColor().mul(new Color(1, 0, 0, 1));
+		else if(type == KeyType.ORANGE) batch.getColor().mul(new Color(1, 0.6f, 0, 1));
+		else if(type == KeyType.YELLOW) batch.getColor().mul(new Color(1, 1, 0, 1));
+		else if(type == KeyType.GREEN) batch.getColor().mul(new Color(0, 1, 0, 1));
+		else if(type == KeyType.BLUE) batch.getColor().mul(new Color(0, 0, 1, 1));
+		else if(type == KeyType.VIOLET) batch.getColor().mul(new Color(0.6f, 0, 1, 1));
+		else batch.getColor().mul(new Color(0.2f, 0.2f, 0.2f, 1));
 		batch.draw(tex, x, y);
-		batch.setColor(1, 1, 1, 1);
 	}
 }

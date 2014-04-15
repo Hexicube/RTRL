@@ -83,6 +83,12 @@ public class ItemWeaponShortBow extends ItemWeapon
 	}
 	
 	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
+	
+	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.SHARP;
@@ -169,4 +175,5 @@ public class ItemWeaponShortBow extends ItemWeapon
 	{
 		batch.draw(tex, x, y);
 	}
+	
 }

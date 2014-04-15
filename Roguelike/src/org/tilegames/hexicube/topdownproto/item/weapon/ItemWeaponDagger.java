@@ -84,6 +84,12 @@ public class ItemWeaponDagger extends ItemWeapon
 	}
 	
 	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
+	
+	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.SHARP;

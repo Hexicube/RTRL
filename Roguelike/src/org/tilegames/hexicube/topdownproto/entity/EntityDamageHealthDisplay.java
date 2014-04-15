@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto.entity;
 
 import org.tilegames.hexicube.topdownproto.FontHolder;
 import org.tilegames.hexicube.topdownproto.Game;
+import org.tilegames.hexicube.topdownproto.map.Map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -11,9 +12,11 @@ public class EntityDamageHealthDisplay extends Entity
 	public double amount;
 	
 	public short timeLived;
+	public boolean compound;
 	
-	public EntityDamageHealthDisplay(boolean damage, double amount, int x, int y)
+	public EntityDamageHealthDisplay(Map map, boolean damage, double amount, int x, int y)
 	{
+		this.map = map;
 		this.damage = damage;
 		this.amount = amount;
 		timeLived = 0;
@@ -32,7 +35,11 @@ public class EntityDamageHealthDisplay extends Entity
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
 		if(amount < 1) batch.setColor(1, 1, 1, (float) (60 - timeLived) / 60);
-		else if(damage) batch.setColor(1, 0, 0, (float) (60 - timeLived) / 60);
+		else if(damage)
+		{
+			if(compound) batch.setColor(1, 1, 0, (float) (60 - timeLived) / 60);
+			else batch.setColor(1, 0, 0, (float) (60 - timeLived) / 60);
+		}
 		else batch.setColor(0, 1, 0, (float) (60 - timeLived) / 60);
 		char[] data = FontHolder.getCharList(Game.numToStr(amount));
 		FontHolder.render(batch, data, Game.xOffset + (xPos - camX) * 32 - FontHolder.getTextWidth(data, true) / 2 + 17, Game.yOffset + (yPos - camY) * 32 + 24, true);

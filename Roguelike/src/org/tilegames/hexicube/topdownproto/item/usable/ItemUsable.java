@@ -9,4 +9,6 @@ public abstract class ItemUsable extends Item
 	public abstract boolean use(Entity source, Direction dir);
 	
 	public abstract int useDelay();
+	
+	public abstract int getManaCost();
 }

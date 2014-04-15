@@ -124,4 +124,10 @@ public class ItemPotionInvisibility extends ItemUsable
 	{
 		return 15;
 	}
+	
+	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
 }

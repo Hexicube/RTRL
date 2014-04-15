@@ -83,6 +83,13 @@ public class ItemWandLeechLife extends ItemWeapon
 	}
 	
 	@Override
+	public int getManaCost()
+	{
+		if(modifier == ItemModifier.CONSERVATIVE) return 9;
+		return 12;
+	}
+	
+	@Override
 	public DamageType getAttackType()
 	{
 		return DamageType.GENERIC;

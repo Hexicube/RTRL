@@ -161,4 +161,10 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		return 45;
 	}
+	
+	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
 }

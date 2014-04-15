@@ -107,4 +107,10 @@ public class ItemWeaponBone extends ItemWeapon
 	{
 		return 65;
 	}
+	
+	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
 }

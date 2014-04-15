@@ -122,22 +122,21 @@ public class EntityPlayer extends EntityLiving
 			if(e.timeRemaining() <= 0) effects.remove(e);
 			else e.tick(this);
 		}
-		if(alive) hungerLevel--;
-		double hungerAmount = (double)hungerLevel / (double)hungerLevelMax;
-		double rate;
-		if(hungerAmount < 0.1) rate = hungerAmount*10 - 1;
-		else if(hungerAmount > 0.75) rate = (hungerAmount-0.75)*4;
-		else rate = 0;
-		if(rate == 0) hungerTicker = 60;
-		else
+		if(alive)
 		{
-			if(hungerTicker > 0) hungerTicker--;
-			else
+			if(hungerLevel > 0) hungerLevel--;
+			double hungerAmount = (double)hungerLevel / (double)hungerLevelMax;
+			double rate;
+			if(hungerAmount < 0.1) rate = hungerAmount*10 - 1;
+			else if(hungerAmount > 0.75) rate = (hungerAmount-0.75)*4;
+			else rate = 0;
+			if(rate != 0)
 			{
-				hungerTicker = 60;
-				int amount = ((int)rate * 3);
+				double amount = rate * .02;
 				health += amount;
 				if(health > healthMax) health = healthMax;
+				if(health < 0) health = 0;
+				health = (double)Math.round(health*1000)/1000;
 			}
 		}
 		alive = (health > 0);

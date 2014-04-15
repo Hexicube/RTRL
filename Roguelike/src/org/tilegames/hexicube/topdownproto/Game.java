@@ -170,7 +170,8 @@ public class Game implements ApplicationListener, InputProcessor
 					{
 						m.tiles[x][y] = new TileTorchWall();
 						int strength = rand.nextInt(6) + 2;
-						addLight(m, x, y, strength + 3, strength, 0);
+						//addLight(m, x, y, strength + 3, strength, 0);
+						addLight(m, x, y, strength+3, strength+3, strength+3);
 					}
 					else if(data[x][y] == 6)
 					{
@@ -314,7 +315,18 @@ public class Game implements ApplicationListener, InputProcessor
 			Tile t = curMap.tiles[e.xPos][e.yPos];
 			boolean invis = !curMap.entities.get(a).visible(player);
 			spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
-			curMap.entities.get(a).render(spriteBatch, camX, camY);
+			e.render(spriteBatch, camX, camY);
+		}
+		size = curMap.damageEntities.size();
+		for(int a = 0; a < size; a++)
+		{
+			Entity e = curMap.damageEntities.get(a);
+			int eX = e.xPos - camX;
+			int eY = e.yPos - camY;
+			int entX = eX * 32;
+			int entY = eY * 32;
+			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
+			e.render(spriteBatch, camX, camY);
 		}
 		
 		spriteBatch.setColor(1, 1, 1, 1);
@@ -432,6 +444,7 @@ public class Game implements ApplicationListener, InputProcessor
 					Item i = player.getItemInSlot(x, y);
 					if(i != null)
 					{
+						spriteBatch.setColor(1, 1, 1, 1);
 						i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y == 0);
 						if(i.getMaxDurability() > 1)
 						{
@@ -467,7 +480,9 @@ public class Game implements ApplicationListener, InputProcessor
 				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
 				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
 				spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2 + " <---> " + itemName), xPos + 4, 508 + yPos, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2), xPos + 4, 508 + yPos, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
+				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
 			}
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
@@ -507,10 +522,16 @@ public class Game implements ApplicationListener, InputProcessor
 		int healthAmount = (int) Math.ceil((double) player.health * 200 / (double) player.healthMax);
 		spriteBatch.setColor(0, 1, 0, 1);
 		spriteBatch.draw(statusBarTex, screenW - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
+		if(player.heldItem != null)
+		{
+			int manaRequiredAmount = (int) Math.ceil((double) player.heldItem.getManaCost() * 200 / (double) player.manaMax);
+			spriteBatch.setColor(0, 0, 1, 1);
+			spriteBatch.draw(statusBarTex, screenW - 205, 18, manaRequiredAmount, 8, 0, 0, manaRequiredAmount, 8, false, false);
+		}
 		int manaAmount = (int) Math.ceil((double) player.mana * 200 / (double) player.manaMax);
 		spriteBatch.setColor(0, 0.5f, 1, 1);
 		spriteBatch.draw(statusBarTex, screenW - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
-		int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / 25200);
+		int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / player.hungerLevelMax);
 		spriteBatch.setColor(1, 0.5f, 0, 1);
 		spriteBatch.draw(statusBarTex, screenW - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
 		
@@ -638,9 +659,14 @@ public class Game implements ApplicationListener, InputProcessor
 			spawnEntities(maps[z], z);
 			if(maps[z].needsLighting) updateLighting(maps[z]);
 			Object[] list = maps[z].entities.toArray();
-			for(int a = 0; a < list.length; a++)
+			for(Object e : list)
 			{
-				((Entity) list[a]).tick();
+				((Entity)e).tick();
+			}
+			list = maps[z].damageEntities.toArray();
+			for(Object e : list)
+			{
+				((EntityDamageHealthDisplay)e).tick();
 			}
 			if(maps[z].needsLighting) updateLighting(maps[z]);
 		}
@@ -652,6 +678,11 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static boolean addEntity(Entity e, Map map, boolean needsTile)
 	{
+		if(e instanceof EntityDamageHealthDisplay)
+		{
+			map.damageEntities.add((EntityDamageHealthDisplay)e);
+			return true;
+		}
 		if(!needsTile)
 		{
 			map.entities.add(e);
@@ -672,6 +703,11 @@ public class Game implements ApplicationListener, InputProcessor
 	{
 		if(e.map != null)
 		{
+			if(e instanceof EntityDamageHealthDisplay)
+			{
+				e.map.damageEntities.remove((EntityDamageHealthDisplay)e);
+				return;
+			}
 			e.map.entities.remove(e);
 			if(e.map.tiles[e.xPos][e.yPos].getCurrentEntity() == e) e.map.tiles[e.xPos][e.yPos].setCurrentEntity(null);
 			e.map = null;
@@ -851,12 +887,15 @@ public class Game implements ApplicationListener, InputProcessor
 		for(int a = 0; a < images.length; a++)
 		{
 			int pos = rand.nextInt(images.length - a);
-			for(int b = 0; b <= pos; b++)
+			int pos2 = 0;
+			for(int b = 0; b <= images.length; b++)
 			{
-				if(images[b] == null) pos++;
+				if(pos == pos2) break;
+				if(images[b] != null) pos2++;
 			}
-			images2[a] = images[pos];
-			images[pos] = null;
+			while(images[pos2] == null) pos2++;
+			images2[a] = images[pos2];
+			images[pos2] = null;
 		}
 		return images2;
 	}

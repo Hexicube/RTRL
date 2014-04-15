@@ -39,10 +39,11 @@ public abstract class EntityLiving extends Entity
 				lastDamageIndicator.timeLived = 0;
 				lastDamageIndicator.xPos = xPos;
 				lastDamageIndicator.yPos = yPos;
+				lastDamageIndicator.compound = true;
 			}
 			else
 			{
-				lastDamageIndicator = new EntityDamageHealthDisplay(true, damage, xPos, yPos);
+				lastDamageIndicator = new EntityDamageHealthDisplay(map, true, damage, xPos, yPos);
 				Game.addEntity(lastDamageIndicator, map, false);
 			}
 			ticksSinceLastDamage = 0;
@@ -63,12 +64,12 @@ public abstract class EntityLiving extends Entity
 		double max = healthMax - health;
 		if(max == 0)
 		{
-			Game.addEntity(new EntityDamageHealthDisplay(true, 0, xPos, yPos), map, false);
+			Game.addEntity(new EntityDamageHealthDisplay(map, true, 0, xPos, yPos), map, false);
 			return 0;
 		}
 		if(max < amount) amount = max;
 		health += amount;
-		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);
+		Game.addEntity(new EntityDamageHealthDisplay(map, false, amount, xPos, yPos), map, false);
 		health = (double)Math.round(health*1000)/1000;
 		return amount;
 	}

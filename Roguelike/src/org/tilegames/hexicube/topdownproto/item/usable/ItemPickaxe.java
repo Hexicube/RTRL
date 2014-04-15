@@ -100,6 +100,12 @@ public class ItemPickaxe extends ItemUsable
 	}
 	
 	@Override
+	public int getManaCost()
+	{
+		return 0;
+	}
+	
+	@Override
 	public boolean isWeapon()
 	{
 		return false;

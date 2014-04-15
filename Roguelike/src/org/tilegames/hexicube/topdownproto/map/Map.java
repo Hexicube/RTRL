@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.entity.EntityDamageHealthDisplay;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,7 @@ public class Map
 	{
 		tiles = new Tile[width][height];
 		entities = new ArrayList<Entity>();
+		damageEntities = new ArrayList<EntityDamageHealthDisplay>();
 		needsLighting = true;
 		
 		mapImage = new Pixmap(Game.nextPowerTwo(width), Game.nextPowerTwo(height), Pixmap.Format.RGBA8888);
@@ -48,6 +50,7 @@ public class Map
 	}
 	
 	public ArrayList<Entity> entities;
+	public ArrayList<EntityDamageHealthDisplay> damageEntities;
 	public Tile[][] tiles;
 	private Pixmap mapImage;
 	public Texture mapTex;

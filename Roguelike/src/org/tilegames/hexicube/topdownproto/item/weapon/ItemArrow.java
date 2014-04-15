@@ -143,6 +143,7 @@ public class ItemArrow extends ItemStack
 	{
 		int t = type.ID;
 		batch.draw(tex, x, y, 32, 32, (t/4) * 32, (t%4) * 32, 32, 32, false, false);
-		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x + 2, y + 9, false);
+		batch.setColor(0, 0, 0, 1);
+		if(stack != 1) FontHolder.render(batch, FontHolder.getCharList(String.valueOf(stack)), x + 3, y + 29, false);
 	}
 }
