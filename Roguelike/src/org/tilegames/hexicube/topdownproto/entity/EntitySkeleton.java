@@ -22,7 +22,7 @@ public class EntitySkeleton extends EntityLiving
 	
 	public EntitySkeleton(int x, int y)
 	{
-		health = healthMax = 100;
+		health = healthMax = 20;
 		alive = true;
 		xPos = x;
 		yPos = y;

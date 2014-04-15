@@ -57,7 +57,12 @@ public class ItemWeaponDagger extends ItemWeapon
 		if(durability <= 0) return false;
 		if(!modDiscovered)
 		{
-			Game.message("You realise the Dagger is " + (mod == ItemModifier.SHODDY ? "rusty" : (mod == ItemModifier.QUICK ? "quick" : "pointy")) + "...");
+			String s = null;
+			if(mod == ItemModifier.SHODDY) s = "shoddy";
+			else if(mod == ItemModifier.QUICK) s = "quick";
+			else if(mod == ItemModifier.SHARPENED) s = "pointy";
+			else mod = null;
+			if(mod != null) Game.message("You realise the Dagger is " + s + "...");
 			modDiscovered = true;
 		}
 		EntityLiving e = (EntityLiving) target;

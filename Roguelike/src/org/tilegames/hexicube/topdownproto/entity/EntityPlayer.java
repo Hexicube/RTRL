@@ -38,7 +38,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		xPos = x;
 		yPos = y;
-		health = healthMax = 200;
+		health = healthMax = 30;
 		inventory = new Item[100];
 		armour = new ItemArmour[4];
 		effects = new ArrayList<Effect>();

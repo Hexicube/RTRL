@@ -22,7 +22,7 @@ public class EntityRat extends EntityLiving
 	
 	public EntityRat(int x, int y)
 	{
-		health = healthMax = 15;
+		health = healthMax = 10;
 		alive = true;
 		xPos = x;
 		yPos = y;
