@@ -57,7 +57,7 @@ public class EntityArrow extends Entity
 	{
 		if(entity instanceof EntityLiving)
 		{
-			((EntityLiving) entity).hurt(Game.rollDice(damageSides, damageDice), type);
+			((EntityLiving)entity).hurt(Game.rollDice(damageSides, damageDice), type);
 		}
 		Game.removeEntity(this);
 	}

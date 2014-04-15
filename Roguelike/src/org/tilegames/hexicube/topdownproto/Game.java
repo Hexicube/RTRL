@@ -782,11 +782,11 @@ public class Game implements ApplicationListener, InputProcessor
 		t.lightLevel[2] = maxB;
 	}
 	
-	public static String numToStr(int num, int len, String filler)
+	public static String numToStr(double val)
 	{
-		String temp = String.valueOf(num);
-		while(temp.length() < len)
-			temp = filler + temp;
+		int whole = (int)val;
+		double dec = (double)Math.round((val - whole) * 1000) / 1000;
+		String temp = String.valueOf(whole);
 		String[] digits = temp.split("");
 		String result = "";
 		int mod = digits.length % 3;
@@ -796,6 +796,7 @@ public class Game implements ApplicationListener, InputProcessor
 			a++;
 			if(a % 3 == mod && a < digits.length) result += ",";
 		}
+		if(dec > 0) result += "."+String.valueOf(dec).substring(2);
 		return result;
 	}
 	

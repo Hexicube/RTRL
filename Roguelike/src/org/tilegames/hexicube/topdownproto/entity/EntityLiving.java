@@ -16,10 +16,11 @@ public abstract class EntityLiving extends Entity
 	
 	public abstract boolean mountable(Entity mounter);
 	
-	public int hurt(double damage, DamageType type)
+	public double hurt(double damage, DamageType type)
 	{
 		if(damage < 0) return 0;
 		damage = damageAfterResistance(damage, type);
+		System.out.println(damage);
 		if(damage < 0) return -heal(damage);
 		else
 		{
@@ -30,12 +31,13 @@ public abstract class EntityLiving extends Entity
 				damage += health;
 				health = 0;
 			}
+			health = Math.round(health*1000)/1000;
 			alive = (health > 0);
-			return (int) damage;
+			return damage;
 		}
 	}
 	
-	public int heal(double amount)
+	public double heal(double amount)
 	{
 		if(amount < 0) return 0;
 		double max = healthMax - health;
@@ -47,7 +49,8 @@ public abstract class EntityLiving extends Entity
 		if(max < amount) amount = max;
 		health += amount;
 		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);
-		return (int) amount;
+		health = Math.round(health*1000)/1000;
+		return amount;
 	}
 	
 	@Override

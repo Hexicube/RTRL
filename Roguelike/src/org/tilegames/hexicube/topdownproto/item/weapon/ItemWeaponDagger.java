@@ -166,7 +166,7 @@ public class ItemWeaponDagger extends ItemWeapon
 	@Override
 	public Color getInvBorderCol()
 	{
-		if(!nameDiscovered) return Color.ORANGE;
+		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;
 		if(mod == ItemModifier.CURSED) return Color.RED;
 		return new Color(0, 0, 0, 0);
 	}

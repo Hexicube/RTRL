@@ -50,8 +50,8 @@ public class EntityLeechBolt extends Entity
 	{
 		if(entity instanceof EntityLiving)
 		{
-			int dmg = ((EntityLiving) entity).hurt(Game.rollDice(10, 2), DamageType.GENERIC);
-			if(source instanceof EntityLiving) ((EntityLiving) source).heal(dmg);
+			double dmg = ((EntityLiving) entity).hurt(Game.rollDice(10, 2), DamageType.GENERIC);
+			if(source instanceof EntityLiving) ((EntityLiving)source).heal(dmg);
 		}
 		Game.removeEntity(this);
 	}

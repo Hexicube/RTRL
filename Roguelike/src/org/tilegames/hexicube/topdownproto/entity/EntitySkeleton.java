@@ -34,14 +34,14 @@ public class EntitySkeleton extends EntityLiving
 	public double damageAfterResistance(double damage, DamageType type)
 	{
 		if(type == DamageType.ACID) return damage * 2;
-		if(type == DamageType.BLUNT) return (long) (damage * 1.5);
+		if(type == DamageType.BLUNT) return damage * 1.5;
 		if(type == DamageType.CRUSHING) return damage * 2;
 		if(type == DamageType.EXPLOSIVE) return damage * 5;
 		if(type == DamageType.FALLING) return damage * 2;
 		if(type == DamageType.FIRE) return 0;
 		if(type == DamageType.GENERIC) return damage;
-		if(type == DamageType.ICE) return (long) (damage * 0.4);
-		if(type == DamageType.SHARP) return (long) (damage * 0.2);
+		if(type == DamageType.ICE) return damage * 0.4;
+		if(type == DamageType.SHARP) return damage * 0.2;
 		return 0;
 	}
 	
