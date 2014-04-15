@@ -17,7 +17,7 @@ public abstract class ItemArmour extends Item
 		return null;
 	}
 	
-	public abstract double getProtectionMod(DamageType type);
+	public abstract double getDamageMod(DamageType type);
 	
 	public abstract ArmourSlot getArmourType();
 }

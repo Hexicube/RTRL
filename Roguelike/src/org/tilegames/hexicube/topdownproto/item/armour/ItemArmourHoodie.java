@@ -14,7 +14,7 @@ public class ItemArmourHoodie extends ItemArmour
 	private static Texture tex = Game.loadImage("armour/hoodie");
 	
 	@Override
-	public double getProtectionMod(DamageType type)
+	public double getDamageMod(DamageType type)
 	{
 		if(type == DamageType.FIRE) return 1.1;
 		if(type == DamageType.ICE) return 0.6;

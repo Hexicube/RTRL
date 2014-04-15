@@ -14,7 +14,7 @@ public class ItemArmourTrainers extends ItemArmour
 	private static Texture tex = Game.loadImage("armour/trainers");
 	
 	@Override
-	public double getProtectionMod(DamageType type)
+	public double getDamageMod(DamageType type)
 	{
 		if(type == DamageType.CRUSHING) return 0.6;
 		return 1;

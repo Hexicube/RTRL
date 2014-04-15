@@ -56,8 +56,9 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(armour[a] != null)
 			{
-				mult += armour[a].getProtectionMod(type);
+				mult += armour[a].getDamageMod(type);
 			}
+			else mult++;
 		}
 		damage *= mult / 4;
 		return damage;
