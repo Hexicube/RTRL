@@ -8,6 +8,7 @@ import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -153,6 +154,14 @@ public class ItemWeaponShortBow extends ItemWeapon
 	public boolean canMove()
 	{
 		return !(mod == ItemModifier.CURSED);
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		if(!nameDiscovered) return Color.ORANGE;
+		if(mod == ItemModifier.CURSED) return Color.RED;
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

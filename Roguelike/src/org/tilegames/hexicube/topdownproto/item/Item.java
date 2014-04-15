@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.item;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Item
@@ -22,6 +23,8 @@ public abstract class Item
 	public abstract int getCurrentDurability();
 	
 	public abstract boolean canMove();
+	
+	public abstract Color getInvBorderCol();
 	
 	public abstract void render(SpriteBatch batch, int x, int y, boolean equipped);
 }

@@ -5,6 +5,7 @@ import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -93,6 +94,13 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	public boolean canMove()
 	{
 		return true;
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		if(!nameDiscovered) return Color.ORANGE;
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

@@ -34,11 +34,11 @@ public enum ArmourType
 		}
 		if(this == STEEL)
 		{
-			if(type == DamageType.BLUNT) return 0.3;
-			if(type == DamageType.SHARP) return 0.3;
+			if(type == DamageType.BLUNT) return 0.2;
+			if(type == DamageType.SHARP) return 0.2;
 			if(type == DamageType.FIRE) return 1.5;
 			if(type == DamageType.ICE) return 0.7;
-			if(type == DamageType.ACID) return 3;
+			if(type == DamageType.ACID) return 2;
 			if(type == DamageType.EXPLOSIVE) return 0.4;
 			if(type == DamageType.CRUSHING) return 0.4;
 			if(type == DamageType.FALLING) return 1.3;
@@ -49,7 +49,7 @@ public enum ArmourType
 			if(type == DamageType.SHARP) return 0.8;
 			if(type == DamageType.FIRE) return 0.4;
 			if(type == DamageType.ICE) return 0.2;
-			if(type == DamageType.ACID) return 5;
+			if(type == DamageType.ACID) return 0.8;
 			if(type == DamageType.EXPLOSIVE) return 0.5;
 			if(type == DamageType.CRUSHING) return 0.8;
 			if(type == DamageType.FALLING) return 1;
@@ -58,9 +58,9 @@ public enum ArmourType
 		{
 			if(type == DamageType.BLUNT) return 0.4;
 			if(type == DamageType.SHARP) return 0.4;
-			if(type == DamageType.FIRE) return 2;
-			if(type == DamageType.ICE) return 2;
-			if(type == DamageType.ACID) return 3;
+			if(type == DamageType.FIRE) return 1.5;
+			if(type == DamageType.ICE) return 1.5;
+			if(type == DamageType.ACID) return 1.5;
 			if(type == DamageType.EXPLOSIVE) return 0.2;
 			if(type == DamageType.CRUSHING) return 0.7;
 			if(type == DamageType.FALLING) return 1;

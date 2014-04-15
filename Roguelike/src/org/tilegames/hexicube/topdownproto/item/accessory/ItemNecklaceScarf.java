@@ -4,6 +4,7 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -49,6 +50,12 @@ public class ItemNecklaceScarf extends ItemAccessory
 	public boolean canMove()
 	{
 		return true;
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

@@ -66,7 +66,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
+	public static Texture tileTex, invTex, invHighlightTex, invItemTypeTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -89,6 +89,7 @@ public class Game implements ApplicationListener, InputProcessor
 		tileTex = loadImage("tiles");
 		invTex = loadImage("inventory");
 		invHighlightTex = loadImage("highlight");
+		invItemTypeTex = loadImage("itemtype");
 		invUsedBar = loadImage("usagebar");
 		statusTex = loadImage("status");
 		statusBarTex = loadImage("statusbar");
@@ -436,6 +437,9 @@ public class Game implements ApplicationListener, InputProcessor
 						{
 							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
 							if(stage == 16) stage = 15;
+							spriteBatch.setColor(i.getInvBorderCol());
+							spriteBatch.draw(invItemTypeTex, xPos + 3 + x * 40, 405 + yPos - y * 40);
+							spriteBatch.setColor(1, 1, 1, 1);
 							spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
 						}
 					}

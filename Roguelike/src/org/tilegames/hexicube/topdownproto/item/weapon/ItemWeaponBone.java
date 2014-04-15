@@ -6,6 +6,7 @@ import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -93,6 +94,12 @@ public class ItemWeaponBone extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y, 32, 32, spriteID * 32, 0, 32, 32, false, false);
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

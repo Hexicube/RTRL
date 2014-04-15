@@ -7,6 +7,7 @@ import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -145,6 +146,14 @@ public class ItemWeaponBadSword extends ItemWeapon
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y);
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		if(!nameDiscovered) return Color.ORANGE;
+		if(modifier == ItemModifier.CURSED) return Color.RED;
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

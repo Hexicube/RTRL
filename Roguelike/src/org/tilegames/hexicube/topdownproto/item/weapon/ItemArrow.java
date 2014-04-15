@@ -7,6 +7,7 @@ import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.ItemStack;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -129,6 +130,12 @@ public class ItemArrow extends ItemStack
 	public boolean canMove()
 	{
 		return true;
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override

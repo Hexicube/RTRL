@@ -11,6 +11,7 @@ import org.tilegames.hexicube.topdownproto.map.TileTorchWall;
 import org.tilegames.hexicube.topdownproto.map.TileVoid;
 import org.tilegames.hexicube.topdownproto.map.TileWall;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -142,6 +143,12 @@ public class ItemPickaxe extends ItemUsable
 	public boolean canMove()
 	{
 		return true;
+	}
+	
+	@Override
+	public Color getInvBorderCol()
+	{
+		return new Color(0, 0, 0, 0);
 	}
 	
 	@Override
