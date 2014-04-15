@@ -67,6 +67,7 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void tick()
 	{
+		super.tick();
 		if(rider != null) rider.tick();
 		for(int a = 0; a < 100; a++)
 		{

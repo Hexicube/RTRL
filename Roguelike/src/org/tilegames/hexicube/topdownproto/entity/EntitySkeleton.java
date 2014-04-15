@@ -48,6 +48,7 @@ public class EntitySkeleton extends EntityLiving
 	@Override
 	public void tick()
 	{
+		super.tick();
 		if(!alive)
 		{
 			ArrayList<Item> items = new ArrayList<Item>();

@@ -10,28 +10,46 @@ public abstract class EntityLiving extends Entity
 	public double health, healthMax;
 	public boolean alive;
 	
+	private int ticksSinceLastDamage = 41;
+	private EntityDamageHealthDisplay lastDamageIndicator;
+	
 	public ArrayList<Effect> effects;
 	
 	public abstract double damageAfterResistance(double damage, DamageType type);
 	
 	public abstract boolean mountable(Entity mounter);
 	
+	@Override
+	public void tick()
+	{
+		ticksSinceLastDamage++;
+	}
+	
 	public double hurt(double damage, DamageType type)
 	{
 		if(damage < 0) return 0;
 		damage = damageAfterResistance(damage, type);
-		System.out.println(damage);
-		if(damage < 0) return -heal(damage);
+		if(damage < 0) return -heal(-damage);
 		else
 		{
 			health -= damage;
-			Game.addEntity(new EntityDamageHealthDisplay(true, damage, xPos, yPos), map, false);
+			if(ticksSinceLastDamage <= 40)
+			{
+				lastDamageIndicator.amount += damage;
+				lastDamageIndicator.timeLived = 0;
+			}
+			else
+			{
+				lastDamageIndicator = new EntityDamageHealthDisplay(true, damage, xPos, yPos);
+				Game.addEntity(lastDamageIndicator, map, false);
+			}
+			ticksSinceLastDamage = 0;
 			if(health < 0)
 			{
 				damage += health;
 				health = 0;
 			}
-			health = Math.round(health*1000)/1000;
+			health = (double)Math.round(health*1000)/1000;
 			alive = (health > 0);
 			return damage;
 		}
@@ -49,7 +67,7 @@ public abstract class EntityLiving extends Entity
 		if(max < amount) amount = max;
 		health += amount;
 		Game.addEntity(new EntityDamageHealthDisplay(false, amount, xPos, yPos), map, false);
-		health = Math.round(health*1000)/1000;
+		health = (double)Math.round(health*1000)/1000;
 		return amount;
 	}
 	
