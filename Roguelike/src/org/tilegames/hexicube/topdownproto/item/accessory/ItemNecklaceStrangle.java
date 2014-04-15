@@ -4,7 +4,6 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
-import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -68,10 +67,16 @@ public class ItemNecklaceStrangle extends ItemAccessory
 			if(ticker == 0)
 			{
 				ticker = 20;
-				if(p.alive) p.hurt(Game.rollDice(6, 2), DamageType.GENERIC);
+				if(p.alive) p.health--;
 			}
 			durability--;
-			if(durability == 0) Game.message("The " + getName() + " broke...");
+			if(durability == 0)
+			{
+				Game.message("The " + getName() + " broke...");
+				Game.message("Your max HP increased by 10!");
+				p.healthMax += 10;
+				p.health += 10;
+			}
 		}
 	}
 	

@@ -66,7 +66,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static boolean paused = false;
 	
-	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarsTex, touchInputTex;
+	public static Texture tileTex, invTex, invHighlightTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -91,7 +91,7 @@ public class Game implements ApplicationListener, InputProcessor
 		invHighlightTex = loadImage("highlight");
 		invUsedBar = loadImage("usagebar");
 		statusTex = loadImage("status");
-		statusBarsTex = loadImage("statusbars");
+		statusBarTex = loadImage("statusbar");
 		
 		rand = new Random();
 		
@@ -114,7 +114,7 @@ public class Game implements ApplicationListener, InputProcessor
 		ItemWeaponBadSword.tex = images[0];
 		ItemWeaponDagger.tex = images[1];
 		
-		images = new Texture[4];
+		images = new Texture[6];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("item/potion" + (a + 1));
@@ -499,14 +499,18 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 		}
 		spriteBatch.setColor(1, 1, 1, 1);
-		spriteBatch.draw(statusTex, screenW - 128, 0);
-		int healthAmount = (int) Math.ceil((double) player.health * 100 / (double) player.healthMax);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 31, healthAmount, 8, healthAmount - 1, 0, 1, 1, false, false);
-		int manaAmount = (int) Math.ceil((double) player.mana * 100 / (double) player.manaMax);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 18, manaAmount, 8, manaAmount - 1, 1, 1, 1, false, false);
-		int foodAmount = (int) Math.ceil((double) player.hungerLevel / 252D);
-		spriteBatch.draw(statusBarsTex, screenW - 105, 5, foodAmount, 8, foodAmount - 1, 2, 1, 1, false, false);
+		spriteBatch.draw(statusTex, screenW - 256, 0);
+		int healthAmount = (int) Math.ceil((double) player.health * 200 / (double) player.healthMax);
+		spriteBatch.setColor(0, 1, 0, 1);
+		spriteBatch.draw(statusBarTex, screenW - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
+		int manaAmount = (int) Math.ceil((double) player.mana * 200 / (double) player.manaMax);
+		spriteBatch.setColor(0, 0.5f, 1, 1);
+		spriteBatch.draw(statusBarTex, screenW - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
+		int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / 25200);
+		spriteBatch.setColor(1, 0.5f, 0, 1);
+		spriteBatch.draw(statusBarTex, screenW - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
 		
+		spriteBatch.setColor(1, 1, 1, 1);
 		spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));
 		
 		spriteBatch.end();
