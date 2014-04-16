@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
@@ -33,6 +34,9 @@ import org.tilegames.hexicube.topdownproto.map.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
@@ -59,6 +63,8 @@ public class Game implements ApplicationListener, InputProcessor
 	public static boolean[] keysDown;
 	public static boolean[] keyPress;
 	
+	private static HashMap<Integer, Integer> touchKeysDown;
+	
 	public static Random rand;
 	
 	private static int ticks, frameRate, renderPercent, tickPercent;
@@ -76,6 +82,8 @@ public class Game implements ApplicationListener, InputProcessor
 	private static ArrayList<Message> messages;
 	
 	public static EntityPlayer player;
+
+	public static boolean hasTouch;
 	
 	@Override
 	public void create()
@@ -93,6 +101,12 @@ public class Game implements ApplicationListener, InputProcessor
 		invUsedBar = loadImage("usagebar");
 		statusTex = loadImage("status");
 		statusBarTex = loadImage("statusbar");
+
+		hasTouch = Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen);
+		if(hasTouch)
+		{
+			touchInputTex = loadImage("touchbuttons");
+		}
 		
 		rand = new Random();
 		
@@ -204,7 +218,9 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		keysDown = new boolean[512];
 		keyPress = new boolean[512];
-		
+
+		touchKeysDown = new HashMap<Integer, Integer>();
+
 		time = TimeUtils.nanoTime();
 		ticks = 0;
 		frameRate = 0;
@@ -334,6 +350,17 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			int xPos = screenW / 2 - 200;
 			int yPos = screenH / 2 - 240 - 32;
+
+			//move away from touch controls
+			if(hasTouch && xPos + 512 > screenW - 192)
+			{
+				xPos -= (xPos + 512) - (screenW - 192);
+				
+				//screen too small
+				if(xPos < 0)
+					xPos = 0;
+			}
+
 			spriteBatch.draw(invTex, xPos, yPos);
 			int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
 			size = player.effects.size();
@@ -486,6 +513,18 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
 		}
+
+		if(hasTouch)
+		{
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(touchInputTex, 0, 0); // TODO: fix co-ords
+		}
+		
+		if(hasTouch)
+		{
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(touchInputTex, screenW - 192, 50);
+		}
 		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
 		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
@@ -602,12 +641,38 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button)
 	{
+		if(hasTouch)
+		{
+			if(button == Input.Buttons.LEFT)
+			{
+				Integer key = touchKeysDown.get(pointer);
+				if(key != null) 
+				{
+					keysDown[key] = false;
+					touchKeysDown.remove(pointer);
+				}
+			}
+		}
 		return false;
 	}
 	
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button)
 	{
+		if(hasTouch)
+		{
+			if(button == Input.Buttons.LEFT)
+			{
+				int key = getTouchKeyAtPos(x, y);
+				if(key != -1)
+				{
+					keysDown[key] = true;
+					keyPress[key] = true;
+					
+					touchKeysDown.put(pointer, key);
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -968,6 +1033,58 @@ public class Game implements ApplicationListener, InputProcessor
 	public static int nextPowerTwo(int val)
 	{
 		return (int) Math.pow(2, Math.ceil(Math.log(val) / Math.log(2)));
+	}
+
+	public int getTouchKeyAtPos(int x, int y)
+	{
+		int screenW = Gdx.graphics.getWidth();
+		int screenH = Gdx.graphics.getHeight();
+		y = screenH - y;
+		
+		int startX = screenW - 190;
+		int startY = 52;
+		
+		//7-9
+		if(y >= startY + 64 * 3 && y <= startY + 64 * 3 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_7;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_8;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_9;
+		}
+		
+		//4-6
+		if(y >= startY + 64 * 2 && y <= startY + 64 * 2 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_4;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_5;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_6;
+		}
+		
+		//1-3
+		if(y >= startY + 64 && y <= startY + 64 + 60)
+		{
+			if(x >= startX && x <= startX + 60)
+				return Keys.NUM_1;
+			else if(x >= startX + 64 && x <= startX + 64 + 60)
+				return Keys.NUM_2;
+			else if(x >= startX + 64 * 2 && x <= startX + 64 * 2 + 60)
+				return Keys.NUM_3;
+		}
+		
+		//0
+		if(y >= startY && y <= startY + 60)
+		{
+			if(x >= startX && x <= startX + 124)
+				return Keys.NUM_0;
+		}		
+
+		return -1;
 	}
 	
 	public static String romanNumerals(int val)
