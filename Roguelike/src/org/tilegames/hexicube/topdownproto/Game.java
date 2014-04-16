@@ -115,7 +115,7 @@ public class Game implements ApplicationListener, InputProcessor
 		ItemWeaponBadSword.tex = images[0];
 		ItemWeaponDagger.tex = images[1];
 		
-		images = new Texture[6];
+		images = new Texture[32];
 		for(int a = 0; a < images.length; a++)
 		{
 			images[a] = loadImage("item/potion" + (a + 1));
