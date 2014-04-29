@@ -29,6 +29,7 @@ import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponBone;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponDagger;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponShortBow;
 import org.tilegames.hexicube.topdownproto.map.*;
+import org.tilegames.hexicube.topdownproto.menu.Menu;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -65,6 +66,8 @@ public class Game implements ApplicationListener, InputProcessor
 	private static long time, tickTime, renderTime;
 	
 	private static boolean paused = false;
+	
+	public static Menu menu;
 	
 	public static Texture tileTex, invTex, invHighlightTex, invItemTypeTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
 	
@@ -871,7 +874,7 @@ public class Game implements ApplicationListener, InputProcessor
 		if(source instanceof EntitySkeleton)
 		{
 			if(rand.nextInt(150) == 27) list.add(new ItemKey(KeyType.SKELETON));
-			int count = rollDice(2, 3);
+			int count = rollDice(1, 3)-1;
 			for(int a = 0; a < count; a++)
 			{
 				list.add(new ItemWeaponBone(rand.nextInt(101) + 100));
@@ -978,17 +981,37 @@ public class Game implements ApplicationListener, InputProcessor
 			str += "M";
 			val -= 1000;
 		}
+		if(val >= 990)
+		{
+			str += "XM";
+			val -= 990;
+		}
+		if(val >= 900)
+		{
+			str += "CM";
+			val -= 900;
+		}
 		if(val >= 500)
 		{
 			str += "D";
 			val -= 500;
 		}
-		while(val > 100)
+		if(val >= 490)
+		{
+			str += "XD";
+			val -= 490;
+		}
+		while(val >= 100)
 		{
 			str += "C";
 			val -= 100;
 		}
-		while(val > 10)
+		if(val >= 90)
+		{
+			str += "XC";
+			val -= 90;
+		}
+		while(val >= 10)
 		{
 			str += "X";
 			val -= 10;
