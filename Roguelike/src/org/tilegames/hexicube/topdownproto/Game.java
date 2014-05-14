@@ -494,7 +494,11 @@ public class Game implements ApplicationListener, InputProcessor
 		if(currentMenu != null)
 		{
 			currentMenu.tick();
-			if(currentMenu != null && currentMenu.pausesGame()) return;
+			if(currentMenu != null && currentMenu.pausesGame())
+			{
+				keys.tick();
+				return;
+			}
 		}
 		if(spawnTimer > 0) spawnTimer--;
 		if(paused) return;

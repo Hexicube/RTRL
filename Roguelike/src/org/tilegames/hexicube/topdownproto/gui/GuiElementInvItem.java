@@ -19,6 +19,7 @@ public class GuiElementInvItem extends GuiElementClickable
 	public GuiElementInvItem(int x, int y, float xAlign, float yAlign, EntityPlayer player, int invX, int invY)
 	{
 		super(x, y, xAlign, yAlign);
+		this.player = player;
 		this.invX = invX;
 		this.invY = invY;
 	}
@@ -46,21 +47,24 @@ public class GuiElementInvItem extends GuiElementClickable
 	@Override
 	public void render(SpriteBatch batch)
 	{
-		int[] pos = getPosition();
-		Color c = batch.getColor();
 		Item item = player.getItemInSlot(invX, invY);
-		batch.setColor(1, 1, 1, c.a);
-		item.render(batch, pos[0], pos[1], invY==0);
-		if(item.getMaxDurability() > 1)
+		if(item != null)
 		{
-			int stage = item.getCurrentDurability() * 16 / item.getMaxDurability();
-			if(stage == 16) stage = 15;
+			int[] pos = getPosition();
+			Color c = batch.getColor();
+			batch.setColor(item.getInvBorderCol());
+			batch.draw(Game.invItemTypeTex, pos[0] - 1, pos[1] - 31);
 			batch.setColor(1, 1, 1, c.a);
-			batch.draw(Game.invUsedBar, pos[0], pos[1] + 31, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
+			item.render(batch, pos[0], pos[1], invY==0);
+			if(item.getMaxDurability() > 1)
+			{
+				int stage = item.getCurrentDurability() * 16 / item.getMaxDurability();
+				if(stage == 16) stage = 15;
+				batch.setColor(1, 1, 1, c.a);
+				batch.draw(Game.invUsedBar, pos[0], pos[1] - 3, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
+			}
+			batch.setColor(c);
 		}
-		batch.setColor(item.getInvBorderCol().mul(new Color(1, 1, 1, c.a)));
-		batch.draw(Game.invItemTypeTex, pos[0], pos[1]);
-		batch.setColor(c);
 	}
 	
 	public boolean checked()

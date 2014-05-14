@@ -43,6 +43,7 @@ public abstract class GuiManagerBase extends GuiManager
 	{
 		batch.setColor(background);
 		batch.draw(bgTex, 0, 0, Game.width, Game.height, 0, 0, 1, 1, false, false);
+		batch.setColor(1, 1, 1, 1);
 		for(GuiElement e : elems)
 		{
 			e.render(batch);

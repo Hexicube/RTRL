@@ -1,5 +1,6 @@
 package org.tilegames.hexicube.topdownproto.gui;
 
+import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
 import com.badlogic.gdx.graphics.Color;
@@ -20,14 +21,14 @@ public class GuiManagerInventory extends GuiManagerBase
 			for(int y = 0; y < 9; y++)
 			{
 				int pos = x + y*10;
-				items[pos] = new GuiElementInvItem(x*40-232, y*40-212, 0.5f, 0.5f, player, x, y);
+				items[pos] = new GuiElementInvItem(x*40-236, 164-y*40, 0.5f, 0.5f, player, x, y);
+				elems.add(items[pos]);
 			}
 		}
 		//TODO
-		//1. Render inventory code, with a custom gui element class extending clickable
-		//2. Restore basic item swap functionality with mouse control
-		//3. Make clicking an item show a menu of actions that can be performed
-		//4. Add methods to allow items to specify custom actions to perform based on other item (i.e. grindstone with sword)
+		//1. Restore basic item swap functionality with mouse control
+		//2. Make clicking an item show a menu of actions that can be performed
+		//3. Add methods to allow items to specify custom actions to perform based on other item (i.e. grindstone with sword)
 	}
 	
 	@Override
@@ -40,10 +41,9 @@ public class GuiManagerInventory extends GuiManagerBase
 	@Override
 	public void render(SpriteBatch batch)
 	{
+		batch.draw(Game.invTex, Game.width/2 - 240, Game.height/2 - 272);
 		super.render(batch);
-		/*int xPos = screenW / 2 - 200;
-		int yPos = screenH / 2 - 240 - 32;
-		spriteBatch.draw(invTex, xPos, yPos);
+		/*
 		int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
 		size = player.effects.size();
 		for(int a = 0; a < size; a++)
@@ -172,7 +172,8 @@ public class GuiManagerInventory extends GuiManagerBase
 			FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
 			FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
 		}
-		else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);*/
+		else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
+		*/
 		//TODO: draw action menu
 	}
 	
