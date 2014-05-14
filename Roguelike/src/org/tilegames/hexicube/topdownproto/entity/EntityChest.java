@@ -31,9 +31,9 @@ public class EntityChest extends Entity
 		if(contents.size() == 1)
 		{
 			Item i = contents.get(0);
-			i.render(batch, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, false);
+			i.render(batch, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16, false);
 		}
-		else batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32);
+		else batch.draw(tex, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16);
 	}
 	
 	@Override

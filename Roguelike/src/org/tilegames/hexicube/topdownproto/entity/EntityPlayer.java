@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.entity;
 import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
+import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 import org.tilegames.hexicube.topdownproto.item.*;
 import org.tilegames.hexicube.topdownproto.item.accessory.AccessorySlot;
 import org.tilegames.hexicube.topdownproto.item.accessory.ItemAccessory;
@@ -10,7 +11,6 @@ import org.tilegames.hexicube.topdownproto.item.armour.ArmourSlot;
 import org.tilegames.hexicube.topdownproto.item.armour.ItemArmour;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
-import org.tilegames.hexicube.topdownproto.map.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,8 +29,6 @@ public class EntityPlayer extends EntityLiving
 	public ItemUsable heldItem;
 	public ItemArmour[] armour;
 	public ItemAccessory necklace, ring1, ring2, bracelet1, bracelet2;
-	
-	public boolean viewingInventory;
 	
 	public int hungerLevel, hungerLevelMax, hungerTicker, mana, manaMax, manaExperience, manaTicker;
 	
@@ -142,8 +140,7 @@ public class EntityPlayer extends EntityLiving
 		alive = (health > 0);
 		if(!alive)
 		{
-			// TODO: die
-			viewingInventory = false;
+			//TODO: die
 			return;
 		}
 		while(manaExperience >= 5 * manaMax)
@@ -161,210 +158,100 @@ public class EntityPlayer extends EntityLiving
 				manaTicker = 900 / (int) Math.sqrt(manaMax);
 			}
 		}
-		// 0-9 -> 7-16
-		if(viewingInventory)
+		// 0 -> open inventory
+		// 2 -> face direction
+		// 3 -> unused
+		// 4/5/6/8 -> left/down/right/up
+		// 7 -> open door
+		// 9 -> use held item
+		if(Game.keys.isKeyPressed(Key.USE))
 		{
-			// 0 -> close inventory
-			// 1 -> Select item/Swap with selected
-			// 2 -> Drop item or place in chest
-			// 3 -> Dispose of item
-			// 4/5/6/8 -> left/down/right/up
-			// 7 -> use on self
-			// 9 -> unused
-			if(Game.keyPress[8])
+			if(useDelay == 0)
 			{
-				if(invSelectY == -1 && canMoveItem(invX, invY))
+				useDelay = 15;
+				if(facingDir == Direction.DOWN)
 				{
-					invSelectX = invX;
-					invSelectY = invY;
+					if(yPos > 0) map.tiles[xPos][yPos - 1].use(this);
 				}
-				else if(invSelectX == invX && invSelectY == invY)
+				if(facingDir == Direction.UP)
 				{
-					invSelectY = -1;
+					if(yPos < map.tiles[xPos].length - 1) map.tiles[xPos][yPos + 1].use(this);
 				}
-				else if(canMoveItem(invX, invY))
+				if(facingDir == Direction.LEFT)
 				{
-					Item i1 = getItemInSlot(invX, invY);
-					Item i2 = getItemInSlot(invSelectX, invSelectY);
-					if(setItemInSlot(invX, invY, i2))
-					{
-						if(setItemInSlot(invSelectX, invSelectY, i1)) invSelectY = -1;
-						else setItemInSlot(invX, invY, i1);
-					}
+					if(xPos > 0) map.tiles[xPos - 1][yPos].use(this);
 				}
-			}
-			if(Game.keyPress[9])
-			{
-				if(canMoveItem(invX, invY))
+				if(facingDir == Direction.RIGHT)
 				{
-					Item i = getItemInSlot(invX, invY);
-					if(i != null)
-					{
-						int targetX = xPos, targetY = yPos;
-						if(facingDir == Direction.DOWN) targetY--;
-						else if(facingDir == Direction.UP) targetY++;
-						else if(facingDir == Direction.LEFT) targetX--;
-						else if(facingDir == Direction.RIGHT) targetX++;
-						Tile target = map.tiles[targetX][targetY];
-						Entity e = target.getCurrentEntity();
-						if(e instanceof EntityChest)
-						{
-							((EntityChest) e).contents.add(i);
-							setItemInSlot(invX, invY, null);
-							Game.message("Item added to chest.");
-						}
-						else if(e == null)
-						{
-							e = new EntityChest(targetX, targetY, new ArrayList<Item>());
-							if(Game.addEntity(e, map, true))
-							{
-								((EntityChest) e).contents.add(i);
-								setItemInSlot(invX, invY, null);
-								Game.message("Item added to new chest.");
-							}
-							else Game.message("Something is blocking the spot in front of you.");
-						}
-						else Game.message("Something is blocking the spot in front of you.");
-					}
-				}
-			}
-			if(Game.keyPress[10])
-			{
-				if(canMoveItem(invX, invY)) setItemInSlot(invX, invY, null);
-			}
-			if(Game.keyPress[15])
-			{
-				if(invY > 0) invY--;
-			}
-			if(Game.keyPress[12])
-			{
-				if(invY < 10) invY++;
-			}
-			if(Game.keyPress[11])
-			{
-				if(invX > 0) invX--;
-			}
-			if(Game.keyPress[13])
-			{
-				if(invX < 9) invX++;
-			}
-			if(Game.keyPress[14])
-			{
-				if(useDelay == 0)
-				{
-					if(getItemInSlot(invX, invY) instanceof ItemUsable)
-					{
-						ItemUsable i = (ItemUsable) getItemInSlot(invX, invY);
-						useDelay = i.useDelay();
-						i.use(this, Direction.NONE);
-					}
+					if(xPos < map.tiles.length - 1) map.tiles[xPos + 1][yPos].use(this);
 				}
 			}
 		}
-		else
+		if(Game.keys.isKeyHeld(Key.UP))
 		{
-			// 0 -> open inventory
-			// 1 -> use on self
-			// 2 -> face direction
-			// 3 -> unused
-			// 4/5/6/8 -> left/down/right/up
-			// 7 -> open door
-			// 9 -> use held item
-			if(Game.keysDown[14])
+			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
 			{
-				if(useDelay == 0)
+				walkDelay = 15;
+				move(Direction.UP);
+				map.updateTexture(xPos, yPos);
+			}
+			facingDir = Direction.UP;
+		}
+		else if(Game.keys.isKeyHeld(Key.DOWN))
+		{
+			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			{
+				walkDelay = 15;
+				move(Direction.DOWN);
+				map.updateTexture(xPos, yPos);
+			}
+			facingDir = Direction.DOWN;
+		}
+		else if(Game.keys.isKeyHeld(Key.LEFT))
+		{
+			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			{
+				walkDelay = 15;
+				move(Direction.LEFT);
+				map.updateTexture(xPos, yPos);
+			}
+			facingDir = Direction.LEFT;
+		}
+		else if(Game.keys.isKeyHeld(Key.RIGHT))
+		{
+			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			{
+				walkDelay = 15;
+				move(Direction.RIGHT);
+				map.updateTexture(xPos, yPos);
+			}
+			facingDir = Direction.RIGHT;
+		}
+		if(Game.keys.isKeyHeld(Key.USE_SELF))
+		{
+			if(heldItem == null) Game.message("You have no held item to use on yourself!");
+			else heldItem.use(this, Direction.NONE);
+		}
+		else if(Game.keys.isKeyHeld(Key.USE))
+		{
+			if(useDelay == 0)
+			{
+				if(heldItem == null)
 				{
 					useDelay = 15;
-					if(facingDir == Direction.DOWN)
-					{
-						if(yPos > 0) map.tiles[xPos][yPos - 1].use(this);
-					}
-					if(facingDir == Direction.UP)
-					{
-						if(yPos < map.tiles[xPos].length - 1) map.tiles[xPos][yPos + 1].use(this);
-					}
-					if(facingDir == Direction.LEFT)
-					{
-						if(xPos > 0) map.tiles[xPos - 1][yPos].use(this);
-					}
-					if(facingDir == Direction.RIGHT)
-					{
-						if(xPos < map.tiles.length - 1) map.tiles[xPos + 1][yPos].use(this);
-					}
+					Game.message("You have no held item!");
 				}
-			}
-			if(Game.keysDown[15])
-			{
-				if(walkDelay == 0 && !Game.keysDown[9])
+				else
 				{
-					walkDelay = 15;
-					move(Direction.UP);
-					map.updateTexture(xPos, yPos);
-				}
-				facingDir = Direction.UP;
-			}
-			else if(Game.keysDown[12])
-			{
-				if(walkDelay == 0 && !Game.keysDown[9])
-				{
-					walkDelay = 15;
-					move(Direction.DOWN);
-					map.updateTexture(xPos, yPos);
-				}
-				facingDir = Direction.DOWN;
-			}
-			else if(Game.keysDown[11])
-			{
-				if(walkDelay == 0 && !Game.keysDown[9])
-				{
-					walkDelay = 15;
-					move(Direction.LEFT);
-					map.updateTexture(xPos, yPos);
-				}
-				facingDir = Direction.LEFT;
-			}
-			else if(Game.keysDown[13])
-			{
-				if(walkDelay == 0 && !Game.keysDown[9])
-				{
-					walkDelay = 15;
-					move(Direction.RIGHT);
-					map.updateTexture(xPos, yPos);
-				}
-				facingDir = Direction.RIGHT;
-			}
-			if(Game.keyPress[8])
-			{
-				if(heldItem == null) Game.message("You have no held item to use on yourself!");
-				else heldItem.use(this, Direction.NONE);
-			}
-			else if(Game.keysDown[16])
-			{
-				if(useDelay == 0)
-				{
-					if(heldItem == null)
-					{
-						useDelay = 15;
-						Game.message("You have no held item!");
-					}
-					else
-					{
-						useDelay = heldItem.useDelay();
-						walkDelay += 7;
-						heldItem.use(this, facingDir);
-					}
+					useDelay = heldItem.useDelay();
+					walkDelay += 7;
+					heldItem.use(this, facingDir);
 				}
 			}
 		}
-		if(Game.keyPress[7])
+		if(Game.keys.isKeyPressed(Key.INV))
 		{
-			viewingInventory = !viewingInventory;
-			if(viewingInventory)
-			{
-				invX = 0;
-				invY = 0;
-				invSelectY = -1;
-			}
+			if(Game.currentMenu == null) Game.currentMenu = new GuiManagerInventory(this);
 		}
 		if(walkDelay > 0) walkDelay--;
 		if(useDelay > 0) useDelay--;
@@ -378,7 +265,7 @@ public class EntityPlayer extends EntityLiving
 		int texX = 0, texY = 0;
 		if(facingDir == Direction.DOWN || facingDir == Direction.RIGHT) texX += 32;
 		if(facingDir == Direction.LEFT || facingDir == Direction.DOWN) texY += 32;
-		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, 32, 32, texX, texY, 32, 32, false, false);
+		batch.draw(tex, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16, 32, 32, texX, texY, 32, 32, false, false);
 		// TODO: animation render (do I want to have animations?)
 		if(rider != null) rider.render(batch, camX, camY);
 	}

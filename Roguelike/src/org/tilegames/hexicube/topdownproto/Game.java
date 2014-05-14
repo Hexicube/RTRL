@@ -5,35 +5,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.tilegames.hexicube.topdownproto.entity.*;
+import org.tilegames.hexicube.topdownproto.gui.*;
 import org.tilegames.hexicube.topdownproto.item.*;
-import org.tilegames.hexicube.topdownproto.item.accessory.ItemBraceletCredits;
-import org.tilegames.hexicube.topdownproto.item.accessory.ItemNecklaceFeeding;
-import org.tilegames.hexicube.topdownproto.item.accessory.ItemNecklaceManaTraining;
-import org.tilegames.hexicube.topdownproto.item.accessory.ItemNecklaceScarf;
-import org.tilegames.hexicube.topdownproto.item.accessory.ItemNecklaceStrangle;
-import org.tilegames.hexicube.topdownproto.item.armour.ItemArmourHoodie;
-import org.tilegames.hexicube.topdownproto.item.armour.ItemArmourJeans;
-import org.tilegames.hexicube.topdownproto.item.armour.ItemArmourJumper;
-import org.tilegames.hexicube.topdownproto.item.armour.ItemArmourTrainers;
-import org.tilegames.hexicube.topdownproto.item.armour.ItemArmourWoolCap;
-import org.tilegames.hexicube.topdownproto.item.usable.ItemPickaxe;
-import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionHealing;
-import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionInvisibility;
-import org.tilegames.hexicube.topdownproto.item.usable.ItemPotionMana;
-import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemArrow;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWandLeechLife;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeapon;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponBadSword;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponBone;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponDagger;
-import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeaponShortBow;
+import org.tilegames.hexicube.topdownproto.item.accessory.*;
+import org.tilegames.hexicube.topdownproto.item.armour.*;
+import org.tilegames.hexicube.topdownproto.item.usable.*;
+import org.tilegames.hexicube.topdownproto.item.weapon.*;
 import org.tilegames.hexicube.topdownproto.map.*;
-import org.tilegames.hexicube.topdownproto.menu.Menu;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
@@ -44,7 +25,7 @@ import com.badlogic.gdx.InputProcessor;
 
 public class Game implements ApplicationListener, InputProcessor
 {
-	public static int xOffset = 384, yOffset = 284;
+	public static int width = 800, height = 600;
 	
 	public static final String gameName = "Numpad Explorer";
 	public static final String versionText = "Alpha 4";
@@ -57,17 +38,12 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	private static float currentDeltaPassed;
 	
-	public static boolean[] keysDown;
-	public static boolean[] keyPress;
-	
 	public static Random rand;
 	
 	private static int ticks, frameRate, renderPercent, tickPercent;
 	private static long time, tickTime, renderTime;
 	
 	private static boolean paused = false;
-	
-	public static Menu menu;
 	
 	public static Texture tileTex, invTex, invHighlightTex, invItemTypeTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
 	
@@ -79,6 +55,15 @@ public class Game implements ApplicationListener, InputProcessor
 	private static ArrayList<Message> messages;
 	
 	public static EntityPlayer player;
+	
+	
+	public static GuiManager currentMenu;
+	
+	public static GuiElementTextInput currentlyTyping;
+	public static GuiElementDraggable currentlyDragging;
+	
+	public static KeyHandler keys;
+	
 	
 	@Override
 	public void create()
@@ -205,8 +190,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		currentDeltaPassed = 0;
 		
-		keysDown = new boolean[512];
-		keyPress = new boolean[512];
+		keys = new KeyHandler(new File("keys.txt"));
 		
 		time = TimeUtils.nanoTime();
 		ticks = 0;
@@ -258,6 +242,8 @@ public class Game implements ApplicationListener, InputProcessor
 		curMap = maps[0];
 		
 		// Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
+		
+		currentMenu = new GuiManagerMainMenu();
 	}
 	
 	@Override
@@ -271,6 +257,9 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public void render()
 	{
+		boolean drawBehind = true;
+		if(currentMenu != null && !currentMenu.drawBehind()) drawBehind = false;
+		
 		currentDeltaPassed += Gdx.graphics.getDeltaTime();
 		if(currentDeltaPassed > .1f) currentDeltaPassed = .1f; // anti mega lag,
 																// makes it do 6
@@ -293,201 +282,205 @@ public class Game implements ApplicationListener, InputProcessor
 		int screenW = Gdx.graphics.getWidth();
 		int screenH = Gdx.graphics.getHeight();
 		
-		for(int x = 0; x < curMap.tiles.length; x++)
+		if(drawBehind)
 		{
-			for(int y = 0; y < curMap.tiles[x].length; y++)
+			for(int x = 0; x < curMap.tiles.length; x++)
 			{
-				int tX = x - camX;
-				int tY = y - camY;
-				int tileX = tX * 32;
-				int tileY = tY * 32;
-				if(tileX + xOffset > screenW || tileY + yOffset > screenH || tileX + xOffset + 32 < 0 || tileY + yOffset + 32 < 0) continue;
-				spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
-				curMap.tiles[x][y].render(spriteBatch, tX, tY);
+				for(int y = 0; y < curMap.tiles[x].length; y++)
+				{
+					int tX = x - camX;
+					int tY = y - camY;
+					int tileX = tX * 32;
+					int tileY = tY * 32;
+					if(tileX + width/2 > screenW || tileY + height/2 > screenH || tileX + width/2 + 32 < 0 || tileY + height/2 + 32 < 0) continue;
+					spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
+					curMap.tiles[x][y].render(spriteBatch, tX, tY);
+				}
 			}
-		}
-		int size = curMap.entities.size();
-		for(int a = 0; a < size; a++)
-		{
-			Entity e = curMap.entities.get(a);
-			int eX = e.xPos - camX;
-			int eY = e.yPos - camY;
-			int entX = eX * 32;
-			int entY = eY * 32;
-			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
-			Tile t = curMap.tiles[e.xPos][e.yPos];
-			boolean invis = !curMap.entities.get(a).visible(player);
-			spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
-			e.render(spriteBatch, camX, camY);
-		}
-		size = curMap.damageEntities.size();
-		for(int a = 0; a < size; a++)
-		{
-			Entity e = curMap.damageEntities.get(a);
-			int eX = e.xPos - camX;
-			int eY = e.yPos - camY;
-			int entX = eX * 32;
-			int entY = eY * 32;
-			if(entX + xOffset > screenW || entY + yOffset > screenH || entX + xOffset + 32 < 0 || entY + yOffset + 32 < 0) continue;
-			e.render(spriteBatch, camX, camY);
-		}
-		
-		spriteBatch.setColor(1, 1, 1, 1);
-		if(player.viewingInventory)
-		{
-			int xPos = screenW / 2 - 200;
-			int yPos = screenH / 2 - 240 - 32;
-			spriteBatch.draw(invTex, xPos, yPos);
-			int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
-			size = player.effects.size();
+			int size = curMap.entities.size();
 			for(int a = 0; a < size; a++)
 			{
-				Effect e = player.effects.get(a);
-				int str = e.getEffectStrength();
-				int time = e.timeRemaining();
-				if(e.getEffectType() == EffectType.HARM)
-				{
-					if(str > harmStrength)
-					{
-						harmStrength = str;
-						harmTimer = time;
-					}
-					else if(str == harmStrength && time > harmTimer)
-					{
-						harmTimer = time;
-					}
-				}
-				else if(e.getEffectType() == EffectType.SLOW)
-				{
-					if(str > slowStrength)
-					{
-						slowStrength = str;
-						slowTimer = time;
-					}
-					else if(str == slowStrength && time > slowTimer)
-					{
-						slowTimer = time;
-					}
-				}
-				else if(e.getEffectType() == EffectType.HEAL)
-				{
-					if(str > healStrength)
-					{
-						healStrength = str;
-						healTimer = time;
-					}
-					else if(str == healStrength && time > healTimer)
-					{
-						healTimer = time;
-					}
-				}
-				else if(e.getEffectType() == EffectType.INVISIBLE)
-				{
-					if(str > 0 && time > invisTimer)
-					{
-						invisTimer = time;
-					}
-				}
-				else if(e.getEffectType() == EffectType.INVULNERABLE)
-				{
-					if(str > 0 && time > invulTimer)
-					{
-						invulTimer = time;
-					}
-				}
-				else if(e.getEffectType() == EffectType.GHOSTLY)
-				{
-					if(str > 0 && time > ghostTimer)
-					{
-						ghostTimer = time;
-					}
-				}
+				Entity e = curMap.entities.get(a);
+				int eX = e.xPos - camX;
+				int eY = e.yPos - camY;
+				int entX = eX * 32;
+				int entY = eY * 32;
+				if(entX + width/2 > screenW || entX + height/2 > screenH || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				Tile t = curMap.tiles[e.xPos][e.yPos];
+				boolean invis = !curMap.entities.get(a).visible(player);
+				spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
+				e.render(spriteBatch, camX, camY);
 			}
-			int posY = yPos + 508;
-			if(harmStrength > 0)
+			size = curMap.damageEntities.size();
+			for(int a = 0; a < size; a++)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Harm " + romanNumerals(harmStrength)), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
+				Entity e = curMap.damageEntities.get(a);
+				int eX = e.xPos - camX;
+				int eY = e.yPos - camY;
+				int entX = eX * 32;
+				int entY = eY * 32;
+				if(entX + width/2 > screenW || entY + height/2 > screenH || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				e.render(spriteBatch, camX, camY);
 			}
-			if(slowStrength > 0)
+			
+			spriteBatch.setColor(1, 1, 1, 1);
+			//TODO: migrate this code into GuiManagerInventory
+			/*if(player.viewingInventory)
 			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Slow " + romanNumerals(slowStrength)), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
-			}
-			if(healStrength > 0)
-			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Heal " + romanNumerals(healStrength)), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
-			}
-			if(invisTimer > -1)
-			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
-			}
-			if(invulTimer > -1)
-			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
-			}
-			if(ghostTimer > -1)
-			{
-				FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos + 402, posY, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer / 60) + "s"), xPos + 422, posY - 9, false);
-				posY -= 18;
-			}
-			for(int x = 0; x < 10; x++)
-			{
-				for(int y = 0; y < 11; y++)
+				int xPos = screenW / 2 - 200;
+				int yPos = screenH / 2 - 240 - 32;
+				spriteBatch.draw(invTex, xPos, yPos);
+				int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
+				size = player.effects.size();
+				for(int a = 0; a < size; a++)
 				{
-					Item i = player.getItemInSlot(x, y);
-					if(i != null)
+					Effect e = player.effects.get(a);
+					int str = e.getEffectStrength();
+					int time = e.timeRemaining();
+					if(e.getEffectType() == EffectType.HARM)
 					{
-						spriteBatch.setColor(1, 1, 1, 1);
-						i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y == 0);
-						if(i.getMaxDurability() > 1)
+						if(str > harmStrength)
 						{
-							int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
-							if(stage == 16) stage = 15;
-							spriteBatch.setColor(i.getInvBorderCol());
-							spriteBatch.draw(invItemTypeTex, xPos + 3 + x * 40, 405 + yPos - y * 40);
-							spriteBatch.setColor(1, 1, 1, 1);
-							spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
+							harmStrength = str;
+							harmTimer = time;
+						}
+						else if(str == harmStrength && time > harmTimer)
+						{
+							harmTimer = time;
+						}
+					}
+					else if(e.getEffectType() == EffectType.SLOW)
+					{
+						if(str > slowStrength)
+						{
+							slowStrength = str;
+							slowTimer = time;
+						}
+						else if(str == slowStrength && time > slowTimer)
+						{
+							slowTimer = time;
+						}
+					}
+					else if(e.getEffectType() == EffectType.HEAL)
+					{
+						if(str > healStrength)
+						{
+							healStrength = str;
+							healTimer = time;
+						}
+						else if(str == healStrength && time > healTimer)
+						{
+							healTimer = time;
+						}
+					}
+					else if(e.getEffectType() == EffectType.INVISIBLE)
+					{
+						if(str > 0 && time > invisTimer)
+						{
+							invisTimer = time;
+						}
+					}
+					else if(e.getEffectType() == EffectType.INVULNERABLE)
+					{
+						if(str > 0 && time > invulTimer)
+						{
+							invulTimer = time;
+						}
+					}
+					else if(e.getEffectType() == EffectType.GHOSTLY)
+					{
+						if(str > 0 && time > ghostTimer)
+						{
+							ghostTimer = time;
 						}
 					}
 				}
-			}
-			spriteBatch.draw(invHighlightTex, xPos + 4 + player.invX * 40, 436 + yPos - player.invY * 40, 32, 32, 32, 0, 32, 32, false, false);
-			Item curItem = player.getItemInSlot(player.invX, player.invY);
-			String itemName = curItem == null ? player.getSlotName(player.invX, player.invY) : curItem.getName();
-			if(curItem instanceof ItemStack)
-			{
-				int size1 = ((ItemStack) curItem).getStackSize();
-				if(size1 != 1) itemName += " x" + size1;
-			}
-			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " (" + (curItem.getCurrentDurability() * 100 / curItem.getMaxDurability()) + "%)";
-			if(curItem != null && curItem instanceof ItemWeapon) itemName = "[" + ((ItemWeapon) curItem).getWeaponDamageRange() + "] " + itemName;
-			if(player.invSelectY != -1)
-			{
-				Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
-				String itemName2 = otherItem == null ? player.getSlotName(player.invSelectX, player.invSelectY) : otherItem.getName();
-				if(otherItem instanceof ItemStack)
+				int posY = yPos + 508;
+				if(harmStrength > 0)
 				{
-					int size1 = ((ItemStack) otherItem).getStackSize();
-					if(size1 != 1) itemName2 += " x" + size1;
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Harm " + romanNumerals(harmStrength)), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
 				}
-				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
-				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
-				spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2), xPos + 4, 508 + yPos, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
-			}
-			else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
+				if(slowStrength > 0)
+				{
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Slow " + romanNumerals(slowStrength)), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
+				}
+				if(healStrength > 0)
+				{
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Heal " + romanNumerals(healStrength)), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
+				}
+				if(invisTimer > -1)
+				{
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
+				}
+				if(invulTimer > -1)
+				{
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
+				}
+				if(ghostTimer > -1)
+				{
+					FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos + 402, posY, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer / 60) + "s"), xPos + 422, posY - 9, false);
+					posY -= 18;
+				}
+				for(int x = 0; x < 10; x++)
+				{
+					for(int y = 0; y < 11; y++)
+					{
+						Item i = player.getItemInSlot(x, y);
+						if(i != null)
+						{
+							spriteBatch.setColor(1, 1, 1, 1);
+							i.render(spriteBatch, xPos + 4 + x * 40, 436 + yPos - y * 40, y == 0);
+							if(i.getMaxDurability() > 1)
+							{
+								int stage = i.getCurrentDurability() * 16 / i.getMaxDurability();
+								if(stage == 16) stage = 15;
+								spriteBatch.setColor(i.getInvBorderCol());
+								spriteBatch.draw(invItemTypeTex, xPos + 3 + x * 40, 405 + yPos - y * 40);
+								spriteBatch.setColor(1, 1, 1, 1);
+								spriteBatch.draw(invUsedBar, xPos + 4 + x * 40, 436 + yPos - y * 40, 32, 2, 0, 30 - stage * 2, 32, 2, false, false);
+							}
+						}
+					}
+				}
+				spriteBatch.draw(invHighlightTex, xPos + 4 + player.invX * 40, 436 + yPos - player.invY * 40, 32, 32, 32, 0, 32, 32, false, false);
+				Item curItem = player.getItemInSlot(player.invX, player.invY);
+				String itemName = curItem == null ? player.getSlotName(player.invX, player.invY) : curItem.getName();
+				if(curItem instanceof ItemStack)
+				{
+					int size1 = ((ItemStack) curItem).getStackSize();
+					if(size1 != 1) itemName += " x" + size1;
+				}
+				if(curItem != null && curItem.getMaxDurability() > 1) itemName += " (" + (curItem.getCurrentDurability() * 100 / curItem.getMaxDurability()) + "%)";
+				if(curItem != null && curItem instanceof ItemWeapon) itemName = "[" + ((ItemWeapon) curItem).getWeaponDamageRange() + "] " + itemName;
+				if(player.invSelectY != -1)
+				{
+					Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
+					String itemName2 = otherItem == null ? player.getSlotName(player.invSelectX, player.invSelectY) : otherItem.getName();
+					if(otherItem instanceof ItemStack)
+					{
+						int size1 = ((ItemStack) otherItem).getStackSize();
+						if(size1 != 1) itemName2 += " x" + size1;
+					}
+					if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
+					if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
+					spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2), xPos + 4, 508 + yPos, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
+				}
+				else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
+			}*/
 		}
 		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
@@ -503,43 +496,48 @@ public class Game implements ApplicationListener, InputProcessor
 		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100 - renderPercent - tickPercent) + "% idle");
 		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 66, true);
 		
-		size = messages.size();
-		for(int a = 0; a < size; a++)
+		if(drawBehind)
 		{
-			Message m = messages.get(a);
-			m.timeLeft--;
-			if(m.timeLeft == 0)
+			int size = messages.size();
+			for(int a = 0; a < size; a++)
 			{
-				messages.remove(a);
-				size--;
-				a--;
+				Message m = messages.get(a);
+				m.timeLeft--;
+				if(m.timeLeft == 0)
+				{
+					messages.remove(a);
+					size--;
+					a--;
+				}
+				else
+				{
+					spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
+				}
 			}
-			else
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(statusTex, screenW - 256, 0);
+			int healthAmount = (int) Math.ceil((double) player.health * 200 / (double) player.healthMax);
+			spriteBatch.setColor(0, 1, 0, 1);
+			spriteBatch.draw(statusBarTex, screenW - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
+			if(player.heldItem != null)
 			{
-				spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
-				FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
+				int manaRequiredAmount = (int) Math.ceil((double) player.heldItem.getManaCost() * 200 / (double) player.manaMax);
+				spriteBatch.setColor(0, 0, 1, 1);
+				spriteBatch.draw(statusBarTex, screenW - 205, 18, manaRequiredAmount, 8, 0, 0, manaRequiredAmount, 8, false, false);
 			}
+			int manaAmount = (int) Math.ceil((double) player.mana * 200 / (double) player.manaMax);
+			spriteBatch.setColor(0, 0.5f, 1, 1);
+			spriteBatch.draw(statusBarTex, screenW - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
+			int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / player.hungerLevelMax);
+			spriteBatch.setColor(1, 0.5f, 0, 1);
+			spriteBatch.draw(statusBarTex, screenW - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
+			
+			spriteBatch.setColor(1, 1, 1, 1);
+			spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));
 		}
-		spriteBatch.setColor(1, 1, 1, 1);
-		spriteBatch.draw(statusTex, screenW - 256, 0);
-		int healthAmount = (int) Math.ceil((double) player.health * 200 / (double) player.healthMax);
-		spriteBatch.setColor(0, 1, 0, 1);
-		spriteBatch.draw(statusBarTex, screenW - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
-		if(player.heldItem != null)
-		{
-			int manaRequiredAmount = (int) Math.ceil((double) player.heldItem.getManaCost() * 200 / (double) player.manaMax);
-			spriteBatch.setColor(0, 0, 1, 1);
-			spriteBatch.draw(statusBarTex, screenW - 205, 18, manaRequiredAmount, 8, 0, 0, manaRequiredAmount, 8, false, false);
-		}
-		int manaAmount = (int) Math.ceil((double) player.mana * 200 / (double) player.manaMax);
-		spriteBatch.setColor(0, 0.5f, 1, 1);
-		spriteBatch.draw(statusBarTex, screenW - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
-		int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / player.hungerLevelMax);
-		spriteBatch.setColor(1, 0.5f, 0, 1);
-		spriteBatch.draw(statusBarTex, screenW - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
 		
-		spriteBatch.setColor(1, 1, 1, 1);
-		spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));
+		if(currentMenu != null) currentMenu.render(spriteBatch);
 		
 		spriteBatch.end();
 		end = TimeUtils.nanoTime();
@@ -561,8 +559,8 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public void resize(int width, int height)
 	{
-		xOffset = width / 2 - 16;
-		yOffset = height / 2 - 16;
+		Game.width = width;
+		Game.height = height;
 		spriteBatch = new SpriteBatch();
 	}
 	
@@ -573,50 +571,47 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int key)
 	{
-		// System.out.println(key);
-		if(key == 254)
-		{
-			if(Gdx.graphics.isFullscreen()) Gdx.graphics.setDisplayMode(800, 600, false);
-			else
-			{
-				DisplayMode d = Gdx.graphics.getDesktopDisplayMode();
-				Gdx.graphics.setDisplayMode(d.width, d.height, true);
-			}
-		}
-		keysDown[key] = true;
-		keyPress[key] = true;
-		return false;
-	}
-	
-	@Override
-	public boolean keyTyped(char character)
-	{
-		// TODO: use for input fields
+		if(currentMenu == null || !currentMenu.keyPress(key)) keys.keyPress(key);
 		return false;
 	}
 	
 	@Override
 	public boolean keyUp(int key)
 	{
-		keysDown[key] = false;
+		keys.keyRelease(key);
 		return false;
 	}
 	
 	@Override
-	public boolean touchUp(int x, int y, int pointer, int button)
+	public boolean keyTyped(char character)
 	{
+		if(currentlyTyping != null) currentlyTyping.keyType(character);
 		return false;
 	}
 	
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button)
 	{
+		if(currentMenu != null)
+		{
+			Game.currentlyDragging = null;
+			Game.currentlyTyping = null;
+			currentMenu.mousePress(x, height-y-1, pointer);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean touchUp(int x, int y, int pointer, int button)
+	{
+		if(currentlyDragging != null) currentlyDragging.handleRelease();
 		return false;
 	}
 	
 	@Override
 	public boolean touchDragged(int x, int y, int pointer)
 	{
+		if(currentlyDragging != null) currentlyDragging.handleDrag(x, y, pointer);
 		return false;
 	}
 	
@@ -655,6 +650,11 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static void tick()
 	{
+		if(currentMenu != null)
+		{
+			currentMenu.tick();
+			if(currentMenu != null && currentMenu.pausesGame()) return;
+		}
 		if(spawnTimer > 0) spawnTimer--;
 		if(paused) return;
 		for(int z = 0; z < maps.length; z++)
@@ -673,10 +673,7 @@ public class Game implements ApplicationListener, InputProcessor
 			}
 			if(maps[z].needsLighting) updateLighting(maps[z]);
 		}
-		for(int a = 0; a < keyPress.length; a++)
-		{
-			keyPress[a] = false;
-		}
+		keys.tick();
 	}
 	
 	public static boolean addEntity(Entity e, Map map, boolean needsTile)

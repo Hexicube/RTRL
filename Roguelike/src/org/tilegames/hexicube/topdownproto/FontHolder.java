@@ -150,6 +150,16 @@ public class FontHolder
 		return xPos;
 	}
 	
+	public static boolean isValid(char key)
+	{
+		if(key == " ".charAt(0)) return true;
+		for(int a = 0; a < characterList.length; a++)
+		{
+			if(characterList[a].character == key) return true;
+		}
+		return false;
+	}
+	
 	public static void render(SpriteBatch batch, char[] charList, int x, int y, boolean doubleScale)
 	{
 		int xPos = 0;

@@ -27,7 +27,7 @@ public class TileStair extends Tile
 	@Override
 	public void render(SpriteBatch batch, int x, int y)
 	{
-		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 0, down ? 32 : 64, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, 32, 32, 0, down ? 32 : 64, 32, 32, false, false);
 	}
 	
 	@Override

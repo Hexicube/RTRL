@@ -42,7 +42,7 @@ public class EntityLeechBolt extends Entity
 	@Override
 	public void render(SpriteBatch batch, int camX, int camY)
 	{
-		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32);
+		batch.draw(tex, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16);
 	}
 	
 	@Override

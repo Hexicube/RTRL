@@ -17,7 +17,7 @@ public class TileTorchWall extends Tile
 	public void render(SpriteBatch batch, int x, int y)
 	{
 		batch.setColor(1, 1, 1, 1);
-		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 64, 0, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, 32, 32, 64, 0, 32, 32, false, false);
 	}
 	
 	@Override

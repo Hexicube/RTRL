@@ -49,7 +49,7 @@ public class EntityArrow extends Entity
 		if(direction == Direction.DOWN || direction == Direction.RIGHT) texX += 32;
 		if(direction == Direction.LEFT || direction == Direction.DOWN) texX += 64;
 		texY = type.ID * 32;
-		batch.draw(tex, Game.xOffset + (xPos - camX) * 32, Game.yOffset + (yPos - camY) * 32, 32, 32, texX, texY, 32, 32, false, false);
+		batch.draw(tex, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16, 32, 32, texX, texY, 32, 32, false, false);
 	}
 	
 	@Override

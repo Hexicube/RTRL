@@ -65,7 +65,7 @@ public class TileDoor extends Tile
 			if(light[2] == 0) light[2] = 1;
 			batch.setColor((float) (light[0] + 2) / 18f, (float) (light[1] + 2) / 18f, (float) (light[2] + 2) / 18f, 1);
 		}
-		batch.draw(Game.tileTex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, 0, 0, 32, 32, false, false);
+		batch.draw(Game.tileTex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, 32, 32, 0, 0, 32, 32, false, false);
 		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1);
 		else if(requiredKey == KeyType.RED) batch.setColor(1, 0, 0, 1);
 		else if(requiredKey == KeyType.ORANGE) batch.setColor(1, 0.6f, 0, 1);
@@ -94,7 +94,7 @@ public class TileDoor extends Tile
 		 * (float)(light[2]+2)/18f, 1);
 		 * } */
 		int texX = doorHorizontal ? 0 : 32;
-		batch.draw(tex, Game.xOffset + x * 32, Game.yOffset + y * 32, 32, 32, texX, 0, 32, 32, false, false);
+		batch.draw(tex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, 32, 32, texX, 0, 32, 32, false, false);
 	}
 	
 	@Override
