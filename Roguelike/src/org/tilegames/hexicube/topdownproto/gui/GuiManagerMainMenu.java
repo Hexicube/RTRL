@@ -10,7 +10,7 @@ public class GuiManagerMainMenu extends GuiManagerBase
 	
 	public GuiManagerMainMenu()
 	{
-		elems.add(new GuiElementLabel(5, -25, 0f, 1f, 100, "RTRL Alpha V0.1", false, Color.WHITE));
+		elems.add(new GuiElementLabel(5, -25, 0f, 1f, 100, Game.gameName+" - "+Game.versionText, false, Color.WHITE));
 		startGame = new GuiElementTextButton(5, -60, 0f, 1f, 110, "Start Game", Color.RED);
 		elems.add(startGame);
 		soundSettings = new GuiElementTextButton(5, -90, 0f, 1f, 110, "Sound", Color.RED);

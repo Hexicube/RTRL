@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
+import org.tilegames.hexicube.topdownproto.gui.GuiManagerInventory;
 import org.tilegames.hexicube.topdownproto.item.*;
 import org.tilegames.hexicube.topdownproto.item.accessory.AccessorySlot;
 import org.tilegames.hexicube.topdownproto.item.accessory.ItemAccessory;
