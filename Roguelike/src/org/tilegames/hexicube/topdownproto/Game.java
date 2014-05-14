@@ -57,7 +57,7 @@ public class Game implements ApplicationListener, InputProcessor
 	public static EntityPlayer player;
 	
 	
-	public static GuiManager currentMenu;
+	private static GuiManager currentMenu;
 	
 	public static GuiElementTextInput currentlyTyping;
 	public static GuiElementDraggable currentlyDragging;
@@ -752,6 +752,24 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			items.add(newList.remove(0));
 		}
+	}
+	
+	public static void setMenu(GuiManager menu)
+	{
+		if(menu == null)
+		{
+			currentMenu = currentMenu.parent;
+		}
+		else
+		{
+			menu.parent = currentMenu;
+			currentMenu = menu;
+		}
+	}
+	
+	public static GuiManager getMenu()
+	{
+		return currentMenu;
 	}
 	
 	private static int spawnTimer = 120;

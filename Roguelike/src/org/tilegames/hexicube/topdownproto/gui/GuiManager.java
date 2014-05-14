@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class GuiManager
 {
+	public GuiManager parent;
+	
 	public abstract void tick();
 	public abstract void render(SpriteBatch batch);
 	

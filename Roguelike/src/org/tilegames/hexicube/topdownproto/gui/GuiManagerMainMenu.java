@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 
 public class GuiManagerMainMenu extends GuiManagerBase
 {
-	private GuiElementButton startGame, soundSettings, controls, exitGame;
+	public static Color mainMenuCol = Color.DARK_GRAY;
+	
+	private GuiElementTextButton startGame, soundSettings, controls, exitGame;
 	
 	public GuiManagerMainMenu()
 	{
@@ -19,13 +21,16 @@ public class GuiManagerMainMenu extends GuiManagerBase
 		elems.add(controls);
 		exitGame = new GuiElementTextButton(5, -150, 0f, 1f, 110, "Exit Game", Color.RED);
 		elems.add(exitGame);
-		background = Color.DARK_GRAY;
+		background = mainMenuCol;
 	}
 	
 	@Override
 	public void tick()
 	{
-		if(startGame.checked()) Game.currentMenu = null;
+		if(startGame.checked()) Game.setMenu(null);
+		else if(soundSettings.checked());
+		else if(controls.checked()) Game.setMenu(new GuiManagerControls(true));
+		else if(exitGame.checked()) System.exit(0);
 		super.tick();
 	}
 	

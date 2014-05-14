@@ -31,6 +31,7 @@ public abstract class GuiManagerBase extends GuiManager
 	@Override
 	public void tick()
 	{
+		if(parent != null) parent.tick();
 		for(GuiElement e : elems)
 		{
 			e.tick();

@@ -234,6 +234,11 @@ public class KeyHandler
 		}
 	}
 	
+	public String getProperName(Key k)
+	{
+		return getProperName(getKeyBind(k));
+	}
+	
 	public void tick()
 	{
 		for(int a = 0; a < keyPressed.length; a++)

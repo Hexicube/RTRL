@@ -252,7 +252,7 @@ public class EntityPlayer extends EntityLiving
 		}
 		if(Game.keys.isKeyPressed(Key.INV))
 		{
-			if(Game.currentMenu == null) Game.currentMenu = new GuiManagerInventory(this);
+			if(Game.getMenu() == null) Game.setMenu(new GuiManagerInventory(this));
 		}
 		if(walkDelay > 0) walkDelay--;
 		if(useDelay > 0) useDelay--;
