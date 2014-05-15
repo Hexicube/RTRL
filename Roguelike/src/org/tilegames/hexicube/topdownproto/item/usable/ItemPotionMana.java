@@ -4,6 +4,7 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
@@ -18,6 +19,24 @@ public class ItemPotionMana extends ItemUsable
 	private static boolean nameDiscovered = false;
 	
 	private boolean used;
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		if(other == null) return new String[0];
+		else return new String[]{"Dip Item"};
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other)
+	{
+		if(action.equals("Dip Item") && other != null)
+		{
+			//TODO: randomly enchant item?
+			Game.message("Nothing happens.");
+			used = true;
+		}
+	}
 	
 	@Override
 	public boolean use(Entity source, Direction dir)

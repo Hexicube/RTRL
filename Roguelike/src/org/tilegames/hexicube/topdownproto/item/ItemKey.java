@@ -21,6 +21,15 @@ public class ItemKey extends Item
 	}
 	
 	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
+	
+	@Override
 	public boolean isWeapon()
 	{
 		return false;

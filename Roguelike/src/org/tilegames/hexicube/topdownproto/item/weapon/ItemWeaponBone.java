@@ -4,6 +4,7 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +23,15 @@ public class ItemWeaponBone extends ItemWeapon
 		durability = dur;
 		spriteID = Game.rand.nextInt(3);
 	}
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
 	
 	@Override
 	public String getWeaponDamageRange()

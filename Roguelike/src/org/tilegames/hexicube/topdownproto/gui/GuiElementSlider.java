@@ -66,7 +66,7 @@ public class GuiElementSlider extends GuiElementDraggable
 	
 	public int getValue()
 	{
-		return (min*(width-pos)+max*(pos))/width;
+		return Math.max(Math.min((min*(width-pos)+(max+1)*(pos))/width, max), min);
 	}
 	
 	@Override
@@ -78,7 +78,13 @@ public class GuiElementSlider extends GuiElementDraggable
 		batch.draw(leftSide, pos[0], pos[1]);
 		batch.draw(rightSide, pos[0]+width-8, pos[1]);
 		batch.draw(mainPiece, pos[0]+8, pos[1], width-16, 16);
-		batch.draw(sliderBar, pos[0]+this.pos-4, pos[1]);
+		int truePos = this.pos;
+		int range = max - min;
+		if(range > 0)
+		{
+			truePos = (getValue()-min) * 200 / range;
+		}
+		batch.draw(sliderBar, pos[0]+truePos-4, pos[1]);
 		batch.setColor(colour);
 		FontHolder.render(batch, FontHolder.getCharList(""+getValue()), pos[0]+width+6, pos[1]+15, true);
 		batch.setColor(c);

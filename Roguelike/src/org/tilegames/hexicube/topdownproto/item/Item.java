@@ -8,6 +8,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Item
 {
+	private boolean needsDeleting;
+	public void delete()
+	{
+		needsDeleting = true;
+	}
+	public boolean needsDeletion()
+	{
+		return needsDeleting;
+	}
+	
+	public abstract String[] getCustomActions(Item other);
+	public abstract void handleCustomAction(String action, Item other);
+	
 	public abstract boolean isWeapon();
 	
 	public abstract DamageType getAttackType();

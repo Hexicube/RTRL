@@ -31,6 +31,15 @@ public class ItemWeaponShortBow extends ItemWeapon
 	}
 	
 	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
+	
+	@Override
 	public String getWeaponDamageRange()
 	{
 		if(!nameDiscovered) return "???";

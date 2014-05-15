@@ -32,7 +32,7 @@ public class GuiManagerMainMenu extends GuiManagerBase
 			Game.newGame();
 			Game.setMenu(null);
 		}
-		else if(soundSettings.checked());
+		else if(soundSettings.checked()) Game.setMenu(new GuiManagerSound());
 		else if(controls.checked()) Game.setMenu(new GuiManagerControls());
 		else if(exitGame.checked()) System.exit(0);
 		super.tick();
@@ -46,6 +46,12 @@ public class GuiManagerMainMenu extends GuiManagerBase
 	
 	@Override
 	public boolean drawBehind()
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean drawAbove()
 	{
 		return false;
 	}

@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto.item.accessory;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Color;
@@ -41,6 +42,15 @@ public class ItemBraceletCredits extends ItemAccessory
 		timer2 = 0;
 		creditsPos = 0;
 	}
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
 	
 	@Override
 	public AccessorySlot getAccessoryType()

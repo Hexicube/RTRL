@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.item.usable;
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 import org.tilegames.hexicube.topdownproto.map.TileDoor;
@@ -18,6 +19,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class ItemPickaxe extends ItemUsable
 {
 	private static Texture tex = Game.loadImage("item/pickaxe");
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
 	
 	private int durability;
 	

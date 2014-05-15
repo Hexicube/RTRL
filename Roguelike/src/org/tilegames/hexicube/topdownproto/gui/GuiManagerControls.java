@@ -4,7 +4,6 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GuiManagerControls extends GuiManagerBase
 {
@@ -27,6 +26,8 @@ public class GuiManagerControls extends GuiManagerBase
 		
 		back = new GuiElementTextButton(5, 5, 0f, 0f, 110, "Back", Color.RED);
 		elems.add(back);
+		
+		background = GuiManagerMainMenu.mainMenuCol;
 	}
 	
 	@Override
@@ -66,23 +67,13 @@ public class GuiManagerControls extends GuiManagerBase
 	@Override
 	public boolean drawBehind()
 	{
-		if(background == null) return false;
-		if(background.a < 1) return true;
 		return false;
 	}
 	
 	@Override
-	public void render(SpriteBatch batch)
+	public boolean drawAbove()
 	{
-		if(background == null)
-		{
-			background = GuiManagerMainMenu.mainMenuCol;
-			if(parent != null && parent instanceof GuiManagerBase)
-			{
-				background = ((GuiManagerBase)parent).background;
-			}
-		}
-		super.render(batch);
+		return false;
 	}
 	
 	@Override

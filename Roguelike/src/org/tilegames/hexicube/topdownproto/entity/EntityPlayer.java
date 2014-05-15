@@ -72,7 +72,7 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(inventory[a] != null)
 			{
-				if(inventory[a].getCurrentDurability() <= 0 && inventory[a].getMaxDurability() > 0) inventory[a] = null;
+				if(inventory[a].needsDeletion() || (inventory[a].getCurrentDurability() <= 0 && inventory[a].getMaxDurability() > 0)) inventory[a] = null;
 				else inventory[a].tick(this, false);
 			}
 		}
@@ -80,38 +80,38 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(armour[a] != null)
 			{
-				if(armour[a].getCurrentDurability() <= 0 && armour[a].getMaxDurability() > 0) armour[a] = null;
+				if(armour[a].needsDeletion() || (armour[a].getCurrentDurability() <= 0 && armour[a].getMaxDurability() > 0)) armour[a] = null;
 				else armour[a].tick(this, true);
 			}
 		}
 		if(heldItem != null)
 		{
-			if(heldItem.getCurrentDurability() <= 0 && heldItem.getMaxDurability() > 0) heldItem = null;
+			if(heldItem.needsDeletion() || (heldItem.getCurrentDurability() <= 0 && heldItem.getMaxDurability() > 0)) heldItem = null;
 			else heldItem.tick(this, true);
 		}
 		if(ring1 != null)
 		{
-			if(ring1.getCurrentDurability() <= 0 && ring1.getMaxDurability() > 0) ring1 = null;
+			if(ring1.needsDeletion() || (ring1.getCurrentDurability() <= 0 && ring1.getMaxDurability() > 0)) ring1 = null;
 			else ring1.tick(this, true);
 		}
 		if(ring2 != null)
 		{
-			if(ring2.getCurrentDurability() <= 0 && ring2.getMaxDurability() > 0) ring2 = null;
+			if(ring2.needsDeletion() || (ring2.getCurrentDurability() <= 0 && ring2.getMaxDurability() > 0)) ring2 = null;
 			else ring2.tick(this, true);
 		}
 		if(bracelet1 != null)
 		{
-			if(bracelet1.getCurrentDurability() <= 0 && bracelet1.getMaxDurability() > 0) bracelet1 = null;
+			if(bracelet1.needsDeletion() || (bracelet1.getCurrentDurability() <= 0 && bracelet1.getMaxDurability() > 0)) bracelet1 = null;
 			else bracelet1.tick(this, true);
 		}
 		if(bracelet2 != null)
 		{
-			if(bracelet2.getCurrentDurability() <= 0 && bracelet2.getMaxDurability() > 0) bracelet2 = null;
+			if(bracelet2.needsDeletion() || (bracelet2.getCurrentDurability() <= 0 && bracelet2.getMaxDurability() > 0)) bracelet2 = null;
 			else bracelet2.tick(this, true);
 		}
 		if(necklace != null)
 		{
-			if(necklace.getCurrentDurability() <= 0 && necklace.getMaxDurability() > 0) necklace = null;
+			if(necklace.needsDeletion() || (necklace.getCurrentDurability() <= 0 && necklace.getMaxDurability() > 0)) necklace = null;
 			else necklace.tick(this, true);
 		}
 		Object[] o = effects.toArray();

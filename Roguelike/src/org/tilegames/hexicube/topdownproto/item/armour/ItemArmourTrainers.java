@@ -2,6 +2,7 @@ package org.tilegames.hexicube.topdownproto.item.armour;
 
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
@@ -12,6 +13,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class ItemArmourTrainers extends ItemArmour
 {
 	private static Texture tex = Game.loadImage("armour/trainers");
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
 	
 	@Override
 	public double getDamageMod(DamageType type)

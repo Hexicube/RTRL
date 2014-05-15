@@ -26,6 +26,15 @@ public class ItemArrow extends ItemStack
 	}
 	
 	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
+	
+	@Override
 	public int getStackSize()
 	{
 		return stack;

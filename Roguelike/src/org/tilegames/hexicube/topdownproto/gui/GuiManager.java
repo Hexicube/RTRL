@@ -14,4 +14,5 @@ public abstract class GuiManager
 	
 	public abstract boolean pausesGame();
 	public abstract boolean drawBehind();
+	public abstract boolean drawAbove();
 }

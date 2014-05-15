@@ -12,21 +12,24 @@ public class GuiManagerInventory extends GuiManagerBase
 	private EntityPlayer player;
 	private GuiElementInvItem[] items;
 	
+	private int currentActionMenu, currentItemSwap;
+	private String[] actionItems;
+	
 	public GuiManagerInventory(EntityPlayer player)
 	{
 		this.player = player;
 		background = new Color(0, 0, 0, 0.4f);
-		items = new GuiElementInvItem[90];
+		items = new GuiElementInvItem[110];
 		for(int x = 0; x < 10; x++)
 		{
-			for(int y = 0; y < 9; y++)
+			for(int y = 0; y < 11; y++)
 			{
 				int pos = x + y*10;
 				items[pos] = new GuiElementInvItem(x*40-236, 164-y*40, 0.5f, 0.5f, player, x, y);
 				elems.add(items[pos]);
 			}
 		}
-		//TODO
+		//TODO: inventory stuff
 		//1. Restore basic item swap functionality with mouse control
 		//2. Make clicking an item show a menu of actions that can be performed
 		//3. Add methods to allow items to specify custom actions to perform based on other item (i.e. grindstone with sword)
@@ -35,8 +38,12 @@ public class GuiManagerInventory extends GuiManagerBase
 	@Override
 	public void tick()
 	{
+		//TODO: check action menu
+		for(int a = 0; a < items.length; a++)
+		{
+			if(items[a].checked()) currentActionMenu = a;
+		}
 		super.tick();
-		//TODO: check inputs
 	}
 	
 	@Override
@@ -195,6 +202,12 @@ public class GuiManagerInventory extends GuiManagerBase
 	
 	@Override
 	public boolean drawBehind()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean drawAbove()
 	{
 		return true;
 	}

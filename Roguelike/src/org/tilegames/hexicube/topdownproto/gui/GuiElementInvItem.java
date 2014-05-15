@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GuiElementInvItem extends GuiElementClickable
 {
-	//TODO: store if button was just clicked (action menu) or is highlighted (item swapping)
-	
 	private EntityPlayer player;
 	private int invX, invY;
 	

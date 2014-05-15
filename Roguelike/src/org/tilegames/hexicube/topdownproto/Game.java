@@ -67,6 +67,10 @@ public class Game implements ApplicationListener, InputProcessor
 	public static KeyHandler keys;
 	
 	
+	
+	public static SoundHandler sounds;
+	
+	
 	@Override
 	public void create()
 	{
@@ -123,12 +127,13 @@ public class Game implements ApplicationListener, InputProcessor
 		currentDeltaPassed = 0;
 		
 		keys = new KeyHandler(new File("keys.txt"));
+		sounds = new SoundHandler(new File("sounds.txt"));
 		
 		time = TimeUtils.nanoTime();
 		ticks = 0;
 		frameRate = 0;
 		
-		// Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
+		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 		
 		currentMenu = new GuiManagerMainMenu();
 	}
@@ -720,7 +725,7 @@ public class Game implements ApplicationListener, InputProcessor
 		else if(r < 12) type = KeyType.VIOLET;
 		else type = KeyType.SKELETON;
 		list.add(new ItemKey(type));
-		// TODO: make this actually do something
+		// TODO: make this actually do something interesting
 	}
 	
 	public static void insertRandomLoot(ArrayList<Item> list, EntityLiving source)

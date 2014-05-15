@@ -40,8 +40,12 @@ public abstract class GuiManagerBase extends GuiManager
 	@Override
 	public void render(SpriteBatch batch)
 	{
-		batch.setColor(background);
-		batch.draw(bgTex, 0, 0, Game.width, Game.height, 0, 0, 1, 1, false, false);
+		if(parent != null && parent.drawAbove()) parent.render(batch);
+		else
+		{
+			batch.setColor(background);
+			batch.draw(bgTex, 0, 0, Game.width, Game.height, 0, 0, 1, 1, false, false);
+		}
 		batch.setColor(1, 1, 1, 1);
 		for(GuiElement e : elems)
 		{

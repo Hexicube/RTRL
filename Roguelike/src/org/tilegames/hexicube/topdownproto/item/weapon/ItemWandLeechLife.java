@@ -5,6 +5,7 @@ import org.tilegames.hexicube.topdownproto.entity.Direction;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLeechBolt;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 
 import com.badlogic.gdx.graphics.Color;
@@ -35,6 +36,15 @@ public class ItemWandLeechLife extends ItemWeapon
 	}
 	
 	@Override
+	public String[] getCustomActions(Item other)
+	{
+		return new String[0];
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other) {}
+	
+	@Override
 	public String getWeaponDamageRange()
 	{
 		if(nameDiscovered) return "2d10 GENERIC";
@@ -45,16 +55,19 @@ public class ItemWandLeechLife extends ItemWeapon
 	public boolean use(Entity source, Direction dir)
 	{
 		if(!(source instanceof EntityPlayer)) return false;
-		EntityPlayer p = (EntityPlayer) source;
+		EntityPlayer p = (EntityPlayer)source;
 		int manaCost = 12;
 		if(modifier == ItemModifier.CONSERVATIVE) manaCost = 9;
 		if(p.mana >= manaCost)
 		{
 			p.mana -= manaCost;
 			p.manaExperience += manaCost;
-			EntityLeechBolt e = new EntityLeechBolt(p.facingDir, p, p.xPos, p.yPos);
-			Game.addEntity(e, p.map, false);
-			e.move(p.facingDir);
+			if(dir != Direction.NONE)
+			{
+				EntityLeechBolt e = new EntityLeechBolt(dir, p, p.xPos, p.yPos);
+				Game.addEntity(e, p.map, false);
+				e.move(dir);
+			}
 			durability--;
 			if(durability == 0) Game.message("The " + getName() + " broke...");
 			if(!nameDiscovered)

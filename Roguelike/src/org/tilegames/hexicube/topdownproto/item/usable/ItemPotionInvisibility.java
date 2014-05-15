@@ -6,6 +6,7 @@ import org.tilegames.hexicube.topdownproto.entity.EffectInvisibilityPotion;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityLiving;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
 
@@ -20,6 +21,31 @@ public class ItemPotionInvisibility extends ItemUsable
 	private static boolean nameDiscovered = false;
 	
 	private boolean used;
+	
+	@Override
+	public String[] getCustomActions(Item other)
+	{
+		if(other == null) return new String[0];
+		else return new String[]{"Dip Item"};
+	}
+	
+	@Override
+	public void handleCustomAction(String action, Item other)
+	{
+		if(action.equals("Dip Item") && other != null)
+		{
+			//TODO: lose item
+			Game.message("Your "+getName()+" vanished!");
+			other.delete();
+			if(!nameDiscovered)
+			{
+				nameDiscovered = true;
+				Game.message("Discovered potion type: Invisibility");
+			}
+			Game.message("You drop your "+other.getName()+", and can't find it.");
+			used = true;
+		}
+	}
 	
 	@Override
 	public boolean use(Entity source, Direction dir)
