@@ -47,6 +47,7 @@ public class Game implements ApplicationListener, InputProcessor
 	private static boolean paused = false;
 	
 	public static Texture tileTex, invTex, invHighlightTex, invItemTypeTex, invUsedBar, statusTex, statusBarTex, touchInputTex;
+	public static Texture[] necklaceTex, swordTex, potionTex, braceletTex, wandTex;
 	
 	public static Map[] maps;
 	public static Map curMap;
@@ -83,52 +84,82 @@ public class Game implements ApplicationListener, InputProcessor
 		statusTex = loadImage("status");
 		statusBarTex = loadImage("statusbar");
 		
+		necklaceTex = new Texture[4];
+		for(int a = 0; a < necklaceTex.length; a++)
+		{
+			necklaceTex[a] = loadImage("necklace/necklace" + (a + 1));
+		}
+		swordTex = new Texture[2];
+		for(int a = 0; a < swordTex.length; a++)
+		{
+			swordTex[a] = loadImage("weapon/sword" + (a + 1));
+		}
+		potionTex = new Texture[32];
+		for(int a = 0; a < potionTex.length; a++)
+		{
+			potionTex[a] = loadImage("item/potion" + (a + 1));
+		}
+		braceletTex = new Texture[1];
+		for(int a = 0; a < braceletTex.length; a++)
+		{
+			braceletTex[a] = loadImage("bracelet/bracelet" + (a + 1));
+		}
+		wandTex = new Texture[1];
+		for(int a = 0; a < wandTex.length; a++)
+		{
+			wandTex[a] = loadImage("weapon/wand" + (a + 1));
+		}
+		
+		spriteBatch = new SpriteBatch();
+		volume = 100;
+		
+		Gdx.input.setInputProcessor(this);
+		Gdx.graphics.setVSync(true);
+		
+		FontHolder.prep();
+		
+		Gdx.graphics.setTitle(gameName + " - " + versionText);
+		
+		currentDeltaPassed = 0;
+		
+		keys = new KeyHandler(new File("keys.txt"));
+		
+		time = TimeUtils.nanoTime();
+		ticks = 0;
+		frameRate = 0;
+		
+		// Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
+		
+		currentMenu = new GuiManagerMainMenu();
+	}
+	
+	@Override
+	public void dispose()
+	{}
+	
+	public static void newGame()
+	{
 		rand = new Random();
 		
-		Texture[] images = new Texture[4];
-		for(int a = 0; a < images.length; a++)
-		{
-			images[a] = loadImage("necklace/necklace" + (a + 1));
-		}
-		images = shuffleTex(images);
-		ItemNecklaceFeeding.tex = images[0];
-		ItemNecklaceStrangle.tex = images[1];
-		ItemNecklaceManaTraining.tex = images[2];
+		necklaceTex = shuffleTex(necklaceTex);
+		ItemNecklaceFeeding.tex = necklaceTex[0];
+		ItemNecklaceStrangle.tex = necklaceTex[1];
+		ItemNecklaceManaTraining.tex = necklaceTex[2];
 		
-		images = new Texture[2];
-		for(int a = 0; a < images.length; a++)
-		{
-			images[a] = loadImage("weapon/sword" + (a + 1));
-		}
-		images = shuffleTex(images);
-		ItemWeaponBadSword.tex = images[0];
-		ItemWeaponDagger.tex = images[1];
+		swordTex = shuffleTex(swordTex);
+		ItemWeaponBadSword.tex = swordTex[0];
+		ItemWeaponDagger.tex = swordTex[1];
 		
-		images = new Texture[32];
-		for(int a = 0; a < images.length; a++)
-		{
-			images[a] = loadImage("item/potion" + (a + 1));
-		}
-		images = shuffleTex(images);
-		ItemPotionHealing.tex = images[0];
-		ItemPotionMana.tex = images[1];
-		ItemPotionInvisibility.tex = images[2];
+		potionTex = shuffleTex(potionTex);
+		ItemPotionHealing.tex = potionTex[0];
+		ItemPotionMana.tex = potionTex[1];
+		ItemPotionInvisibility.tex = potionTex[2];
 		
-		images = new Texture[1];
-		for(int a = 0; a < images.length; a++)
-		{
-			images[a] = loadImage("bracelet/bracelet" + (a + 1));
-		}
-		images = shuffleTex(images);
-		ItemBraceletCredits.tex = images[0];
+		braceletTex = shuffleTex(braceletTex);
+		ItemBraceletCredits.tex = braceletTex[0];
 		
-		images = new Texture[1];
-		for(int a = 0; a < images.length; a++)
-		{
-			images[a] = loadImage("weapon/wand" + (a + 1));
-		}
-		images = shuffleTex(images);
-		ItemWandLeechLife.tex = images[0];
+		wandTex = shuffleTex(wandTex);
+		ItemWandLeechLife.tex = wandTex[0];
 		
 		maps = new Map[15];
 		int[] ladderPos = new int[2];
@@ -179,24 +210,6 @@ public class Game implements ApplicationListener, InputProcessor
 			maps[a] = m;
 		}
 		
-		spriteBatch = new SpriteBatch();
-		volume = 100;
-		
-		Gdx.input.setInputProcessor(this);
-		Gdx.graphics.setVSync(true);
-		
-		FontHolder.prep();
-		
-		Gdx.graphics.setTitle(gameName + " - " + versionText);
-		
-		currentDeltaPassed = 0;
-		
-		keys = new KeyHandler(new File("keys.txt"));
-		
-		time = TimeUtils.nanoTime();
-		ticks = 0;
-		frameRate = 0;
-		
 		while(true)
 		{
 			int x = rand.nextInt(maps[0].tiles.length - 1) + 1;
@@ -241,15 +254,7 @@ public class Game implements ApplicationListener, InputProcessor
 		messages = new ArrayList<Message>();
 		
 		curMap = maps[0];
-		
-		// Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
-		
-		currentMenu = new GuiManagerMainMenu();
 	}
-	
-	@Override
-	public void dispose()
-	{}
 	
 	@Override
 	public void pause()

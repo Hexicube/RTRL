@@ -27,7 +27,11 @@ public class GuiManagerMainMenu extends GuiManagerBase
 	@Override
 	public void tick()
 	{
-		if(startGame.checked()) Game.setMenu(null);
+		if(startGame.checked())
+		{
+			Game.newGame();
+			Game.setMenu(null);
+		}
 		else if(soundSettings.checked());
 		else if(controls.checked()) Game.setMenu(new GuiManagerControls());
 		else if(exitGame.checked()) System.exit(0);

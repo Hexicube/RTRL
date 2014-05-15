@@ -27,7 +27,8 @@ public class GuiManagerPauseMenu extends GuiManagerBase
 	{
 		if(newGame.checked())
 		{
-			//TODO: start a new game
+			Game.newGame();
+			Game.setMenu(null);
 		}
 		else if(soundSettings.checked());
 		else if(controls.checked()) Game.setMenu(new GuiManagerControls());
