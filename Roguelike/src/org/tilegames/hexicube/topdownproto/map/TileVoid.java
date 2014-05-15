@@ -41,6 +41,8 @@ public class TileVoid extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
-	{}
+	public boolean use(Entity entity)
+	{
+		return false;
+	}
 }

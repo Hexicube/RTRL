@@ -165,32 +165,31 @@ public class EntityPlayer extends EntityLiving
 		// 4/5/6/8 -> left/down/right/up
 		// 7 -> open door
 		// 9 -> use held item
-		if(Game.keys.isKeyPressed(Key.USE))
+		if(Game.keys.isKeyHeld(Key.USE))
 		{
 			if(useDelay == 0)
 			{
-				useDelay = 15;
 				if(facingDir == Direction.DOWN)
 				{
-					if(yPos > 0) map.tiles[xPos][yPos - 1].use(this);
+					if(yPos > 0 && map.tiles[xPos][yPos - 1].use(this)) useDelay = 15;
 				}
 				if(facingDir == Direction.UP)
 				{
-					if(yPos < map.tiles[xPos].length - 1) map.tiles[xPos][yPos + 1].use(this);
+					if(yPos < map.tiles[xPos].length - 1 && map.tiles[xPos][yPos + 1].use(this)) useDelay = 15;
 				}
 				if(facingDir == Direction.LEFT)
 				{
-					if(xPos > 0) map.tiles[xPos - 1][yPos].use(this);
+					if(xPos > 0 && map.tiles[xPos - 1][yPos].use(this)) useDelay = 15;
 				}
 				if(facingDir == Direction.RIGHT)
 				{
-					if(xPos < map.tiles.length - 1) map.tiles[xPos + 1][yPos].use(this);
+					if(xPos < map.tiles.length - 1 && map.tiles[xPos + 1][yPos].use(this)) useDelay = 15;
 				}
 			}
 		}
 		if(Game.keys.isKeyHeld(Key.UP))
 		{
-			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
 				walkDelay = 15;
 				move(Direction.UP);
@@ -200,7 +199,7 @@ public class EntityPlayer extends EntityLiving
 		}
 		else if(Game.keys.isKeyHeld(Key.DOWN))
 		{
-			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
 				walkDelay = 15;
 				move(Direction.DOWN);
@@ -210,7 +209,7 @@ public class EntityPlayer extends EntityLiving
 		}
 		else if(Game.keys.isKeyHeld(Key.LEFT))
 		{
-			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
 				walkDelay = 15;
 				move(Direction.LEFT);
@@ -220,7 +219,7 @@ public class EntityPlayer extends EntityLiving
 		}
 		else if(Game.keys.isKeyHeld(Key.RIGHT))
 		{
-			if(walkDelay == 0 && !Game.keys.isKeyPressed(Key.LOOK))
+			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
 				walkDelay = 15;
 				move(Direction.RIGHT);
@@ -228,12 +227,7 @@ public class EntityPlayer extends EntityLiving
 			}
 			facingDir = Direction.RIGHT;
 		}
-		if(Game.keys.isKeyHeld(Key.USE_SELF))
-		{
-			if(heldItem == null) Game.message("You have no held item to use on yourself!");
-			else heldItem.use(this, Direction.NONE);
-		}
-		else if(Game.keys.isKeyHeld(Key.USE))
+		if(Game.keys.isKeyHeld(Key.USE))
 		{
 			if(useDelay == 0)
 			{

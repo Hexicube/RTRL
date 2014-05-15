@@ -53,7 +53,7 @@ public class TileFloor extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
+	public boolean use(Entity entity)
 	{
 		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
 		{
@@ -109,11 +109,13 @@ public class TileFloor extends Tile
 					if(!found)
 					{
 						Game.message("Your inventory is full!");
-						return;
+						return true;
 					}
 				}
 				if(items.size() == 0) Game.removeEntity(curEnt);
 			}
+			return true;
 		}
+		return false;
 	}
 }

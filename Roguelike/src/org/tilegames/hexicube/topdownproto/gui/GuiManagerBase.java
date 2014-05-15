@@ -25,7 +25,6 @@ public abstract class GuiManagerBase extends GuiManager
 	public GuiManagerBase()
 	{
 		elems = new ArrayList<GuiElement>();
-		background = new Color(0, 0, 0, 0);
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 import org.tilegames.hexicube.topdownproto.entity.*;
 import org.tilegames.hexicube.topdownproto.gui.*;
 import org.tilegames.hexicube.topdownproto.item.*;
@@ -412,7 +413,13 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int key)
 	{
-		if(currentMenu == null || !currentMenu.keyPress(key)) keys.keyPress(key);
+		Key k = Key.getKey(key);
+		if(k == Key.PAUSE)
+		{
+			if(currentMenu == null || !currentMenu.pausesGame()) setMenu(new GuiManagerPauseMenu());
+			else setMenu(null);
+		}
+		else if(currentMenu == null || !currentMenu.keyPress(key)) keys.keyPress(key);
 		return false;
 	}
 	

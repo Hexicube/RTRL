@@ -1,6 +1,7 @@
 package org.tilegames.hexicube.topdownproto.gui;
 
 import org.tilegames.hexicube.topdownproto.Game;
+import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 
 import com.badlogic.gdx.graphics.Color;
@@ -43,6 +44,7 @@ public class GuiManagerInventory extends GuiManagerBase
 	{
 		batch.draw(Game.invTex, Game.width/2 - 240, Game.height/2 - 272);
 		super.render(batch);
+		//TODO: render status effects
 		/*
 		int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
 		size = player.effects.size();
@@ -180,6 +182,8 @@ public class GuiManagerInventory extends GuiManagerBase
 	@Override
 	public boolean keyPress(int key)
 	{
+		Key k = Key.getKey(key);
+		if(k == Key.INV) Game.setMenu(null);
 		return true; //block input from controling character
 	}
 	

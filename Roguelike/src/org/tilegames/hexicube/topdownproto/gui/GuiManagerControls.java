@@ -4,6 +4,7 @@ import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GuiManagerControls extends GuiManagerBase
 {
@@ -11,7 +12,7 @@ public class GuiManagerControls extends GuiManagerBase
 	private GuiElementTextButton[] controls;
 	private int controlEditing;
 	
-	public GuiManagerControls(boolean mainMenu)
+	public GuiManagerControls()
 	{
 		elems.add(new GuiElementLabel(5, -25, 0f, 1f, 100, "Controls", false, Color.WHITE));
 		
@@ -26,17 +27,6 @@ public class GuiManagerControls extends GuiManagerBase
 		
 		back = new GuiElementTextButton(5, 5, 0f, 0f, 110, "Back", Color.RED);
 		elems.add(back);
-		background = GuiManagerMainMenu.mainMenuCol;
-		if(!mainMenu)
-		{
-			if(parent != null)
-			{
-				if(parent instanceof GuiManagerBase)
-				{
-					background = ((GuiManagerBase)parent).background;
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -76,7 +66,45 @@ public class GuiManagerControls extends GuiManagerBase
 	@Override
 	public boolean drawBehind()
 	{
+		if(background == null) return false;
+		if(background.a < 1) return true;
 		return false;
+	}
+	
+	@Override
+	public void render(SpriteBatch batch)
+	{
+		if(background == null)
+		{
+			background = GuiManagerMainMenu.mainMenuCol;
+			if(parent != null && parent instanceof GuiManagerBase)
+			{
+				background = ((GuiManagerBase)parent).background;
+			}
+		}
+		super.render(batch);
+	}
+	
+	@Override
+	public void mousePress(int x, int y, int pointer)
+	{
+		for(GuiElement e : elems)
+		{
+			if(e instanceof GuiElementClickable)
+			{
+				if(((GuiElementClickable)e).gotClicked(x, y, pointer))
+				{
+					((GuiElementClickable)e).handleClick();
+					return;
+				}
+			}
+		}
+		if(controlEditing != -1)
+		{
+			Key k = Key.values()[controlEditing];
+			controls[controlEditing].text = k.getName()+": "+Game.keys.getProperName(k);
+			controlEditing = -1;
+		}
 	}
 	
 	@Override

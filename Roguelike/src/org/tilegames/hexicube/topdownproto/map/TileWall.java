@@ -11,7 +11,7 @@ public class TileWall extends Tile
 	{
 		lightSource = new int[]
 		{
-				15, 15, 15
+			15, 15, 15
 		};
 	}
 	
@@ -52,6 +52,8 @@ public class TileWall extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
-	{}
+	public boolean use(Entity entity)
+	{
+		return false;
+	}
 }

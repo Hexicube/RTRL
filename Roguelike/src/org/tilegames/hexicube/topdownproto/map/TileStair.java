@@ -55,11 +55,15 @@ public class TileStair extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
+	public boolean use(Entity entity)
 	{
 		if(entity instanceof EntityPlayer)
 		{
-			if(Game.addEntity(entity, Game.maps[floor + (down ? 1 : -1)], true)) Game.curMap = entity.map;
+			if(Game.addEntity(entity, Game.maps[floor + (down ? 1 : -1)], true))
+			{
+				Game.curMap = entity.map;
+			}
 		}
+		return true;
 	}
 }

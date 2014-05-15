@@ -18,7 +18,7 @@ public abstract class Tile
 	
 	public abstract boolean takesLight();
 	
-	public abstract void use(Entity entity);
+	public abstract boolean use(Entity entity);
 	
 	public int[] lightLevel = new int[3];
 	public int[] lightSource = new int[3];

@@ -43,7 +43,7 @@ public class TileDoor extends Tile
 	@Override
 	public boolean onWalkAttempt(Entity entity)
 	{
-		if(entity instanceof EntityPlayer && !opened) Game.message("You need to open the door first!");
+		if(entity instanceof EntityPlayer && !opened) use(entity);
 		return opened;
 	}
 	
@@ -124,7 +124,7 @@ public class TileDoor extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
+	public boolean use(Entity entity)
 	{
 		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
 		{
@@ -152,12 +152,12 @@ public class TileDoor extends Tile
 					if(!found)
 					{
 						Game.message("Your inventory is full!");
-						return;
+						return true;
 					}
 				}
 				if(items.size() == 0) Game.removeEntity(curEnt);
 			}
-			return;
+			return true;
 		}
 		if(requiredKey == KeyType.NONE)
 		{
@@ -189,17 +189,18 @@ public class TileDoor extends Tile
 						player.inventory[a] = null;
 						requiredKey = KeyType.NONE;
 						Game.message("Door unlocked.");
-						return;
+						return true;
 					}
 					if(key.type == KeyType.SKELETON)
 					{
 						requiredKey = KeyType.NONE;
 						Game.message("Door unlocked with skeleton key.");
-						return;
+						return true;
 					}
 				}
 			}
 			Game.message("You need a " + requiredKey + " key or a skeleton key to open that!");
 		}
+		return true;
 	}
 }

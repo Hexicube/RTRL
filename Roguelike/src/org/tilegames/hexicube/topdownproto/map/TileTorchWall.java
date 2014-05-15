@@ -45,6 +45,8 @@ public class TileTorchWall extends Tile
 	}
 	
 	@Override
-	public void use(Entity entity)
-	{}
+	public boolean use(Entity entity)
+	{
+		return false;
+	}
 }

@@ -11,15 +11,25 @@ public class KeyHandler
 {
 	public enum Key
 	{
-		LEFT("Left", 21), RIGHT("Right", 22), UP("Up", 19), DOWN("Down", 20),
+		LEFT("Left", 29), RIGHT("Right", 32), UP("Up", 51), DOWN("Down", 47),
 		
-		LOOK("Look", 0), INV("Inventory", 0), USE("Use", 0), USE_SELF("UseSelf", 0),
+		LOOK("Look", 129), INV("Inventory", 37), USE("Use", 33),
 		
 		PAUSE("Pause", 131);
 		
 		private int keyID, defaultValue;
 		private String name;
 		private static int numKeys;
+		
+		public static Key getKey(int key)
+		{
+			Key[] keys = values();
+			for(int a = 0; a < keys.length; a++)
+			{
+				if(Game.keys.getKeyBind(keys[a]) == key) return keys[a];
+			}
+			return null;
+		}
 		
 		private Key(String name, int defaultVal)
 		{
