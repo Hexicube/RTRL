@@ -86,16 +86,19 @@ public class GuiManagerInventory extends GuiManagerBase
 		batch.setColor(1, 1, 1, 1);
 		if(currentActionMenu != -1) batch.draw(Game.invHighlightTex, currentActionMenu%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentActionMenu/10 * 40, 32, 32, 32, 0, 32, 32, false, false);
 		if(currentItemSwap != -1) batch.draw(Game.invHighlightTex, currentItemSwap%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentItemSwap/10 * 40, 32, 32, 0, 0, 32, 32, false, false);
-		int size = player.effects.size();
+		EffectType[] effects = EffectType.values();
 		int posY = Game.height/2 + 108;
-		for(int a = 0; a < size; a++)
+		for(int a = 0; a < effects.length; a++)
 		{
-			Effect e = player.effects.get(a);
-			int str = e.getEffectStrength();
-			int time = e.timeRemaining();
-			FontHolder.render(batch, FontHolder.getCharList(e.getEffectType().displayName+" " + ((str>1)?Game.romanNumerals(str):"")), Game.width/2 + 162, posY + 128, false);
-			FontHolder.render(batch, FontHolder.getCharList(((time>60)?((time / 3600)+"m "):"")+((time / 60) % 60 + "s")), Game.width/2 + 172, posY + 119, false);
-			posY -= 18;
+			Effect e = player.getEffect(effects[a]);
+			if(e != null)
+			{
+				int str = e.getEffectStrength();
+				int time = e.timeRemaining();
+				FontHolder.render(batch, FontHolder.getCharList(e.getEffectType().displayName+" " + ((str>1)?Game.romanNumerals(str):"")), Game.width/2 + 162, posY + 128, false);
+				FontHolder.render(batch, FontHolder.getCharList(((time>60)?((time / 3600)+"m "):"")+((time / 60) % 60 + "s")), Game.width/2 + 172, posY + 119, false);
+				posY -= 18;
+			}
 		}
 		//TODO: render item names
 		/*Item curItem = player.getItemInSlot(player.invX, player.invY);
