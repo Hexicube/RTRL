@@ -27,7 +27,6 @@ public class EntityRat extends EntityLiving
 		xPos = x;
 		yPos = y;
 		facingDir = Direction.UP;
-		effects = new ArrayList<Effect>();
 	}
 	
 	@Override

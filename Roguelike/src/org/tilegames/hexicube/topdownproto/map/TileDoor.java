@@ -191,15 +191,9 @@ public class TileDoor extends Tile
 						Game.message("Door unlocked.");
 						return true;
 					}
-					if(key.type == KeyType.SKELETON)
-					{
-						requiredKey = KeyType.NONE;
-						Game.message("Door unlocked with skeleton key.");
-						return true;
-					}
 				}
 			}
-			Game.message("You need a " + requiredKey + " key or a skeleton key to open that!");
+			Game.message("You need a " + requiredKey.name + " key to open that!");
 		}
 		return true;
 	}

@@ -723,7 +723,7 @@ public class Game implements ApplicationListener, InputProcessor
 		else if(r < 8) type = KeyType.GREEN;
 		else if(r < 10) type = KeyType.BLUE;
 		else if(r < 12) type = KeyType.VIOLET;
-		else type = KeyType.SKELETON;
+		else type = KeyType.ARCADE;
 		list.add(new ItemKey(type));
 		// TODO: make this actually do something interesting
 	}
@@ -732,7 +732,6 @@ public class Game implements ApplicationListener, InputProcessor
 	{
 		if(source instanceof EntitySkeleton)
 		{
-			if(rand.nextInt(150) == 27) list.add(new ItemKey(KeyType.SKELETON));
 			int count = rollDice(1, 3)-1;
 			for(int a = 0; a < count; a++)
 			{

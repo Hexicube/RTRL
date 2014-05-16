@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemKey extends Item
 {
-	private static Texture tex = Game.loadImage("item/key");
-	private static Texture tex2 = Game.loadImage("item/keyskeleton");
+	private static Texture tex = Game.loadImage("item/key"),
+						   tex2 = Game.loadImage("item/keyarcade");
 	
 	public KeyType type;
 	
@@ -84,7 +84,7 @@ public class ItemKey extends Item
 	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
-		if(type == KeyType.SKELETON)
+		if(type == KeyType.ARCADE)
 		{
 			batch.draw(tex2, x, y);
 			return;
@@ -94,6 +94,7 @@ public class ItemKey extends Item
 		else if(type == KeyType.YELLOW) batch.setColor(batch.getColor().mul(new Color(1, 1, 0, 1)));
 		else if(type == KeyType.GREEN) batch.setColor(batch.getColor().mul(new Color(0, 1, 0, 1)));
 		else if(type == KeyType.BLUE) batch.setColor(batch.getColor().mul(new Color(0, 0, 1, 1)));
+		else if(type == KeyType.VIOLET) batch.setColor(batch.getColor().mul(new Color(0.6f, 0, 1, 1)));
 		else if(type == KeyType.VIOLET) batch.setColor(batch.getColor().mul(new Color(0.6f, 0, 1, 1)));
 		else batch.setColor(batch.getColor().mul(new Color(0.2f, 0.2f, 0.2f, 1)));
 		batch.draw(tex, x, y);

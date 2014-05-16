@@ -1,7 +1,5 @@
 package org.tilegames.hexicube.topdownproto.entity;
 
-import java.util.ArrayList;
-
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 import org.tilegames.hexicube.topdownproto.gui.GuiManagerInventory;
@@ -40,7 +38,6 @@ public class EntityPlayer extends EntityLiving
 		health = healthMax = 30;
 		inventory = new Item[100];
 		armour = new ItemArmour[4];
-		effects = new ArrayList<Effect>();
 		hungerLevel = hungerLevelMax = 25200;
 		mana = 20;
 		manaMax = 20;
@@ -113,13 +110,6 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(necklace.needsDeletion() || (necklace.getCurrentDurability() <= 0 && necklace.getMaxDurability() > 0)) necklace = null;
 			else necklace.tick(this, true);
-		}
-		Object[] o = effects.toArray();
-		for(int a = 0; a < o.length; a++)
-		{
-			Effect e = (Effect) o[a];
-			if(e.timeRemaining() <= 0) effects.remove(e);
-			else e.tick(this);
 		}
 		if(alive)
 		{

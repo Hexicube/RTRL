@@ -13,16 +13,28 @@ public abstract class EntityLiving extends Entity
 	private int ticksSinceLastDamage = 51;
 	private EntityDamageHealthDisplay lastDamageIndicator;
 	
-	public ArrayList<Effect> effects;
+	private ArrayList<Effect> effects;
 	
 	public abstract double damageAfterResistance(double damage, DamageType type);
 	
 	public abstract boolean mountable(Entity mounter);
 	
+	public EntityLiving()
+	{
+		effects = new ArrayList<Effect>();
+	}
+	
 	@Override
 	public void tick()
 	{
 		ticksSinceLastDamage++;
+		Object[] o = effects.toArray();
+		for(int a = 0; a < o.length; a++)
+		{
+			Effect e = (Effect) o[a];
+			if(e.timeRemaining() <= 0) effects.remove(e);
+			else e.tick(this);
+		}
 	}
 	
 	public double hurt(double damage, DamageType type)
@@ -84,5 +96,46 @@ public abstract class EntityLiving extends Entity
 			if(e.getEffectType() == EffectType.INVISIBLE && e.getEffectStrength() > 0) return false;
 		}
 		return true;
+	}
+	
+	public void addEffect(Effect effect)
+	{
+		int size = effects.size();
+		for(int a = 0; a < size; a++)
+		{
+			Effect e = effects.get(a);
+			if(e.getEffectType() == effect.getEffectType())
+			{
+				if(e.getEffectStrength() == effect.getEffectStrength())
+				{
+					e.setTimeRemaining(Math.max(e.timeRemaining(), effect.timeRemaining()));
+					return;
+				}
+				if(e.getEffectStrength() < effect.getEffectStrength())
+				{
+					if(e.timeRemaining() <= effect.timeRemaining()) effects.remove(e);
+					effects.add(effect);
+					return;
+				}
+				if(e.timeRemaining() < effect.timeRemaining()) effects.add(effect);
+				return;
+			}
+		}
+		effects.add(effect);
+	}
+	
+	public Effect getEffect(EffectType type)
+	{
+		Effect effect = null;
+		int size = effects.size();
+		for(int a = 0; a < size; a++)
+		{
+			Effect e = effects.get(a);
+			if(e.getEffectType() == type)
+			{
+				if(effect == null || e.getEffectStrength() > effect.getEffectStrength()) effect = e;
+			}
+		}
+		return effect;
 	}
 }

@@ -32,4 +32,10 @@ public class EffectInvisibilityPotion extends Effect
 	{
 		return timeLeft;
 	}
+	
+	@Override
+	public void setTimeRemaining(int val)
+	{
+		timeLeft = val;
+	}
 }

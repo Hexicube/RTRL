@@ -9,4 +9,5 @@ public abstract class Effect
 	public abstract int getEffectStrength();
 	
 	public abstract int timeRemaining();
+	public abstract void setTimeRemaining(int val);
 }

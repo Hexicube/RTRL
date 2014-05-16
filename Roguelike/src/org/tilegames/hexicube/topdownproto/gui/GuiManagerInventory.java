@@ -1,8 +1,14 @@
 package org.tilegames.hexicube.topdownproto.gui;
 
+import org.tilegames.hexicube.topdownproto.FontHolder;
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
+import org.tilegames.hexicube.topdownproto.entity.Direction;
+import org.tilegames.hexicube.topdownproto.entity.Effect;
+import org.tilegames.hexicube.topdownproto.entity.EffectType;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +18,7 @@ public class GuiManagerInventory extends GuiManagerBase
 	private EntityPlayer player;
 	private GuiElementInvItem[] items;
 	
-	private int currentActionMenu, currentItemSwap;
+	private int currentActionMenu = -1, currentItemSwap = -1;
 	private String[] actionItems;
 	
 	public GuiManagerInventory(EntityPlayer player)
@@ -41,7 +47,33 @@ public class GuiManagerInventory extends GuiManagerBase
 		//TODO: check action menu
 		for(int a = 0; a < items.length; a++)
 		{
-			if(items[a].checked()) currentActionMenu = a;
+			if(items[a].checked())
+			{
+				if(currentActionMenu == -1) currentActionMenu = a;
+				else
+				{
+					if(currentActionMenu == a)
+					{
+						Item i = player.getItemInSlot(a%10, a/10);
+						if(i instanceof ItemUsable)
+						{
+							((ItemUsable)i).use(player, Direction.NONE);
+						}
+						//TODO: try to consume
+					}
+					else
+					{
+						Item i = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
+						Item i2 = player.getItemInSlot(a%10, a/10);
+						if((i == null || currentActionMenu >= 10 || i.canMove()) && (i2 == null || a >= 10 || i2.canMove()))
+						{
+							player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, i2);
+							player.setItemInSlot(a%10, a/10, i);
+						}
+					}
+					currentActionMenu = -1;
+				}
+			}
 		}
 		super.tick();
 	}
@@ -51,112 +83,22 @@ public class GuiManagerInventory extends GuiManagerBase
 	{
 		batch.draw(Game.invTex, Game.width/2 - 240, Game.height/2 - 272);
 		super.render(batch);
-		//TODO: render status effects
-		/*
-		int harmTimer = -1, harmStrength = 0, slowTimer = -1, slowStrength = 0, healTimer = -1, healStrength = 0, invisTimer = -1, invulTimer = -1, ghostTimer = -1;
-		size = player.effects.size();
+		batch.setColor(1, 1, 1, 1);
+		if(currentActionMenu != -1) batch.draw(Game.invHighlightTex, currentActionMenu%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentActionMenu/10 * 40, 32, 32, 32, 0, 32, 32, false, false);
+		if(currentItemSwap != -1) batch.draw(Game.invHighlightTex, currentItemSwap%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentItemSwap/10 * 40, 32, 32, 0, 0, 32, 32, false, false);
+		int size = player.effects.size();
+		int posY = Game.height/2 + 108;
 		for(int a = 0; a < size; a++)
 		{
 			Effect e = player.effects.get(a);
 			int str = e.getEffectStrength();
 			int time = e.timeRemaining();
-			if(e.getEffectType() == EffectType.HARM)
-			{
-				if(str > harmStrength)
-				{
-					harmStrength = str;
-					harmTimer = time;
-				}
-				else if(str == harmStrength && time > harmTimer)
-				{
-					harmTimer = time;
-				}
-			}
-			else if(e.getEffectType() == EffectType.SLOW)
-			{
-				if(str > slowStrength)
-				{
-					slowStrength = str;
-					slowTimer = time;
-				}
-				else if(str == slowStrength && time > slowTimer)
-				{
-					slowTimer = time;
-				}
-			}
-			else if(e.getEffectType() == EffectType.HEAL)
-			{
-				if(str > healStrength)
-				{
-					healStrength = str;
-					healTimer = time;
-				}
-				else if(str == healStrength && time > healTimer)
-				{
-					healTimer = time;
-				}
-			}
-			else if(e.getEffectType() == EffectType.INVISIBLE)
-			{
-				if(str > 0 && time > invisTimer)
-				{
-					invisTimer = time;
-				}
-			}
-			else if(e.getEffectType() == EffectType.INVULNERABLE)
-			{
-				if(str > 0 && time > invulTimer)
-				{
-					invulTimer = time;
-				}
-			}
-			else if(e.getEffectType() == EffectType.GHOSTLY)
-			{
-				if(str > 0 && time > ghostTimer)
-				{
-					ghostTimer = time;
-				}
-			}
-		}
-		int posY = yPos + 508;
-		if(harmStrength > 0)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Harm " + romanNumerals(harmStrength)), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((harmTimer / 60) + "s"), xPos + 422, posY - 9, false);
+			FontHolder.render(batch, FontHolder.getCharList(e.getEffectType().displayName+" " + ((str>1)?Game.romanNumerals(str):"")), Game.width/2 + 162, posY + 128, false);
+			FontHolder.render(batch, FontHolder.getCharList(((time>60)?((time / 3600)+"m "):"")+((time / 60) % 60 + "s")), Game.width/2 + 172, posY + 119, false);
 			posY -= 18;
 		}
-		if(slowStrength > 0)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Slow " + romanNumerals(slowStrength)), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((slowTimer / 60) + "s"), xPos + 422, posY - 9, false);
-			posY -= 18;
-		}
-		if(healStrength > 0)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Heal " + romanNumerals(healStrength)), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((healTimer / 60) + "s"), xPos + 422, posY - 9, false);
-			posY -= 18;
-		}
-		if(invisTimer > -1)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Invisibility"), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
-			posY -= 18;
-		}
-		if(invulTimer > -1)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Invulnerability"), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((invisTimer / 60) + "s"), xPos + 422, posY - 9, false);
-			posY -= 18;
-		}
-		if(ghostTimer > -1)
-		{
-			FontHolder.render(spriteBatch, FontHolder.getCharList("Ghostly"), xPos + 402, posY, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList((ghostTimer / 60) + "s"), xPos + 422, posY - 9, false);
-			posY -= 18;
-		}
-		spriteBatch.draw(invHighlightTex, xPos + 4 + player.invX * 40, 436 + yPos - player.invY * 40, 32, 32, 32, 0, 32, 32, false, false);
-		Item curItem = player.getItemInSlot(player.invX, player.invY);
+		//TODO: render item names
+		/*Item curItem = player.getItemInSlot(player.invX, player.invY);
 		String itemName = curItem == null ? player.getSlotName(player.invX, player.invY) : curItem.getName();
 		if(curItem instanceof ItemStack)
 		{
@@ -176,7 +118,6 @@ public class GuiManagerInventory extends GuiManagerBase
 			}
 			if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
 			if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
-			spriteBatch.draw(invHighlightTex, xPos + 4 + player.invSelectX * 40, 436 + yPos - player.invSelectY * 40, 32, 32, 0, 0, 32, 32, false, false);
 			FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2), xPos + 4, 508 + yPos, false);
 			FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
 			FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
