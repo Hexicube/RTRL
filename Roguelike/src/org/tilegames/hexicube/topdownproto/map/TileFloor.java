@@ -118,4 +118,10 @@ public class TileFloor extends Tile
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean canBeBrokeBy(Item item)
+	{
+		return true;
+	}
 }

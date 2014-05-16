@@ -92,8 +92,12 @@ public class GuiManagerInventory extends GuiManagerBase
 							Item i2 = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
 							if((i == null || currentItemSwap >= 10 || i.canMove()) && (i2 == null || currentActionMenu >= 10 || i2.canMove()))
 							{
-								player.setItemInSlot(currentItemSwap%10, currentItemSwap/10, i2);
-								player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, i);
+								if(!player.setItemInSlot(currentItemSwap%10, currentItemSwap/10, i2) ||
+								   !player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, i))
+								{
+									player.setItemInSlot(currentItemSwap%10, currentItemSwap/10, i);
+									player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, i2);
+								}
 							}
 							currentItemSwap = -1;
 						}
@@ -103,33 +107,37 @@ public class GuiManagerInventory extends GuiManagerBase
 						Item i = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
 						if(i != null)
 						{
-							int x = player.xPos;
-							int y = player.yPos;
-							Map map = player.map;
-							if(player.facingDir == Direction.UP) y++;
-							if(player.facingDir == Direction.DOWN) y--;
-							if(player.facingDir == Direction.LEFT) x--;
-							if(player.facingDir == Direction.RIGHT) x++;
-							Entity e = map.tiles[x][y].getCurrentEntity();
-							if(e == null)
+							if(i.canMove())
 							{
-								ArrayList<Item> items = new ArrayList<Item>();
-								items.add(i);
-								EntityChest chest = new EntityChest(x, y, items);
-								if(Game.addEntity(chest, map, true))
+								int x = player.xPos;
+								int y = player.yPos;
+								Map map = player.map;
+								if(player.facingDir == Direction.UP) y++;
+								if(player.facingDir == Direction.DOWN) y--;
+								if(player.facingDir == Direction.LEFT) x--;
+								if(player.facingDir == Direction.RIGHT) x++;
+								Entity e = map.tiles[x][y].getCurrentEntity();
+								if(e == null)
 								{
+									ArrayList<Item> items = new ArrayList<Item>();
+									items.add(i);
+									EntityChest chest = new EntityChest(x, y, items);
+									if(Game.addEntity(chest, map, true))
+									{
+										player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, null);
+										Game.message("Item added to chest.");
+									}
+									else Game.message("You can't drop an item, something is blocking that spot!");
+								}
+								else if(e instanceof EntityChest)
+								{
+									((EntityChest)e).contents.add(i);
 									player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, null);
 									Game.message("Item added to chest.");
 								}
 								else Game.message("You can't drop an item, something is blocking that spot!");
 							}
-							else if(e instanceof EntityChest)
-							{
-								((EntityChest)e).contents.add(i);
-								player.setItemInSlot(currentActionMenu%10, currentActionMenu/10, null);
-								Game.message("Item added to chest.");
-							}
-							else Game.message("You can't drop an item, something is blocking that spot!");
+							else Game.message("That item can't be removed!");
 						}
 					}
 					else if(a == 2) //delete
@@ -137,8 +145,12 @@ public class GuiManagerInventory extends GuiManagerBase
 						Item i = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
 						if(i != null)
 						{
-							i.delete();
-							Game.message("Item deleted.");
+							if(i.canMove())
+							{
+								i.delete();
+								Game.message("Item deleted.");
+							}
+							else Game.message("That item can't be removed!");
 						}
 					}
 					//TODO: generic action stuff

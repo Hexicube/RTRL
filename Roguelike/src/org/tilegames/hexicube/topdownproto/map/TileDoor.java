@@ -202,4 +202,10 @@ public class TileDoor extends Tile
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean canBeBrokeBy(Item item)
+	{
+		return false;
+	}
 }

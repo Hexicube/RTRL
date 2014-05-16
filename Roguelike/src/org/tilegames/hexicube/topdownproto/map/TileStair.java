@@ -3,6 +3,7 @@ package org.tilegames.hexicube.topdownproto.map;
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
+import org.tilegames.hexicube.topdownproto.item.Item;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -65,5 +66,11 @@ public class TileStair extends Tile
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean canBeBrokeBy(Item item)
+	{
+		return false;
 	}
 }

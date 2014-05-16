@@ -1,6 +1,7 @@
 package org.tilegames.hexicube.topdownproto.map;
 
 import org.tilegames.hexicube.topdownproto.entity.Entity;
+import org.tilegames.hexicube.topdownproto.item.Item;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -44,5 +45,11 @@ public class TileVoid extends Tile
 	public boolean use(Entity entity)
 	{
 		return false;
+	}
+	
+	@Override
+	public boolean canBeBrokeBy(Item item)
+	{
+		return true;
 	}
 }
