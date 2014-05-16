@@ -131,7 +131,8 @@ public class EntityPlayer extends EntityLiving
 		alive = (health > 0);
 		if(!alive)
 		{
-			//TODO: die
+			while(Game.getMenu() != null && !Game.getMenu().pausesGame()) Game.setMenu(null);
+			//TODO: death screen
 			return;
 		}
 		while(manaExperience >= 5 * manaMax)
@@ -149,12 +150,6 @@ public class EntityPlayer extends EntityLiving
 				manaTicker = 900 / (int) Math.sqrt(manaMax);
 			}
 		}
-		// 0 -> open inventory
-		// 2 -> face direction
-		// 3 -> unused
-		// 4/5/6/8 -> left/down/right/up
-		// 7 -> open door
-		// 9 -> use held item
 		if(Game.keys.isKeyHeld(Key.USE))
 		{
 			if(useDelay == 0)

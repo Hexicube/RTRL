@@ -23,18 +23,28 @@ public class ItemPotionMana extends ItemUsable
 	@Override
 	public String[] getCustomActions(Item other)
 	{
-		if(other == null) return new String[0];
+		if(other == null) return new String[]{"Consume"};
 		else return new String[]{"Dip Item"};
 	}
 	
 	@Override
 	public void handleCustomAction(String action, Item other)
 	{
-		if(action.equals("Dip Item") && other != null)
+		if(other == null)
 		{
-			//TODO: randomly enchant item?
-			Game.message("Nothing happens.");
-			used = true;
+			if(action.equals("Consume"))
+			{
+				use(Game.player, Direction.NONE);
+			}
+		}
+		else
+		{
+			if(action.equals("Dip Item"))
+			{
+				//TODO: randomly enchant item?
+				Game.message("Nothing happens.");
+				used = true;
+			}
 		}
 	}
 	

@@ -25,25 +25,34 @@ public class ItemPotionInvisibility extends ItemUsable
 	@Override
 	public String[] getCustomActions(Item other)
 	{
-		if(other == null) return new String[0];
+		if(other == null) return new String[]{"Consume"};
 		else return new String[]{"Dip Item"};
 	}
 	
 	@Override
 	public void handleCustomAction(String action, Item other)
 	{
-		if(action.equals("Dip Item") && other != null)
+		if(other == null)
 		{
-			//TODO: lose item
-			Game.message("Your "+getName()+" vanished!");
-			other.delete();
-			if(!nameDiscovered)
+			if(action.equals("Consume"))
 			{
-				nameDiscovered = true;
-				Game.message("Discovered potion type: Invisibility");
+				use(Game.player, Direction.NONE);
 			}
-			Game.message("You drop your "+other.getName()+", and can't find it.");
-			used = true;
+		}
+		else
+		{
+			if(action.equals("Dip Item"))
+			{
+				Game.message("Your "+getName()+" vanished!");
+				other.delete();
+				if(!nameDiscovered)
+				{
+					nameDiscovered = true;
+					Game.message("Discovered potion type: Invisibility");
+				}
+				Game.message("You drop your "+other.getName()+", and can't find it.");
+				used = true;
+			}
 		}
 	}
 	

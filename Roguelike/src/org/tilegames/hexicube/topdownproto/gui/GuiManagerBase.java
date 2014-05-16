@@ -56,8 +56,10 @@ public abstract class GuiManagerBase extends GuiManager
 	@Override
 	public void mousePress(int x, int y, int pointer)
 	{
-		for(GuiElement e : elems)
+		int size = elems.size();
+		for(int a = size-1; a >= 0; a--) //prioritises front elements
 		{
+			GuiElement e = elems.get(a);
 			if(e instanceof GuiElementClickable)
 			{
 				if(((GuiElementClickable)e).gotClicked(x, y, pointer))
