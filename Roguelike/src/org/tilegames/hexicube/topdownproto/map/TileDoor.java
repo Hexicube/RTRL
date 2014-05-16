@@ -193,7 +193,7 @@ public class TileDoor extends Tile
 					}
 				}
 			}
-			Game.message("You need a " + requiredKey.name + " key to open that!");
+			Game.message("You need the " + requiredKey.name + " key to open that!");
 		}
 		return true;
 	}
