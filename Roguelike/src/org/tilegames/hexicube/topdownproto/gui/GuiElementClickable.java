@@ -9,4 +9,9 @@ public abstract class GuiElementClickable extends GuiElement
 	
 	public abstract boolean gotClicked(int x, int y, int pointer);
 	public abstract void handleClick();
+
+	public boolean gotClicked(int x, int y)
+	{
+		return gotClicked(x, y, -1);
+	}
 }

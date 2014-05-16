@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemNecklaceFeeding extends ItemAccessory
 {
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	
 	private int durability;
 	

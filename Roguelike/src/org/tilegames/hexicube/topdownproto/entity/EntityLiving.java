@@ -31,7 +31,7 @@ public abstract class EntityLiving extends Entity
 		Object[] o = effects.toArray();
 		for(int a = 0; a < o.length; a++)
 		{
-			Effect e = (Effect) o[a];
+			Effect e = (Effect)o[a];
 			if(e.timeRemaining() <= 0) effects.remove(e);
 			else e.tick(this);
 		}

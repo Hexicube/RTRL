@@ -16,7 +16,7 @@ public class ItemPotionMana extends ItemUsable
 {
 	public static Texture tex;
 	
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	
 	private boolean used;
 	

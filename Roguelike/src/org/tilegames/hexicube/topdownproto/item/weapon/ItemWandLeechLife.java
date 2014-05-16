@@ -16,7 +16,7 @@ public class ItemWandLeechLife extends ItemWeapon
 {
 	public static Texture tex;
 	
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	private boolean modDiscovered;
 	
 	private int durability;
@@ -54,6 +54,7 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
+		if(dir == Direction.NONE) return false; 
 		if(!(source instanceof EntityPlayer)) return false;
 		EntityPlayer p = (EntityPlayer)source;
 		int manaCost = 12;
@@ -62,12 +63,9 @@ public class ItemWandLeechLife extends ItemWeapon
 		{
 			p.mana -= manaCost;
 			p.manaExperience += manaCost;
-			if(dir != Direction.NONE)
-			{
-				EntityLeechBolt e = new EntityLeechBolt(dir, p, p.xPos, p.yPos);
-				Game.addEntity(e, p.map, false);
-				e.move(dir);
-			}
+			EntityLeechBolt e = new EntityLeechBolt(dir, p, p.xPos, p.yPos);
+			Game.addEntity(e, p.map, false);
+			e.move(dir);
 			durability--;
 			if(durability == 0) Game.message("The " + getName() + " broke...");
 			if(!nameDiscovered)
@@ -155,7 +153,7 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public Color getInvBorderCol()
 	{
-		if(!nameDiscovered) return Color.ORANGE;
+		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;
 		return new Color(0, 0, 0, 0);
 	}
 	

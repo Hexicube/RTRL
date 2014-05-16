@@ -8,7 +8,9 @@ import org.tilegames.hexicube.topdownproto.entity.Effect;
 import org.tilegames.hexicube.topdownproto.entity.EffectType;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.Item;
+import org.tilegames.hexicube.topdownproto.item.ItemStack;
 import org.tilegames.hexicube.topdownproto.item.usable.ItemUsable;
+import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeapon;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,7 +20,7 @@ public class GuiManagerInventory extends GuiManagerBase
 	private EntityPlayer player;
 	private GuiElementInvItem[] items;
 	
-	private int currentActionMenu = -1, currentItemSwap = -1;
+	private int currentActionMenu = -1, currentItemSwap = -1, currentMouseOverItem = -1;
 	private String[] actionItems;
 	
 	public GuiManagerInventory(EntityPlayer player)
@@ -79,6 +81,20 @@ public class GuiManagerInventory extends GuiManagerBase
 	}
 	
 	@Override
+	public void mouseMove(int x, int y)
+	{
+		currentMouseOverItem = -1;
+		for(int a = 0; a < items.length; a++)
+		{
+			if(items[a].gotClicked(x, y))
+			{
+				currentMouseOverItem = a;
+				return;
+			}
+		}
+	}
+	
+	@Override
 	public void render(SpriteBatch batch)
 	{
 		batch.draw(Game.invTex, Game.width/2 - 240, Game.height/2 - 272);
@@ -100,34 +116,34 @@ public class GuiManagerInventory extends GuiManagerBase
 				posY -= 18;
 			}
 		}
-		//TODO: render item names
-		/*Item curItem = player.getItemInSlot(player.invX, player.invY);
-		String itemName = curItem == null ? player.getSlotName(player.invX, player.invY) : curItem.getName();
-		if(curItem instanceof ItemStack)
+		if(currentMouseOverItem != -1)
 		{
-			int size1 = ((ItemStack) curItem).getStackSize();
-			if(size1 != 1) itemName += " x" + size1;
-		}
-		if(curItem != null && curItem.getMaxDurability() > 1) itemName += " (" + (curItem.getCurrentDurability() * 100 / curItem.getMaxDurability()) + "%)";
-		if(curItem != null && curItem instanceof ItemWeapon) itemName = "[" + ((ItemWeapon) curItem).getWeaponDamageRange() + "] " + itemName;
-		if(player.invSelectY != -1)
-		{
-			Item otherItem = player.getItemInSlot(player.invSelectX, player.invSelectY);
-			String itemName2 = otherItem == null ? player.getSlotName(player.invSelectX, player.invSelectY) : otherItem.getName();
-			if(otherItem instanceof ItemStack)
+			Item curItem = player.getItemInSlot(currentMouseOverItem%10, currentMouseOverItem/10);
+			String itemName = curItem == null ? player.getSlotName(currentMouseOverItem%10, currentMouseOverItem/10) : curItem.getName();
+			if(curItem instanceof ItemStack)
 			{
-				int size1 = ((ItemStack) otherItem).getStackSize();
-				if(size1 != 1) itemName2 += " x" + size1;
+				int size1 = ((ItemStack) curItem).getStackSize();
+				if(size1 != 1) itemName += " x" + size1;
 			}
-			if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
-			if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
-			FontHolder.render(spriteBatch, FontHolder.getCharList(itemName2), xPos + 4, 508 + yPos, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList("<--->"), xPos + 4, 498 + yPos, false);
-			FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 488 + yPos, false);
+			if(curItem != null && curItem.getMaxDurability() > 1) itemName += " (" + (curItem.getCurrentDurability() * 100 / curItem.getMaxDurability()) + "%)";
+			if(curItem != null && curItem instanceof ItemWeapon) itemName = "[" + ((ItemWeapon)curItem).getWeaponDamageRange() + "] " + itemName;
+			if(currentItemSwap != -1)
+			{
+				Item otherItem = player.getItemInSlot(currentItemSwap%10, currentItemSwap/10);
+				String itemName2 = otherItem == null ? player.getSlotName(currentItemSwap%10, currentItemSwap/10) : otherItem.getName();
+				if(otherItem instanceof ItemStack)
+				{
+					int size1 = ((ItemStack) otherItem).getStackSize();
+					if(size1 != 1) itemName2 += " x" + size1;
+				}
+				if(otherItem != null && otherItem.getMaxDurability() > 1) itemName2 += " (" + (otherItem.getCurrentDurability() * 100 / otherItem.getMaxDurability()) + "%)";
+				if(otherItem != null && otherItem instanceof ItemWeapon) itemName2 = "[" + ((ItemWeapon) otherItem).getWeaponDamageRange() + "] " + itemName2;
+				FontHolder.render(batch, FontHolder.getCharList(itemName2), Game.width/2 - 200, Game.height/2+200, false);
+				FontHolder.render(batch, FontHolder.getCharList("<--->"), Game.width/2 - 200, Game.height/2+190, false);
+				FontHolder.render(batch, FontHolder.getCharList(itemName), Game.width/2 - 200, Game.height/2+180, false);
+			}
+			else FontHolder.render(batch, FontHolder.getCharList(itemName), Game.width/2 - 200, Game.height/2+200, false);
 		}
-		else FontHolder.render(spriteBatch, FontHolder.getCharList(itemName), xPos + 4, 508 + yPos, false);
-		*/
-		//TODO: draw action menu
 	}
 	
 	@Override

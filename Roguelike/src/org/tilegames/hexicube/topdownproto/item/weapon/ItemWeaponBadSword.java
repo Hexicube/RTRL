@@ -14,21 +14,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemWeaponBadSword extends ItemWeapon
 {
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	private boolean modDiscovered;
 	
 	public static Texture tex;
 	
 	private int durability;
-	private ItemModifier modifier;
+	private ItemModifier mod;
 	
 	public ItemWeaponBadSword()
 	{
 		int rand = Game.rand.nextInt(10);
-		if(rand < 2) modifier = ItemModifier.SHODDY;
-		else if(rand < 6) modifier = ItemModifier.NONE;
-		else if(rand < 9) modifier = ItemModifier.CURSED;
-		else modifier = ItemModifier.SHARPENED;
+		if(rand < 2) mod = ItemModifier.SHODDY;
+		else if(rand < 6) mod = ItemModifier.NONE;
+		else if(rand < 9) mod = ItemModifier.CURSED;
+		else mod = ItemModifier.SHARPENED;
 		
 		durability = getMaxDurability();
 		
@@ -60,12 +60,12 @@ public class ItemWeaponBadSword extends ItemWeapon
 		if(durability <= 0) return false;
 		if(!modDiscovered)
 		{
-			Game.message("You realise the Badsword is " + (modifier == ItemModifier.SHODDY ? "shoddy" : "sharp") + "...");
+			Game.message("You realise the Badsword is " + (mod == ItemModifier.SHODDY ? "shoddy" : "sharp") + "...");
 			modDiscovered = true;
 		}
 		EntityLiving e = (EntityLiving) target;
 		if(!e.alive) return false;
-		e.hurt((modifier == ItemModifier.SHARPENED ? Game.rollDice(2, 4) : (Game.rollDice(4, 1) - (modifier == ItemModifier.SHODDY ? 1 : 0))), DamageType.SHARP);
+		e.hurt((mod == ItemModifier.SHARPENED ? Game.rollDice(2, 4) : (Game.rollDice(4, 1) - (mod == ItemModifier.SHODDY ? 1 : 0))), DamageType.SHARP);
 		durability--;
 		if(durability == 0) Game.message("The " + getName() + " broke...");
 		return true;
@@ -76,8 +76,8 @@ public class ItemWeaponBadSword extends ItemWeapon
 	{
 		if(!nameDiscovered) return "???";
 		if(!modDiscovered) return "1d4 SHARP";
-		if(modifier == ItemModifier.SHARPENED) return "2d4 SHARP";
-		if(modifier == ItemModifier.SHODDY) return "1d4-1 SHARP";
+		if(mod == ItemModifier.SHARPENED) return "2d4 SHARP";
+		if(mod == ItemModifier.SHODDY) return "1d4-1 SHARP";
 		return "1d4 SHARP";
 	}
 	
@@ -102,27 +102,27 @@ public class ItemWeaponBadSword extends ItemWeapon
 	@Override
 	public ItemModifier getModifier()
 	{
-		return modifier;
+		return mod;
 	}
 	
 	@Override
 	public String getName()
 	{
-		if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true;
+		if(mod == null || mod == ItemModifier.NONE) modDiscovered = true;
 		if(!nameDiscovered)
 		{
 			if(modDiscovered) return "Unknown Sword";
 			return "Unusual Sword";
 		}
 		if(!modDiscovered) return "Unusual Badsword";
-		if(modifier == null || modifier == ItemModifier.NONE) return "Badsword";
-		else if(modifier == ItemModifier.CURSED) return "Cursed Badsword";
-		else if(modifier == ItemModifier.SHARPENED) return "Sharpened Badsword";
-		else if(modifier == ItemModifier.SHODDY) return "Really Badsword";
+		if(mod == null || mod == ItemModifier.NONE) return "Badsword";
+		else if(mod == ItemModifier.CURSED) return "Cursed Badsword";
+		else if(mod == ItemModifier.SHARPENED) return "Sharpened Badsword";
+		else if(mod == ItemModifier.SHODDY) return "Really Badsword";
 		else
 		{
-			System.out.println("Removed bad modifier on badsword: " + modifier);
-			modifier = ItemModifier.NONE;
+			System.out.println("Removed bad modifier on badsword: " + mod);
+			mod = ItemModifier.NONE;
 		}
 		return "Badsword";
 	}
@@ -136,12 +136,12 @@ public class ItemWeaponBadSword extends ItemWeapon
 			nameDiscovered = true;
 			if(!modDiscovered)
 			{
-				if(modifier == ItemModifier.CURSED)
+				if(mod == ItemModifier.CURSED)
 				{
 					Game.message("The Badsword is cursed, you can't remove it!");
 					modDiscovered = true;
 				}
-				if(modifier == null || modifier == ItemModifier.NONE) modDiscovered = true;
+				if(mod == null || mod == ItemModifier.NONE) modDiscovered = true;
 			}
 		}
 	}
@@ -149,7 +149,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 	@Override
 	public boolean canMove()
 	{
-		return !(modifier == ItemModifier.CURSED);
+		return !(mod == ItemModifier.CURSED);
 	}
 	
 	@Override
@@ -162,7 +162,11 @@ public class ItemWeaponBadSword extends ItemWeapon
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered) return Color.ORANGE;
-		if(modifier == ItemModifier.CURSED) return Color.RED;
+		if(mod != ItemModifier.NONE)
+		{
+			if(modDiscovered && mod == ItemModifier.CURSED) return Color.RED;
+			return Color.ORANGE;
+		}
 		return new Color(0, 0, 0, 0);
 	}
 	

@@ -14,7 +14,7 @@ public class ItemNecklaceStrangle extends ItemAccessory
 {
 	public static Texture tex;
 	
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	private boolean cursed, modDiscovered;
 	private int durability, ticker;
 	

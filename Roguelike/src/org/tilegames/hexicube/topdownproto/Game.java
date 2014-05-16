@@ -148,23 +148,32 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		necklaceTex = shuffleTex(necklaceTex);
 		ItemNecklaceFeeding.tex = necklaceTex[0];
+		ItemNecklaceFeeding.nameDiscovered = false;
 		ItemNecklaceStrangle.tex = necklaceTex[1];
+		ItemNecklaceStrangle.nameDiscovered = false;
 		ItemNecklaceManaTraining.tex = necklaceTex[2];
+		ItemNecklaceManaTraining.nameDiscovered = false;
 		
 		swordTex = shuffleTex(swordTex);
 		ItemWeaponBadSword.tex = swordTex[0];
+		ItemWeaponBadSword.nameDiscovered = false;
 		ItemWeaponDagger.tex = swordTex[1];
+		ItemWeaponDagger.nameDiscovered = false;
 		
 		potionTex = shuffleTex(potionTex);
 		ItemPotionHealing.tex = potionTex[0];
+		ItemPotionHealing.nameDiscovered = false;
 		ItemPotionMana.tex = potionTex[1];
+		ItemPotionMana.nameDiscovered = false;
 		ItemPotionInvisibility.tex = potionTex[2];
+		ItemPotionInvisibility.nameDiscovered = false;
 		
 		braceletTex = shuffleTex(braceletTex);
 		ItemBraceletCredits.tex = braceletTex[0];
 		
 		wandTex = shuffleTex(wandTex);
 		ItemWandLeechLife.tex = wandTex[0];
+		ItemWandLeechLife.nameDiscovered = false;
 		
 		maps = new Map[15];
 		int[] ladderPos = new int[2];
@@ -469,13 +478,14 @@ public class Game implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchDragged(int x, int y, int pointer)
 	{
-		if(currentlyDragging != null) currentlyDragging.handleDrag(x, y, pointer);
+		if(currentlyDragging != null) currentlyDragging.handleDrag(x, height-y-1, pointer);
 		return false;
 	}
 	
 	@Override
 	public boolean mouseMoved(int x, int y)
 	{
+		if(currentMenu != null) currentMenu.mouseMove(x, height-y-1);
 		return false;
 	}
 	

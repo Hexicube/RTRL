@@ -14,7 +14,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 {
 	public static Texture tex;
 	
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	
 	private int durability;
 	private boolean modDiscovered;
@@ -133,7 +133,7 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	@Override
 	public Color getInvBorderCol()
 	{
-		if(!nameDiscovered) return Color.ORANGE;
+		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;
 		return new Color(0, 0, 0, 0);
 	}
 	

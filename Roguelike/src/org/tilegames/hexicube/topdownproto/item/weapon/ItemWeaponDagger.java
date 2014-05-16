@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemWeaponDagger extends ItemWeapon
 {
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	
 	public static Texture tex;
 	
@@ -182,8 +182,12 @@ public class ItemWeaponDagger extends ItemWeapon
 	@Override
 	public Color getInvBorderCol()
 	{
-		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;
-		if(mod == ItemModifier.CURSED) return Color.RED;
+		if(!nameDiscovered) return Color.ORANGE;
+		if(mod != ItemModifier.NONE)
+		{
+			if(modDiscovered && mod == ItemModifier.CURSED) return Color.RED;
+			return Color.ORANGE;
+		}
 		return new Color(0, 0, 0, 0);
 	}
 	

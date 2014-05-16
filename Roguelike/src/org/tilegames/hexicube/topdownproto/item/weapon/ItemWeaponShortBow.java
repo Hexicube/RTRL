@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ItemWeaponShortBow extends ItemWeapon
 {
-	private static boolean nameDiscovered = false;
+	public static boolean nameDiscovered = false;
 	private static Texture tex = Game.loadImage("weapon/shortbow");
 	
 	private ItemModifier mod;
@@ -50,9 +50,10 @@ public class ItemWeaponShortBow extends ItemWeapon
 	@Override
 	public boolean use(Entity source, Direction dir)
 	{
+		if(dir == Direction.NONE) return false; 
 		if(source instanceof EntityPlayer)
 		{
-			EntityPlayer p = (EntityPlayer) source;
+			EntityPlayer p = (EntityPlayer)source;
 			for(int x = 0; x < 10; x++)
 			{
 				for(int y = 1; y < 11; y++)
@@ -63,9 +64,9 @@ public class ItemWeaponShortBow extends ItemWeapon
 						ItemArrow arrow = (ItemArrow) i;
 						if(arrow.getStackSize() <= 1) p.setItemInSlot(x, y, null);
 						else arrow.setStackSize(arrow.getStackSize() - 1);
-						EntityArrow entityArrow = new EntityArrow(p.xPos, p.yPos, 4, 1 + ((mod == ItemModifier.SHODDY) ? 0 : 1), p.facingDir, arrow.getAttackType());
+						EntityArrow entityArrow = new EntityArrow(p.xPos, p.yPos, 4, 1 + ((mod == ItemModifier.SHODDY) ? 0 : 1), dir, arrow.getAttackType());
 						Game.addEntity(entityArrow, p.map, false);
-						entityArrow.move(p.facingDir);
+						entityArrow.move(dir);
 						if(!nameDiscovered)
 						{
 							nameDiscovered = true;
@@ -175,7 +176,11 @@ public class ItemWeaponShortBow extends ItemWeapon
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered) return Color.ORANGE;
-		if(mod == ItemModifier.CURSED) return Color.RED;
+		if(mod != ItemModifier.NONE)
+		{
+			if(modDiscovered && mod == ItemModifier.CURSED) return Color.RED;
+			return Color.ORANGE;
+		}
 		return new Color(0, 0, 0, 0);
 	}
 	

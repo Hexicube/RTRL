@@ -159,6 +159,11 @@ public class TileDoor extends Tile
 			}
 			return true;
 		}
+		if(requiredKey == KeyType.SECRET)
+		{
+			Game.message("The door can't directly be opened, try looking elsewhere!");
+			return true;
+		}
 		if(requiredKey == KeyType.NONE)
 		{
 			if(opened)
