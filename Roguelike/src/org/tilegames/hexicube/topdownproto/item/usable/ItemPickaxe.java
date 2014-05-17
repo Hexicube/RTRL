@@ -6,9 +6,7 @@ import org.tilegames.hexicube.topdownproto.entity.Entity;
 import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemModifier;
 import org.tilegames.hexicube.topdownproto.item.weapon.DamageType;
-import org.tilegames.hexicube.topdownproto.map.TileFloor;
 import org.tilegames.hexicube.topdownproto.map.TileVoid;
-import org.tilegames.hexicube.topdownproto.map.TileWall;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,19 +58,26 @@ public class ItemPickaxe extends ItemUsable
 			targX++;
 		}
 		else return false;
-		if(!(source.map.tiles[targX][targY] instanceof TileFloor) && source.map.tiles[targX][targY].canBeBrokeBy(this))
+		if(source.map.tiles[targX][targY].canBeBrokeBy(this))
 		{
-			if(!source.map.tiles[targX + 1][targY].canBeBrokeBy(this)) return false;
-			if(!source.map.tiles[targX - 1][targY].canBeBrokeBy(this)) return false;
-			if(!source.map.tiles[targX][targY + 1].canBeBrokeBy(this)) return false;
-			if(!source.map.tiles[targX][targY - 1].canBeBrokeBy(this)) return false;
+			if(!source.map.tiles[targX + 1][targY].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX - 1][targY].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX][targY + 1].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX][targY - 1].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX + 1][targY + 1].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX - 1][targY - 1].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX - 1][targY + 1].canBreakNearby(this)) return false;
+			if(!source.map.tiles[targX + 1][targY - 1].canBreakNearby(this)) return false;
 			durability--;
-			source.map.tiles[targX][targY] = new TileFloor(); //TODO: allow tile to designate 'parent' tile
+			source.map.tiles[targX][targY] = source.map.tiles[targX][targY].parent();
 			for(int x = targX - 1; x <= targX + 1; x++)
 			{
 				for(int y = targY - 1; y <= targY + 1; y++)
 				{
-					if(source.map.tiles[x][y] instanceof TileVoid) source.map.tiles[x][y] = new TileWall(); //TODO: allow map to designate 'wall' tile
+					if(source.map.tiles[x][y] instanceof TileVoid)
+					{
+						source.map.tiles[x][y] = source.map.wallTile.clone();
+					}
 				}
 			}
 			Game.removeLight(source.map, targX, targY);

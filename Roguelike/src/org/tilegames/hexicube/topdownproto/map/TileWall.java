@@ -63,4 +63,22 @@ public class TileWall extends Tile
 	{
 		return true;
 	}
+	
+	@Override
+	public boolean canBreakNearby(Item item)
+	{
+		return true;
+	}
+	
+	@Override
+	public Tile clone()
+	{
+		return this;
+	}
+	
+	@Override
+	public Tile parent()
+	{
+		return new TileFloor();
+	}
 }

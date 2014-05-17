@@ -122,6 +122,24 @@ public class TileFloor extends Tile
 	@Override
 	public boolean canBeBrokeBy(Item item)
 	{
+		return false;
+	}
+	
+	@Override
+	public boolean canBreakNearby(Item item)
+	{
 		return true;
+	}
+	
+	@Override
+	public Tile clone()
+	{
+		return new TileFloor();
+	}
+	
+	@Override
+	public Tile parent()
+	{
+		return new TileVoid();
 	}
 }

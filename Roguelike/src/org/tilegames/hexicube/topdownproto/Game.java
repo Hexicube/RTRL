@@ -179,7 +179,7 @@ public class Game implements ApplicationListener, InputProcessor
 		int[] ladderPos = new int[2];
 		for(int a = 0; a < maps.length; a++)
 		{
-			Map m = new Map(120, 120);
+			Map m = new Map(120, 120, new TileWall());
 			int[][] data = new Generator().gen(120, 120, (a == 0) ? null : ladderPos, a != 4);
 			for(int x = 0; x < 120; x++)
 			{
@@ -313,8 +313,17 @@ public class Game implements ApplicationListener, InputProcessor
 					int tileX = tX * 32;
 					int tileY = tY * 32;
 					if(tileX + width/2 > screenW || tileY + height/2 > screenH || tileX + width/2 + 32 < 0 || tileY + height/2 + 32 < 0) continue;
-					spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
-					curMap.tiles[x][y].render(spriteBatch, tX, tY);
+					Tile t = curMap.tiles[x][y];
+					if(t instanceof TileVoid)
+					{
+						spriteBatch.setColor(3f/18f, 3f/18f, 3f/18f, 1);
+						curMap.wallTile.render(spriteBatch, tX, tY);
+					}
+					else
+					{
+						spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
+						t.render(spriteBatch, tX, tY);
+					}
 				}
 			}
 			int size = curMap.entities.size();

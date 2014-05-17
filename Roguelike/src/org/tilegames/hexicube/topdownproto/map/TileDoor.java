@@ -208,4 +208,24 @@ public class TileDoor extends Tile
 	{
 		return false;
 	}
+	
+	@Override
+	public boolean canBreakNearby(Item item)
+	{
+		return false;
+	}
+	
+	@Override
+	public Tile clone()
+	{
+		TileDoor door = new TileDoor(horizontal, true);
+		door.requiredKey = requiredKey;
+		return door;
+	}
+	
+	@Override
+	public Tile parent()
+	{
+		return new TileFloor();
+	}
 }

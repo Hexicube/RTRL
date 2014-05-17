@@ -11,7 +11,17 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Map
 {
-	public Map(int width, int height)
+	public ArrayList<Entity> entities;
+	public ArrayList<EntityDamageHealthDisplay> damageEntities;
+	public Tile[][] tiles;
+	private Pixmap mapImage;
+	public Texture mapTex;
+	
+	public boolean needsLighting;
+	
+	public Tile wallTile;
+	
+	public Map(int width, int height, Tile wallTile)
 	{
 		tiles = new Tile[width][height];
 		entities = new ArrayList<Entity>();
@@ -24,6 +34,8 @@ public class Map
 		mapImage.setColor(0, 0, 0, 1);
 		mapImage.fillRectangle(0, 0, width, height);
 		mapTex = new Texture(mapImage);
+		
+		this.wallTile = wallTile;
 	}
 	
 	public void updateTexture(int x, int y)
@@ -48,12 +60,4 @@ public class Map
 		}
 		mapTex.draw(mapImage, 0, 0);
 	}
-	
-	public ArrayList<Entity> entities;
-	public ArrayList<EntityDamageHealthDisplay> damageEntities;
-	public Tile[][] tiles;
-	private Pixmap mapImage;
-	public Texture mapTex;
-	
-	public boolean needsLighting;
 }

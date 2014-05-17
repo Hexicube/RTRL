@@ -206,6 +206,12 @@ public class Generator
 			}
 			data[startX][startY] = 3;
 			data[endX][endY] = 3;
+			x = endX+dirX*2;
+			y = endY+dirY*2;
+			if(data[x][y] != 2 || isExposed(x, y))
+			{
+				if(Game.rand.nextInt(3) == 1) genHallway(x, y, dirX, dirY);
+			}
 		}
 	}
 	
