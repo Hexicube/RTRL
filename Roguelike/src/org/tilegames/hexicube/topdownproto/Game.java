@@ -364,7 +364,7 @@ public class Game implements ApplicationListener, InputProcessor
 			{
 				Message m = messages.get(a);
 				m.timeLeft--;
-				if(m.timeLeft == 0)
+				if(m.timeLeft <= 30)
 				{
 					messages.remove(a);
 					size--;
@@ -373,7 +373,8 @@ public class Game implements ApplicationListener, InputProcessor
 				else
 				{
 					spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
-					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
+					//FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH - 3 - a * 10, false);
 				}
 			}
 			spriteBatch.setColor(1, 1, 1, 1);
@@ -710,7 +711,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static void message(String message)
 	{
-		messages.add(new Message(message, 600));
+		messages.add(new Message(message, 450));
 	}
 	
 	public static int rollDice(int sides, int amount)
