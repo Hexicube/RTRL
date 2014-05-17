@@ -13,7 +13,7 @@ public abstract class GuiManagerBase extends GuiManager
 {
 	protected ArrayList<GuiElement> elems;
 	protected Color background;
-	private static Texture bgTex;
+	protected static Texture bgTex;
 	static
 	{
 		Pixmap p = new Pixmap(1, 1, Pixmap.Format.RGBA8888);

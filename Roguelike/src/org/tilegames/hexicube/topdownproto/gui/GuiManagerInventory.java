@@ -19,7 +19,7 @@ import org.tilegames.hexicube.topdownproto.map.Map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GuiManagerInventory extends GuiManagerBase
+public class GuiManagerInventory extends GuiManager
 {
 	private EntityPlayer player;
 	private GuiElementInvItem[] items;
@@ -30,7 +30,6 @@ public class GuiManagerInventory extends GuiManagerBase
 	public GuiManagerInventory(EntityPlayer player)
 	{
 		this.player = player;
-		background = new Color(0, 0, 0, 0.4f);
 		items = new GuiElementInvItem[110];
 		for(int x = 0; x < 10; x++)
 		{
@@ -38,7 +37,6 @@ public class GuiManagerInventory extends GuiManagerBase
 			{
 				int pos = x + y*10;
 				items[pos] = new GuiElementInvItem(x*40-236, 164-y*40, 0.5f, 0.5f, player, x, y);
-				elems.add(items[pos]);
 			}
 		}
 		//TODO: generic action stuff
@@ -67,15 +65,19 @@ public class GuiManagerInventory extends GuiManagerBase
 					}
 					currentActionMenu = -1;
 					currentItemSwap = -1;
-					for(int b = 0; b < actionItems.length; b++)
+					if(parent != null) parent.tick();
+					for(GuiElement e : actionItems)
 					{
-						elems.remove(actionItems[b]);
+						e.tick();
 					}
-					for(int b = 0; b < genericActionItems.length; b++)
+					for(GuiElement e : genericActionItems)
 					{
-						elems.remove(genericActionItems[b]);
+						e.tick();
 					}
-					super.tick();
+					for(GuiElement e : items)
+					{
+						e.tick();
+					}
 					return;
 				}
 			}
@@ -155,15 +157,19 @@ public class GuiManagerInventory extends GuiManagerBase
 					}
 					//TODO: generic action stuff
 					currentActionMenu = -1;
-					for(int b = 0; b < actionItems.length; b++)
+					if(parent != null) parent.tick();
+					for(GuiElement e : actionItems)
 					{
-						elems.remove(actionItems[b]);
+						e.tick();
 					}
-					for(int b = 0; b < genericActionItems.length; b++)
+					for(GuiElement e : genericActionItems)
 					{
-						elems.remove(genericActionItems[b]);
+						e.tick();
 					}
-					super.tick();
+					for(GuiElement e : items)
+					{
+						e.tick();
+					}
 					return;
 				}
 			}
@@ -177,7 +183,7 @@ public class GuiManagerInventory extends GuiManagerBase
 					if(currentItemSwap == a)
 					{
 						currentItemSwap = -1;
-						continue;
+						break;
 					}
 					Item i = player.getItemInSlot(a%10, a/10);
 					if(i == null)
@@ -186,8 +192,8 @@ public class GuiManagerInventory extends GuiManagerBase
 						{
 							genericActionItems[0].x = a%10*40-200;
 							genericActionItems[0].y = 180-(a/10)*40;
-							elems.add(genericActionItems[0]);
 							genericActionItems[0].text = "Move";
+							actionItems = new GuiElementTextButton[0];
 							currentActionMenu = a;
 						}
 					}
@@ -198,25 +204,15 @@ public class GuiManagerInventory extends GuiManagerBase
 						if(currentItemSwap != -1) other = player.getItemInSlot(currentItemSwap%10, currentItemSwap/10);
 						String[] others = i.getCustomActions(other);
 						for(String s : others) items.add(s);
-						for(int b = 0; b < actionItems.length; b++)
-						{
-							elems.remove(actionItems[b]);
-						}
-						for(int b = 0; b < genericActionItems.length; b++)
-						{
-							elems.remove(genericActionItems[b]);
-						}
 						actionItems = new GuiElementTextButton[items.size()];
 						for(int b = 0; b < actionItems.length; b++)
 						{
 							actionItems[b] = new GuiElementTextButton(a%10*40-200, 180-(a/10)*40 - b*20, 0.5f, 0.5f, 80, items.get(b), Color.RED);
-							elems.add(actionItems[b]);
 						}
 						for(int b = 0; b < genericActionItems.length; b++)
 						{
 							genericActionItems[b].x = a%10*40-200;
 							genericActionItems[b].y = 180-(a/10)*40 - actionItems.length*20 - (actionItems.length>0?10:0) - b*20;
-							elems.add(genericActionItems[b]);
 						}
 						if(currentItemSwap == -1) genericActionItems[0].text = "Select";
 						else genericActionItems[0].text = "Move";
@@ -226,18 +222,22 @@ public class GuiManagerInventory extends GuiManagerBase
 				else
 				{
 					currentActionMenu = -1;
-					for(int b = 0; b < actionItems.length; b++)
-					{
-						elems.remove(actionItems[b]);
-					}
-					for(int b = 0; b < genericActionItems.length; b++)
-					{
-						elems.remove(genericActionItems[b]);
-					}
 				}
 			}
 		}
-		super.tick();
+		if(parent != null) parent.tick();
+		for(GuiElement e : actionItems)
+		{
+			e.tick();
+		}
+		for(GuiElement e : genericActionItems)
+		{
+			e.tick();
+		}
+		for(GuiElement e : items)
+		{
+			e.tick();
+		}
 	}
 	
 	@Override
@@ -258,11 +258,35 @@ public class GuiManagerInventory extends GuiManagerBase
 	public void render(SpriteBatch batch)
 	{
 		batch.draw(Game.invTex, Game.width/2 - 240, Game.height/2 - 272);
+		if(parent != null && parent.drawAbove()) parent.render(batch);
+		else
+		{
+			batch.setColor(new Color(0, 0, 0, 0.4f));
+			batch.draw(GuiManagerBase.bgTex, 0, 0, Game.width, Game.height, 0, 0, 1, 1, false, false);
+		}
+		for(GuiElement e : items)
+		{
+			e.render(batch);
+		}
 		batch.setColor(1, 1, 1, 1);
-		super.render(batch);
-		batch.setColor(1, 1, 1, 1);
-		if(currentActionMenu != -1) batch.draw(Game.invHighlightTex, currentActionMenu%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentActionMenu/10 * 40, 32, 32, 32, 0, 32, 32, false, false);
 		if(currentItemSwap != -1) batch.draw(Game.invHighlightTex, currentItemSwap%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentItemSwap/10 * 40, 32, 32, 0, 0, 32, 32, false, false);
+		if(currentActionMenu != -1)
+		{
+			batch.draw(Game.invHighlightTex, currentActionMenu%10 * 40 + Game.width/2 - 236, Game.height/2 + 164 - currentActionMenu/10 * 40, 32, 32, 32, 0, 32, 32, false, false);
+			for(GuiElement e : actionItems)
+			{
+				e.render(batch);
+			}
+			Item i = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
+			if(i == null) genericActionItems[0].render(batch);
+			else
+			{
+				for(GuiElement e : genericActionItems)
+				{
+					e.render(batch);
+				}
+			}
+		}
 		EffectType[] effects = EffectType.values();
 		int posY = Game.height/2 + 108;
 		for(int a = 0; a < effects.length; a++)
@@ -312,6 +336,50 @@ public class GuiManagerInventory extends GuiManagerBase
 			if(item != null && item.getMaxDurability() > 1) itemName += " (" + (item.getCurrentDurability() * 100 / item.getMaxDurability()) + "%)";
 			if(item != null && item instanceof ItemWeapon) itemName = "[" + ((ItemWeapon) item).getWeaponDamageRange() + "] " + itemName;
 			FontHolder.render(batch, FontHolder.getCharList(itemName), Game.width/2 - 236, Game.height/2+236, false);
+		}
+	}
+	
+	@Override
+	public void mousePress(int x, int y, int pointer)
+	{
+		if(currentActionMenu != -1)
+		{
+			for(GuiElementClickable e : actionItems)
+			{
+				if(e.gotClicked(x, y, pointer))
+				{
+					e.handleClick();
+					return;
+				}
+			}
+			Item i = player.getItemInSlot(currentActionMenu%10, currentActionMenu/10);
+			if(i == null)
+			{
+				if(genericActionItems[0].gotClicked(x, y, pointer))
+				{
+					genericActionItems[0].handleClick();
+					return;
+				}
+			}
+			else
+			{
+				for(GuiElementClickable e : genericActionItems)
+				{
+					if(e.gotClicked(x, y, pointer))
+					{
+						e.handleClick();
+						return;
+					}
+				}
+			}
+		}
+		for(GuiElementClickable e : items)
+		{
+			if(e.gotClicked(x, y, pointer))
+			{
+				e.handleClick();
+				return;
+			}
 		}
 	}
 	
