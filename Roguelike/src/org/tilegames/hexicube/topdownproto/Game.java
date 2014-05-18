@@ -121,6 +121,7 @@ public class Game implements ApplicationListener, InputProcessor
 		Gdx.graphics.setVSync(true);
 		
 		FontHolder.prep();
+		NumberFontHolder.prep();
 		
 		Gdx.graphics.setTitle(gameName + " - " + versionText);
 		
@@ -305,9 +306,6 @@ public class Game implements ApplicationListener, InputProcessor
 		Gdx.graphics.getGLCommon().glClearColor(0, 0, 0, 1);
 		Gdx.graphics.getGLCommon().glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		int screenW = Gdx.graphics.getWidth();
-		int screenH = Gdx.graphics.getHeight();
-		
 		if(drawBehind)
 		{
 			for(int x = 0; x < curMap.tiles.length; x++)
@@ -318,7 +316,7 @@ public class Game implements ApplicationListener, InputProcessor
 					int tY = y - camY;
 					int tileX = tX * 32;
 					int tileY = tY * 32;
-					if(tileX + width/2 > screenW || tileY + height/2 > screenH || tileX + width/2 + 32 < 0 || tileY + height/2 + 32 < 0) continue;
+					if(tileX > width/2 || tileY > height/2 || tileX + width/2 + 32 < 0 || tileY + height/2 + 32 < 0) continue;
 					Tile t = curMap.tiles[x][y];
 					if(t instanceof TileVoid)
 					{
@@ -340,7 +338,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int eY = e.yPos - camY;
 				int entX = eX * 32;
 				int entY = eY * 32;
-				if(entX + width/2 > screenW || entX + height/2 > screenH || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				if(entX > width/2 || entX > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
 				Tile t = curMap.tiles[e.xPos][e.yPos];
 				boolean invis = !curMap.entities.get(a).visible(player);
 				spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
@@ -354,7 +352,7 @@ public class Game implements ApplicationListener, InputProcessor
 				int eY = e.yPos - camY;
 				int entX = eX * 32;
 				int entY = eY * 32;
-				if(entX + width/2 > screenW || entY + height/2 > screenH || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				if(entX > width/2 || entX > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
 				e.render(spriteBatch, camX, camY);
 			}
 		}
@@ -363,14 +361,17 @@ public class Game implements ApplicationListener, InputProcessor
 		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
 		else spriteBatch.setColor(0, 1, 0, 1);
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate) + "fps");
-		FontHolder.render(spriteBatch, tickRateText, screenW - 6 - FontHolder.getTextWidth(tickRateText, true), screenH - 6, true);
+		FontHolder.render(spriteBatch, tickRateText, width - 6 - FontHolder.getTextWidth(tickRateText, true), height - 6, true);
 		spriteBatch.setColor(1, 1, 1, 1);
 		char[] tickTimeText = FontHolder.getCharList(String.valueOf(tickPercent) + "% tick");
-		FontHolder.render(spriteBatch, tickTimeText, screenW - 6 - FontHolder.getTextWidth(tickTimeText, true), screenH - 26, true);
+		FontHolder.render(spriteBatch, tickTimeText, width - 6 - FontHolder.getTextWidth(tickTimeText, true), height - 26, true);
 		char[] renderTimeText = FontHolder.getCharList(String.valueOf(renderPercent) + "% render");
-		FontHolder.render(spriteBatch, renderTimeText, screenW - 6 - FontHolder.getTextWidth(renderTimeText, true), screenH - 46, true);
+		FontHolder.render(spriteBatch, renderTimeText, width - 6 - FontHolder.getTextWidth(renderTimeText, true), height - 46, true);
 		char[] idleTimeText = FontHolder.getCharList(String.valueOf(100 - renderPercent - tickPercent) + "% idle");
-		FontHolder.render(spriteBatch, idleTimeText, screenW - 6 - FontHolder.getTextWidth(idleTimeText, true), screenH - 66, true);
+		FontHolder.render(spriteBatch, idleTimeText, width - 6 - FontHolder.getTextWidth(idleTimeText, true), height - 66, true);
+		
+		int[] testText = NumberFontHolder.encodeString("Test String");
+		NumberFontHolder.render(spriteBatch, testText, width - 6 - NumberFontHolder.getTextWidth(testText, true), height - 96, true);
 		
 		if(drawBehind)
 		{
@@ -388,27 +389,27 @@ public class Game implements ApplicationListener, InputProcessor
 				else
 				{
 					spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
-					//FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH + 6 - (size - a) * 10, false);
-					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, screenH - 3 - a * 10, false);
+					//FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height + 6 - (size - a) * 10, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height - 3 - a * 10, false);
 				}
 			}
 			spriteBatch.setColor(1, 1, 1, 1);
-			spriteBatch.draw(statusTex, screenW - 256, 0);
+			spriteBatch.draw(statusTex, width - 256, 0);
 			int healthAmount = (int) Math.ceil((double) player.health * 200 / (double) player.healthMax);
 			spriteBatch.setColor(0, 1, 0, 1);
-			spriteBatch.draw(statusBarTex, screenW - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
+			spriteBatch.draw(statusBarTex, width - 205, 31, healthAmount, 8, 0, 0, healthAmount, 8, false, false);
 			if(player.heldItem != null)
 			{
 				int manaRequiredAmount = (int) Math.ceil((double) player.heldItem.getManaCost() * 200 / (double) player.manaMax);
 				spriteBatch.setColor(0, 0, 1, 1);
-				spriteBatch.draw(statusBarTex, screenW - 205, 18, manaRequiredAmount, 8, 0, 0, manaRequiredAmount, 8, false, false);
+				spriteBatch.draw(statusBarTex, width - 205, 18, manaRequiredAmount, 8, 0, 0, manaRequiredAmount, 8, false, false);
 			}
 			int manaAmount = (int) Math.ceil((double) player.mana * 200 / (double) player.manaMax);
 			spriteBatch.setColor(0, 0.5f, 1, 1);
-			spriteBatch.draw(statusBarTex, screenW - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
+			spriteBatch.draw(statusBarTex, width - 205, 18, manaAmount, 8, 0, 0, manaAmount, 8, false, false);
 			int foodAmount = (int) Math.ceil((double) player.hungerLevel * 200 / player.hungerLevelMax);
 			spriteBatch.setColor(1, 0.5f, 0, 1);
-			spriteBatch.draw(statusBarTex, screenW - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
+			spriteBatch.draw(statusBarTex, width - 205, 5, foodAmount, 8, 0, 0, foodAmount, 8, false, false);
 			
 			spriteBatch.setColor(1, 1, 1, 1);
 			spriteBatch.draw(curMap.mapTex, 0, curMap.tiles[0].length - nextPowerTwo(curMap.tiles[0].length));

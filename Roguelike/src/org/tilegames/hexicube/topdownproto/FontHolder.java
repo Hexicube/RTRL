@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class FontHolder
 {
-	public static Texture font, numberFont;
+	public static Texture font;
 	public static FontChar[] characterList;
 	
 	public static void prep()
