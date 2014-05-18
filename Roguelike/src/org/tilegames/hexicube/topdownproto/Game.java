@@ -224,13 +224,15 @@ public class Game implements ApplicationListener, InputProcessor
 			maps[a] = m;
 		}
 		
+		player = new EntityPlayer(0, 0);
 		while(true)
 		{
 			int x = rand.nextInt(maps[0].tiles.length - 1) + 1;
 			int y = rand.nextInt(maps[0].tiles[x].length);
-			if(maps[0].tiles[x][y] instanceof TileFloor && maps[0].tiles[x - 1][y] instanceof TileFloor)
+			if(maps[0].tiles[x][y].setCurrentEntity(player))
 			{
-				player = new EntityPlayer(x, y);
+				player.xPos = x;
+				player.yPos = y;
 				if(rand.nextBoolean())
 				{
 					player.armour[0] = new ItemArmourWoolCap();
@@ -260,7 +262,11 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemWeaponDagger());
 				items.add(new ItemWandLeechLife());
 				shuffleItems(items);
-				addEntity(new EntityChest(x - 1, y, items), maps[0], true);
+				int size = items.size();
+				for(int a = 0; a < size; a++)
+				{
+					player.inventory[a] = items.get(a);
+				}
 				break;
 			}
 		}
@@ -790,7 +796,7 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		while(newList.size() > 0)
 		{
-			items.add(newList.remove(0));
+			items.add(newList.remove(rand.nextInt(newList.size())));
 		}
 	}
 	
@@ -798,7 +804,7 @@ public class Game implements ApplicationListener, InputProcessor
 	{
 		if(menu == null)
 		{
-			currentMenu = currentMenu.parent;
+			if(currentMenu != null) currentMenu = currentMenu.parent;
 		}
 		else
 		{
