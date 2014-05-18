@@ -24,7 +24,7 @@ public class ItemBraceletCredits extends ItemAccessory
 				"SPECIAL THANKS TO"
 			}, new String[]
 			{
-					"allyally", "Daft Freak"
+				"allyally", "Daft Freak"
 			}, new String[]
 			{
 				"THANKS FOR LISTENING!"
@@ -79,9 +79,9 @@ public class ItemBraceletCredits extends ItemAccessory
 			timer1++;
 			if(creditsPos == 0 || timer1 == credits[creditsPos - 1].length * 30 + 150)
 			{
-				Game.message("-----------------");
 				timer1 = 0;
-				for(int a = credits[creditsPos].length - 1; a >= 0; a--)
+				Game.message("-----------------");
+				for(int a = 0; a < credits[creditsPos].length; a++)
 				{
 					Game.message(credits[creditsPos][a]);
 				}
