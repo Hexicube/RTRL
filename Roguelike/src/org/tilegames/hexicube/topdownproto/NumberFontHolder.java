@@ -81,6 +81,7 @@ public class NumberFontHolder
 	
 	public static int getTextWidth(long val, boolean doubleScale)
 	{
+		if(val == 0) return doubleScale?10:5;
 		int width = 0;
 		if(val < 0) val *= -1;
 		while(val > 0)
@@ -98,6 +99,11 @@ public class NumberFontHolder
 		for(int a = 0; a < values.length; a++)
 		{
 			int val = values[a];
+			if(val == 0)
+			{
+				width += 9;
+				continue;
+			}
 			if(val < 0) val *= -1;
 			while(val > 0)
 			{
@@ -113,6 +119,11 @@ public class NumberFontHolder
 	public static void render(SpriteBatch batch, long val, int x, int y, boolean doubleScale)
 	{
 		int xPos = 0;
+		if(val == 0)
+		{
+			batch.draw(font, x + xPos, y - (doubleScale ? 18 : 9), (doubleScale ? 10 : 5), doubleScale ? 18 : 9, 0, 0, 5, 9, false, false);
+			return;
+		}
 		if(val < 0) val *= -1;
 		while(val > 0)
 		{
@@ -129,6 +140,12 @@ public class NumberFontHolder
 		for(int a = 0; a < values.length; a++)
 		{
 			int val = values[a];
+			if(val == 0)
+			{
+				batch.draw(font, x + xPos, y - (doubleScale ? 18 : 9), (doubleScale ? 10 : 5), doubleScale ? 18 : 9, 0, 0, 5, 9, false, false);
+				xPos += doubleScale?18:9;
+				continue;
+			}
 			if(val < 0) val *= -1;
 			while(val > 0)
 			{
