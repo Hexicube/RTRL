@@ -6,22 +6,6 @@
 * Being a douche, I will be taking all steps I can to make this as hard as I can without ruining it. You will starve to death, you can use fire potions on wooden doors (any door) or kick it down and maybe get splinters which kill you.  
 * Slight realism, you can't stab a slime because it's gelatinous. You also can't burn skeletons because they're made of bones, but acid helps with them.  
   
-##Controls (all numpad):  
-* In-game:
-    * 0: Open inventory  
-    * 1: Use current item on self if applicable (potions mainly, i.e. invisibility potion)  
-    * 2: Face a direction using movement keys  
-    * 4/5/6/8: left/down/right/up (movement)  
-    * 7: Use tiles (open/close doors, unlock doors, collect all items from chest)  
-    * 9: Use current item (sword, potion, whatever) in the direction you're facing  
-* Inventory:  
-    * 0: Close inventory  
-    * 1: Select item to move/Swap with selected item  
-    * 2: Drop item on floor if space  
-    * 3: Dispose of item  
-    * 4/5/6/8: Navigate inventory  
-    * 7: Use item on self (potions and stuff)  
-  
 ##Enemies:  
 * Slime (todo):  
     * Difficulty: Hard  
