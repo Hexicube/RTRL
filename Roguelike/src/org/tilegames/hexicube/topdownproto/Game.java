@@ -109,7 +109,7 @@ public class Game implements ApplicationListener, InputProcessor
 		{
 			potionTex[a] = loadImage("item/potion" + (a + 1));
 		}
-		braceletTex = new Texture[1];
+		braceletTex = new Texture[3];
 		for(int a = 0; a < braceletTex.length; a++)
 		{
 			braceletTex[a] = loadImage("bracelet/bracelet" + (a + 1));
@@ -279,6 +279,7 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemWandLeechLife());
 				items.add(new ItemArmourRunningShoes());
 				items.add(new ItemTheBox());
+				items.add(new ItemArmourBeard());
 				shuffleItems(items);
 				int size = items.size();
 				for(int a = 0; a < size; a++)
