@@ -134,7 +134,7 @@ public class ItemPotionMana extends ItemUsable
 	@Override
 	public int useDelay()
 	{
-		return 15;
+		return 12;
 	}
 	
 	@Override

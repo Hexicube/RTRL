@@ -1,10 +1,7 @@
 package org.tilegames.hexicube.topdownproto.map;
 
-import java.util.ArrayList;
-
 import org.tilegames.hexicube.topdownproto.Game;
 import org.tilegames.hexicube.topdownproto.entity.Entity;
-import org.tilegames.hexicube.topdownproto.entity.EntityChest;
 import org.tilegames.hexicube.topdownproto.entity.EntityPlayer;
 import org.tilegames.hexicube.topdownproto.item.Item;
 import org.tilegames.hexicube.topdownproto.item.ItemKey;
@@ -20,8 +17,6 @@ public class TileDoor extends Tile
 	private boolean opened, horizontal;
 	
 	private KeyType requiredKey;
-	
-	private Entity curEnt;
 	
 	public TileDoor(boolean horizontal, boolean forceBasic)
 	{
@@ -126,44 +121,7 @@ public class TileDoor extends Tile
 	@Override
 	public boolean use(Entity entity)
 	{
-		if(curEnt instanceof EntityChest && entity instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer) entity;
-			ArrayList<Item> items = ((EntityChest) curEnt).contents;
-			if(items.size() == 0)
-			{
-				Game.message("The chest is empty!");
-				Game.removeEntity(curEnt);
-			}
-			else
-			{
-				while(items.size() > 0)
-				{
-					boolean found = false;
-					for(int a = 0; a < player.inventory.length && !found; a++)
-					{
-						if(player.inventory[a] == null)
-						{
-							player.inventory[a] = items.remove(0);
-							Game.message("Collected item: " + player.inventory[a].getName());
-							found = true;
-						}
-					}
-					if(!found)
-					{
-						Game.message("Your inventory is full!");
-						return true;
-					}
-				}
-				if(items.size() == 0) Game.removeEntity(curEnt);
-			}
-			return true;
-		}
-		if(requiredKey == KeyType.SECRET)
-		{
-			Game.message("The door can't directly be opened, try looking elsewhere!");
-			return true;
-		}
+		if(super.use(entity)) return true;
 		if(requiredKey == KeyType.NONE)
 		{
 			if(opened)
@@ -183,6 +141,11 @@ public class TileDoor extends Tile
 		}
 		else if(entity instanceof EntityPlayer)
 		{
+			if(requiredKey == KeyType.SECRET)
+			{
+				Game.message("The door can't directly be opened, try looking elsewhere!");
+				return true;
+			}
 			EntityPlayer player = (EntityPlayer) entity;
 			for(int a = 0; a < 100; a++)
 			{

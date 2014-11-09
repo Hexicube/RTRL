@@ -20,7 +20,7 @@ public class EntityArrow extends Entity
 		damageSides = dmgS;
 		damageDice = dmgD;
 		direction = dir;
-		timer = 5;
+		timer = 4;
 		xPos = x;
 		yPos = y;
 		this.type = type;
@@ -34,7 +34,7 @@ public class EntityArrow extends Entity
 		timer--;
 		if(timer == 0)
 		{
-			timer = 5;
+			timer = 4;
 			int oldX = xPos, oldY = yPos;
 			move(direction);
 			flightTime++;

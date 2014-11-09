@@ -44,13 +44,13 @@ public class ItemPotionInvisibility extends ItemUsable
 			if(action.equals("Dip Item"))
 			{
 				Game.message("Your "+getName()+" vanished!");
-				other.delete();
 				if(!nameDiscovered)
 				{
 					nameDiscovered = true;
 					Game.message("Discovered potion type: Invisibility");
 				}
 				Game.message("You drop your "+other.getName()+", and can't find it.");
+				other.delete();
 				used = true;
 			}
 		}
@@ -64,7 +64,7 @@ public class ItemPotionInvisibility extends ItemUsable
 		{
 			if(source instanceof EntityLiving)
 			{
-				((EntityLiving)source).addEffect(new EffectInvisibilityPotion(7200));
+				((EntityLiving)source).addEffect(new EffectInvisibilityPotion(6000));
 				if(source instanceof EntityPlayer && !nameDiscovered)
 				{
 					nameDiscovered = true;
@@ -84,7 +84,7 @@ public class ItemPotionInvisibility extends ItemUsable
 		if(!(target instanceof EntityLiving)) return false;
 		EntityLiving e = (EntityLiving)target;
 		if(!e.alive) return false;
-		e.addEffect(new EffectInvisibilityPotion(7200));
+		e.addEffect(new EffectInvisibilityPotion(6000));
 		if(source instanceof EntityPlayer && !nameDiscovered)
 		{
 			nameDiscovered = true;
@@ -157,7 +157,7 @@ public class ItemPotionInvisibility extends ItemUsable
 	@Override
 	public int useDelay()
 	{
-		return 15;
+		return 12;
 	}
 	
 	@Override

@@ -89,7 +89,7 @@ public class ItemWeaponShortBow extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return 35;
+		return 30;
 	}
 	
 	@Override

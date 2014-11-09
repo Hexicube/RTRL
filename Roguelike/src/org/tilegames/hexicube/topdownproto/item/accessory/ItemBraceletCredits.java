@@ -18,7 +18,7 @@ public class ItemBraceletCredits extends ItemAccessory
 				"CREDITS"
 			}, new String[]
 			{
-					"Concept: Hexicube", "Artwork: allyally", "Artwork: Daft Freak", "Programming: Hexicube", "HTML port: Daft Freak", "Inspiration: geckojsc"
+				"Concept: Hexicube", "Artwork: allyally", "Artwork: Daft Freak", "Programming: Hexicube", "HTML port: Daft Freak", "Inspiration: geckojsc"
 			}, new String[]
 			{
 				"SPECIAL THANKS TO"
@@ -77,13 +77,13 @@ public class ItemBraceletCredits extends ItemAccessory
 		{
 			timer2 = 0;
 			timer1++;
-			if(creditsPos == 0 || timer1 == credits[creditsPos - 1].length * 30 + 150)
+			if(creditsPos == 0 || timer1 == credits[creditsPos - 1].length * 50 + 50)
 			{
 				timer1 = 0;
 				Game.message("-----------------");
 				for(int a = 0; a < credits[creditsPos].length; a++)
 				{
-					Game.message(credits[creditsPos][a]);
+					Game.message(credits[creditsPos][credits[creditsPos].length-a-1]);
 				}
 				creditsPos++;
 				if(creditsPos == credits.length)

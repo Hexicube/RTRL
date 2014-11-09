@@ -93,7 +93,7 @@ public class ItemPickaxe extends ItemUsable
 	@Override
 	public int useDelay()
 	{
-		return 60;
+		return 50;
 	}
 	
 	@Override

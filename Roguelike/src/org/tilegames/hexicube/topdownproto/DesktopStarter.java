@@ -1,20 +1,21 @@
 package org.tilegames.hexicube.topdownproto;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.jglfw.JglfwApplication;
+import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 
 public class DesktopStarter
 {
-	public static LwjglApplicationConfiguration config;
+	public static JglfwApplicationConfiguration config;
 	
 	public static void main(String[] args)
 	{
-		config = new LwjglApplicationConfiguration();
+		config = new JglfwApplicationConfiguration();
 		config.title = "Game loading...";
 		config.width = 800;
 		config.height = 600;
-		config.useGL20 = false;
+		config.foregroundFPS = 60;
+		config.backgroundFPS = 6;
 		
-		new LwjglApplication(new Game(), config);
+		new JglfwApplication(new Game(), config);
 	}
 }

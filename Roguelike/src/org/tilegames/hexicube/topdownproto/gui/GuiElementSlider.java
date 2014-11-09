@@ -31,11 +31,14 @@ public class GuiElementSlider extends GuiElementDraggable
 	@Override
 	public void handleDrag(int x, int y, int pointer)
 	{
-		int[] pos = getPosition();
-		int relativePosX = x-pos[0];
-		if(relativePosX < 0) relativePosX = 0;
-		if(relativePosX > width) relativePosX = width;
-		this.pos = relativePosX;
+		if(Game.currentlyDragging == this)
+		{
+			int[] pos = getPosition();
+			int relativePosX = x-pos[0];
+			if(relativePosX < 0) relativePosX = 0;
+			if(relativePosX > width) relativePosX = width;
+			this.pos = relativePosX;
+		}
 	}
 	
 	@Override

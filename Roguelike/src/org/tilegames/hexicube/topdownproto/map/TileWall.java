@@ -53,12 +53,6 @@ public class TileWall extends Tile
 	}
 	
 	@Override
-	public boolean use(Entity entity)
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean canBeBrokeBy(Item item)
 	{
 		return true;

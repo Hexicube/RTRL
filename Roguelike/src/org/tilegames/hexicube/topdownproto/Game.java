@@ -1,8 +1,13 @@
 package org.tilegames.hexicube.topdownproto;
 
+import java.awt.Image;
+import java.awt.Window;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import org.tilegames.hexicube.topdownproto.KeyHandler.Key;
 import org.tilegames.hexicube.topdownproto.entity.*;
@@ -18,7 +23,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -29,7 +35,7 @@ public class Game implements ApplicationListener, InputProcessor
 	public static int width = 800, height = 600;
 	
 	public static final String gameName = "RTRL";
-	public static final String versionText = "Alpha V0.1";
+	public static final String versionText = "Alpha V0.2";
 	
 	private static SpriteBatch spriteBatch;
 	
@@ -118,7 +124,6 @@ public class Game implements ApplicationListener, InputProcessor
 		volume = 100;
 		
 		Gdx.input.setInputProcessor(this);
-		Gdx.graphics.setVSync(true);
 		
 		FontHolder.prep();
 		NumberFontHolder.prep();
@@ -137,6 +142,16 @@ public class Game implements ApplicationListener, InputProcessor
 		//Gdx.graphics.setDisplayMode(800, 600, true); //fullscreen
 		
 		currentMenu = new GuiManagerMainMenu();
+		
+		ArrayList<Image> icons = new ArrayList<Image>();
+		icons.add(loadIcon("icon_16x16"));
+		icons.add(loadIcon("icon_32x32"));
+		icons.add(loadIcon("icon_64x64"));
+		for(Window w : Window.getWindows())
+		{
+			System.out.println(w);
+			w.setIconImages(icons);
+		}
 	}
 	
 	@Override
@@ -262,6 +277,8 @@ public class Game implements ApplicationListener, InputProcessor
 				items.add(new ItemWeaponBadSword());
 				items.add(new ItemWeaponDagger());
 				items.add(new ItemWandLeechLife());
+				items.add(new ItemArmourRunningShoes());
+				items.add(new ItemTheBox());
 				shuffleItems(items);
 				int size = items.size();
 				for(int a = 0; a < size; a++)
@@ -288,14 +305,11 @@ public class Game implements ApplicationListener, InputProcessor
 		if(currentMenu != null && !currentMenu.drawBehind()) drawBehind = false;
 		
 		currentDeltaPassed += Gdx.graphics.getDeltaTime();
-		if(currentDeltaPassed > .1f) currentDeltaPassed = .1f; // anti mega lag,
-																// makes it do 6
-																// ticks after
-																// large lag
+		if(currentDeltaPassed > .2f) currentDeltaPassed = .2f;
 		long start = TimeUtils.nanoTime();
-		while(currentDeltaPassed >= .01667f) // about 60tps
+		while(currentDeltaPassed >= .02f) //50tps
 		{
-			currentDeltaPassed -= .01667f;
+			currentDeltaPassed -= .02f;
 			tick();
 		}
 		long end = TimeUtils.nanoTime();
@@ -303,8 +317,8 @@ public class Game implements ApplicationListener, InputProcessor
 		start = TimeUtils.nanoTime();
 		spriteBatch.begin();
 		
-		Gdx.graphics.getGLCommon().glClearColor(0, 0, 0, 1);
-		Gdx.graphics.getGLCommon().glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		Gdx.graphics.getGL20().glClearColor(0, 0, 0, 1);
+		Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		if(drawBehind)
 		{
@@ -358,7 +372,7 @@ public class Game implements ApplicationListener, InputProcessor
 		}
 		
 		if(frameRate < 30) spriteBatch.setColor(1, 0, 0, 1);
-		else if(frameRate < 55) spriteBatch.setColor(1, 1, 0, 1);
+		else if(frameRate < 40) spriteBatch.setColor(1, 1, 0, 1);
 		else spriteBatch.setColor(0, 1, 0, 1);
 		char[] tickRateText = FontHolder.getCharList(String.valueOf(frameRate) + "fps");
 		FontHolder.render(spriteBatch, tickRateText, width - 6 - FontHolder.getTextWidth(tickRateText, true), height - 6, true);
@@ -372,6 +386,7 @@ public class Game implements ApplicationListener, InputProcessor
 		
 		int[] testText = NumberFontHolder.encodeString("Test String");
 		NumberFontHolder.render(spriteBatch, testText, width - 6 - NumberFontHolder.getTextWidth(testText, true), height - 96, true);
+		NumberFontHolder.render(spriteBatch, 42, width-26, height - 126, true);
 		
 		if(drawBehind)
 		{
@@ -389,8 +404,8 @@ public class Game implements ApplicationListener, InputProcessor
 				else
 				{
 					spriteBatch.setColor(1, 1, 1, (m.timeLeft < 300) ? ((float) m.timeLeft / 300f) : 1);
-					//FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height + 6 - (size - a) * 10, false);
-					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height - 3 - a * 10, false);
+					FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height + 6 - (size - a) * 10, false);
+					//FontHolder.render(spriteBatch, FontHolder.getCharList(m.text), 4, height - 3 - a * 10, false);
 				}
 			}
 			spriteBatch.setColor(1, 1, 1, 1);
@@ -510,6 +525,22 @@ public class Game implements ApplicationListener, InputProcessor
 	public boolean scrolled(int amount)
 	{
 		return false;
+	}
+	
+	public static Image loadIcon(String name)
+	{
+		name = "images/" + name;
+		if(!File.separator.equals("/")) name.replace("/", File.separator);
+		FileHandle fh = Gdx.files.internal(name + ".png");
+		try
+		{
+			return ImageIO.read(fh.read());
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static Texture loadImage(String name)
@@ -727,7 +758,7 @@ public class Game implements ApplicationListener, InputProcessor
 	
 	public static void message(String message)
 	{
-		messages.add(new Message(message, 450));
+		messages.add(new Message(message, 400));
 	}
 	
 	public static int rollDice(int sides, int amount)

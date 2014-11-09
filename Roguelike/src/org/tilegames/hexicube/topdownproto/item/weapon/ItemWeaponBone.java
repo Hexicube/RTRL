@@ -115,7 +115,7 @@ public class ItemWeaponBone extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return 65;
+		return 55;
 	}
 	
 	@Override

@@ -59,7 +59,7 @@ public class EntitySkeleton extends EntityLiving
 		}
 		if(movementTimer == 0)
 		{
-			movementTimer = 45;
+			movementTimer = 40;
 			int xDist = Game.player.xPos - xPos;
 			int yDist = Game.player.yPos - yPos;
 			int dist = Math.abs(xDist) + Math.abs(yDist);

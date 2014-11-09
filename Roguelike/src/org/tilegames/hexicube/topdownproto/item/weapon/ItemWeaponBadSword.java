@@ -173,7 +173,7 @@ public class ItemWeaponBadSword extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return 45;
+		return 35;
 	}
 	
 	@Override

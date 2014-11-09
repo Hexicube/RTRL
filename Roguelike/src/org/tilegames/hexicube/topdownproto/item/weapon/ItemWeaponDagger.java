@@ -90,7 +90,7 @@ public class ItemWeaponDagger extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return (mod == ItemModifier.QUICK) ? 9 : 15;
+		return (mod == ItemModifier.QUICK) ? 8 : 12;
 	}
 	
 	@Override

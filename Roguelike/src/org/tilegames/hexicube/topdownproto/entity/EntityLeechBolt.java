@@ -18,7 +18,7 @@ public class EntityLeechBolt extends Entity
 	{
 		direction = dir;
 		source = src;
-		timer = 5;
+		timer = 4;
 		xPos = x;
 		yPos = y;
 		flightTime = 0;
@@ -31,7 +31,7 @@ public class EntityLeechBolt extends Entity
 		timer--;
 		if(timer == 0)
 		{
-			timer = 5;
+			timer = 4;
 			int oldX = xPos, oldY = yPos;
 			move(direction);
 			flightTime++;

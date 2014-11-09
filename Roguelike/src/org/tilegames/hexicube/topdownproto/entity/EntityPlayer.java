@@ -20,9 +20,9 @@ public class EntityPlayer extends EntityLiving
 	
 	public Direction facingDir = Direction.UP;
 	
-	private int walkDelay, useDelay;
+	private int useDelay;
 	
-	public int invX, invY, invSelectX, invSelectY;
+	public int walkDelay, invX, invY, invSelectX, invSelectY;
 	
 	public Item[] inventory;
 	public ItemUsable heldItem;
@@ -147,7 +147,7 @@ public class EntityPlayer extends EntityLiving
 			if(mana < manaMax)
 			{
 				mana++;
-				manaTicker = 900 / (int) Math.sqrt(manaMax);
+				manaTicker = 750 / (int) Math.sqrt(manaMax);
 			}
 		}
 		if(Game.keys.isKeyHeld(Key.USE))
@@ -156,19 +156,19 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(facingDir == Direction.DOWN)
 				{
-					if(yPos > 0 && map.tiles[xPos][yPos - 1].use(this)) useDelay = 15;
+					if(yPos > 0 && map.tiles[xPos][yPos - 1].use(this)) useDelay = 12;
 				}
 				if(facingDir == Direction.UP)
 				{
-					if(yPos < map.tiles[xPos].length - 1 && map.tiles[xPos][yPos + 1].use(this)) useDelay = 15;
+					if(yPos < map.tiles[xPos].length - 1 && map.tiles[xPos][yPos + 1].use(this)) useDelay = 12;
 				}
 				if(facingDir == Direction.LEFT)
 				{
-					if(xPos > 0 && map.tiles[xPos - 1][yPos].use(this)) useDelay = 15;
+					if(xPos > 0 && map.tiles[xPos - 1][yPos].use(this)) useDelay = 12;
 				}
 				if(facingDir == Direction.RIGHT)
 				{
-					if(xPos < map.tiles.length - 1 && map.tiles[xPos + 1][yPos].use(this)) useDelay = 15;
+					if(xPos < map.tiles.length - 1 && map.tiles[xPos + 1][yPos].use(this)) useDelay = 12;
 				}
 			}
 		}
@@ -176,7 +176,7 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
-				walkDelay = 15;
+				walkDelay = 12;
 				move(Direction.UP);
 				map.updateTexture(xPos, yPos);
 			}
@@ -186,7 +186,7 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
-				walkDelay = 15;
+				walkDelay = 12;
 				move(Direction.DOWN);
 				map.updateTexture(xPos, yPos);
 			}
@@ -196,7 +196,7 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
-				walkDelay = 15;
+				walkDelay = 12;
 				move(Direction.LEFT);
 				map.updateTexture(xPos, yPos);
 			}
@@ -206,7 +206,7 @@ public class EntityPlayer extends EntityLiving
 		{
 			if(walkDelay == 0 && !Game.keys.isKeyHeld(Key.LOOK))
 			{
-				walkDelay = 15;
+				walkDelay = 12;
 				move(Direction.RIGHT);
 				map.updateTexture(xPos, yPos);
 			}
@@ -218,13 +218,13 @@ public class EntityPlayer extends EntityLiving
 			{
 				if(heldItem == null)
 				{
-					useDelay = 15;
+					useDelay = 12;
 					Game.message("You have no held item!");
 				}
 				else
 				{
 					useDelay = heldItem.useDelay();
-					walkDelay += 7;
+					walkDelay += 6;
 					heldItem.use(this, facingDir);
 				}
 			}
@@ -255,19 +255,40 @@ public class EntityPlayer extends EntityLiving
 	{
 		if(entity instanceof EntityItem)
 		{
-			for(int a = 0; a < inventory.length; a++)
+			if(giveItem(((EntityItem)entity).curItem))
 			{
-				if(inventory[a] == null)
-				{
-					Game.removeEntity(entity);
-					inventory[a] = ((EntityItem) entity).curItem;
-					Game.message("Collected item: " + inventory[a].getName());
-					return;
-				}
+				Game.removeEntity(entity);
+				Game.message("Collected item: "+((EntityItem)entity).curItem.getName());
+				return;
 			}
 			Game.message("Your inventory is full!");
 		}
-		// TODO: check more collision things, such as pushing a boulder
+		//TODO: check more collision things, such as pushing a boulder
+	}
+	
+	public boolean giveItem(Item item)
+	{
+		for(int a = 0; a < inventory.length; a++)
+		{
+			if(inventory[a] != null && inventory[a] instanceof ItemStack)
+			{
+				ItemStack i = (ItemStack)inventory[a];
+				if(i.canStack(item))
+				{
+					i.stackItem(item);
+					return true;
+				}
+			}
+		}
+		for(int a = 0; a < inventory.length; a++)
+		{
+			if(inventory[a] == null)
+			{
+				inventory[a] = item;
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Item getItemInSlot(int x, int y)

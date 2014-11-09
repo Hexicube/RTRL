@@ -90,7 +90,7 @@ public class ItemWandLeechLife extends ItemWeapon
 	@Override
 	public int useDelay()
 	{
-		return 120;
+		return 100;
 	}
 	
 	@Override
