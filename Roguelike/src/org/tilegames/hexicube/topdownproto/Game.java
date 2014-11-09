@@ -353,11 +353,11 @@ public class Game implements ApplicationListener, InputProcessor
 				int eY = e.yPos - camY;
 				int entX = eX * 32;
 				int entY = eY * 32;
-				if(entX > width/2 || entX > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				if(entX > width/2 || entY > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
 				Tile t = curMap.tiles[e.xPos][e.yPos];
 				boolean invis = !curMap.entities.get(a).visible(player);
 				spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
-				e.render(spriteBatch, camX, camY);
+				e.render(spriteBatch, eX, eY);
 			}
 			size = curMap.damageEntities.size();
 			for(int a = 0; a < size; a++)
@@ -367,8 +367,8 @@ public class Game implements ApplicationListener, InputProcessor
 				int eY = e.yPos - camY;
 				int entX = eX * 32;
 				int entY = eY * 32;
-				if(entX > width/2 || entX > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
-				e.render(spriteBatch, camX, camY);
+				if(entX > width/2 || entY > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
+				e.render(spriteBatch, eX, eY);
 			}
 		}
 		

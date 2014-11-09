@@ -24,9 +24,9 @@ public class EntityItem extends Entity
 	{}
 	
 	@Override
-	public void render(SpriteBatch batch, int camX, int camY)
+	public void render(SpriteBatch batch, int x, int y)
 	{
-		curItem.render(batch, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16, false);
+		curItem.render(batch, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, false);
 	}
 	
 	@Override

@@ -32,7 +32,7 @@ public class EntityDamageHealthDisplay extends Entity
 	}
 	
 	@Override
-	public void render(SpriteBatch batch, int camX, int camY)
+	public void render(SpriteBatch batch, int x, int y)
 	{
 		if(amount < 1) batch.setColor(1, 1, 1, (float) (60 - timeLived) / 60);
 		else if(damage)
@@ -42,7 +42,7 @@ public class EntityDamageHealthDisplay extends Entity
 		}
 		else batch.setColor(0, 1, 0, (float) (60 - timeLived) / 60);
 		char[] data = FontHolder.getCharList(Game.numToStr(amount));
-		FontHolder.render(batch, data, Game.width/2 + (xPos - camX) * 32 - FontHolder.getTextWidth(data, true) / 2 + 1, Game.height/2 + (yPos - camY) * 32 + 8, true);
+		FontHolder.render(batch, data, Game.width/2 + x * 32 - FontHolder.getTextWidth(data, true) / 2 + 1, Game.height/2 + y * 32 + 8, true);
 	}
 	
 	@Override

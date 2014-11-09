@@ -26,14 +26,14 @@ public class EntityChest extends Entity
 	{}
 	
 	@Override
-	public void render(SpriteBatch batch, int camX, int camY)
+	public void render(SpriteBatch batch, int x, int y)
 	{
 		if(contents.size() == 1)
 		{
 			Item i = contents.get(0);
-			i.render(batch, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16, false);
+			i.render(batch, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, false);
 		}
-		else batch.draw(tex, Game.width/2 + (xPos - camX) * 32 - 16, Game.height/2 + (yPos - camY) * 32 - 16);
+		else batch.draw(tex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16);
 	}
 	
 	@Override
