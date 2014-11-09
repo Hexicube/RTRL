@@ -173,6 +173,17 @@ public class ItemWeaponShortBow extends ItemWeapon
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		if(mod == ItemModifier.CURSED)
+		{
+			mod = ItemModifier.NONE;
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered) return Color.ORANGE;

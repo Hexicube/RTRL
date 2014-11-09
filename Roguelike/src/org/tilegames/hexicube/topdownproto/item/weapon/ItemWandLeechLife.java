@@ -151,6 +151,12 @@ public class ItemWandLeechLife extends ItemWeapon
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;

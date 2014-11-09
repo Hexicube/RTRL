@@ -131,6 +131,12 @@ public class ItemNecklaceManaTraining extends ItemAccessory
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered || !modDiscovered) return Color.ORANGE;

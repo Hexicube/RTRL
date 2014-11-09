@@ -72,6 +72,12 @@ public class ItemArmourJumper extends ItemArmour
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		return new Color(0, 0, 0, 0);

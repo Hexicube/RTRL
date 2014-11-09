@@ -134,6 +134,12 @@ public class ItemPotionHealing extends ItemUsable
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public void render(SpriteBatch batch, int x, int y, boolean equipped)
 	{
 		batch.draw(tex, x, y);

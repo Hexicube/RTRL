@@ -36,6 +36,7 @@ public abstract class Item
 	public abstract int getCurrentDurability();
 	
 	public abstract boolean canMove();
+	public abstract boolean purify();
 	
 	public abstract Color getInvBorderCol();
 	

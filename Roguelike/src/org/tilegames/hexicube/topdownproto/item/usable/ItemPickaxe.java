@@ -149,6 +149,12 @@ public class ItemPickaxe extends ItemUsable
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		return new Color(0, 0, 0, 0);

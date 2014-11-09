@@ -93,6 +93,12 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	}
 	
 	@Override
+	public boolean purify()
+	{
+		return false;
+	}
+	
+	@Override
 	public Color getInvBorderCol()
 	{
 		if(!nameDiscovered) return Color.ORANGE;

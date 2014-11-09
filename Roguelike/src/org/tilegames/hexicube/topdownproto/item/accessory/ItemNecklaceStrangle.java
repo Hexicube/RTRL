@@ -83,10 +83,9 @@ public class ItemNecklaceStrangle extends ItemAccessory
 			durability--;
 			if(durability == 0)
 			{
-				Game.message("The " + getName() + " broke...");
-				Game.message("Your max HP increased by 10!");
-				p.healthMax += 10;
-				p.health += 10;
+				Game.message("The "+getName()+" loosened it's grip...");
+				delete();
+				p.necklace = new ItemNecklaceBinding();
 			}
 		}
 	}
@@ -107,6 +106,17 @@ public class ItemNecklaceStrangle extends ItemAccessory
 	public boolean canMove()
 	{
 		return !cursed;
+	}
+	
+	@Override
+	public boolean purify()
+	{
+		if(cursed)
+		{
+			cursed = false;
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
