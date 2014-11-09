@@ -53,12 +53,12 @@ public class TileDoor extends Tile
 			Tile t2 = map.tiles[doorHorizontal ? tileX : (tileX + 1)][doorHorizontal ? (tileY - 1) : tileY];
 			int[] light = new int[]
 			{
-					t2.lightLevel[0], t2.lightLevel[1], t2.lightLevel[2]
+				t2.lightLevel[0], t2.lightLevel[1], t2.lightLevel[2]
 			};
 			if(light[0] == 0) light[0] = 1;
 			if(light[1] == 0) light[1] = 1;
 			if(light[2] == 0) light[2] = 1;
-			batch.setColor((float) (light[0] + 2) / 18f, (float) (light[1] + 2) / 18f, (float) (light[2] + 2) / 18f, 1);
+			batch.setColor((float) (light[0]-1) / 15f, (float) (light[1]-1) / 15f, (float) (light[2]-1) / 15f, 1);
 		}
 		batch.draw(Game.tileTex, Game.width/2 + x * 32 - 16, Game.height/2 + y * 32 - 16, 32, 32, 0, 0, 32, 32, false, false);
 		if(requiredKey == KeyType.NONE) batch.setColor(1, 1, 1, 1);

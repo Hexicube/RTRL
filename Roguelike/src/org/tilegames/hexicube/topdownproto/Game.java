@@ -335,12 +335,12 @@ public class Game implements ApplicationListener, InputProcessor
 					Tile t = curMap.tiles[x][y];
 					if(t instanceof TileVoid)
 					{
-						spriteBatch.setColor(3f/18f, 3f/18f, 3f/18f, 1);
-						curMap.wallTile.render(spriteBatch, tX, tY);
+						//spriteBatch.setColor(.2f, .2f, .2f, 1);
+						//curMap.wallTile.render(spriteBatch, tX, tY);
 					}
 					else
 					{
-						spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[1] + 3) / 18f, (float) (curMap.tiles[x][y].lightLevel[2] + 3) / 18f, 1);
+						spriteBatch.setColor((float) (curMap.tiles[x][y].lightLevel[0] ) / 15f, (float) (curMap.tiles[x][y].lightLevel[1]) / 15f, (float) (curMap.tiles[x][y].lightLevel[2]) / 15f, 1);
 						t.render(spriteBatch, tX, tY);
 					}
 				}
@@ -356,7 +356,7 @@ public class Game implements ApplicationListener, InputProcessor
 				if(entX > width/2 || entY > height/2 || entX + width/2 + 32 < 0 || entY + height/2 + 32 < 0) continue;
 				Tile t = curMap.tiles[e.xPos][e.yPos];
 				boolean invis = !curMap.entities.get(a).visible(player);
-				spriteBatch.setColor((float) (t.lightLevel[0] + 3) / 18f, (float) (t.lightLevel[1] + 3) / 18f, (float) (t.lightLevel[2] + 3) / 18f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
+				spriteBatch.setColor((float) (t.lightLevel[0]) / 15f, (float) (t.lightLevel[1]) / 15f, (float) (t.lightLevel[2]) / 15f, invis ? ((curMap.entities.get(a) == player) ? 0.5f : 0) : 1);
 				e.render(spriteBatch, eX, eY);
 			}
 			size = curMap.damageEntities.size();
@@ -673,9 +673,80 @@ public class Game implements ApplicationListener, InputProcessor
 		Tile t = map.tiles[x][y];
 		if(!t.takesLight())
 		{
-			t.lightLevel[0] = t.lightSource[0];
-			t.lightLevel[1] = t.lightSource[1];
-			t.lightLevel[2] = t.lightSource[2];
+			/*int[] old = new int[]{t.lightLevel[0], t.lightLevel[1], t.lightLevel[2]};
+			if(t.givesLight())
+			{*/
+				t.lightLevel[0] = t.lightSource[0];
+				t.lightLevel[1] = t.lightSource[1];
+				t.lightLevel[2] = t.lightSource[2];
+			/*}
+			else
+			{
+				t.lightLevel[0] = 0;
+				t.lightLevel[1] = 0;
+				t.lightLevel[2] = 0;
+			}
+			if(x > 0)
+			{
+				if(map.tiles[x-1][y].givesLight())
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x-1][y].lightLevel[0]);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x-1][y].lightLevel[1]);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x-1][y].lightLevel[2]);
+				}
+				else
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x-1][y].lightLevel[0]-1);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x-1][y].lightLevel[1]-1);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x-1][y].lightLevel[2]-1);
+				}
+			}
+			if(x < map.tiles.length - 1)
+			{
+				if(map.tiles[x+1][y].givesLight())
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x+1][y].lightLevel[0]);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x+1][y].lightLevel[1]);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x+1][y].lightLevel[2]);
+				}
+				else
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x+1][y].lightLevel[0]-1);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x+1][y].lightLevel[1]-1);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x+1][y].lightLevel[2]-1);
+				}
+			}
+			if(y > 0)
+			{
+				if(map.tiles[x][y-1].givesLight())
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x][y-1].lightLevel[0]);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x][y-1].lightLevel[1]);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x][y-1].lightLevel[2]);
+				}
+				else
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x][y-1].lightLevel[0]-1);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x][y-1].lightLevel[1]-1);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x][y-1].lightLevel[2]-1);
+				}
+			}
+			if(y < map.tiles[x].length - 1)
+			{
+				if(map.tiles[x][y+1].givesLight())
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x][y+1].lightLevel[0]);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x][y+1].lightLevel[1]);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x][y+1].lightLevel[2]);
+				}
+				else
+				{
+					t.lightLevel[0] = Math.max(t.lightLevel[0], map.tiles[x][y+1].lightLevel[0]-1);
+					t.lightLevel[1] = Math.max(t.lightLevel[1], map.tiles[x][y+1].lightLevel[1]-1);
+					t.lightLevel[2] = Math.max(t.lightLevel[2], map.tiles[x][y+1].lightLevel[2]-1);
+				}
+			}
+			if(t.lightLevel[0] != old[0] || t.lightLevel[1] != old[1] || t.lightLevel[2] != old[2]) map.needsLighting = true;*/
 			return;
 		}
 		int maxR = t.lightSource[0];

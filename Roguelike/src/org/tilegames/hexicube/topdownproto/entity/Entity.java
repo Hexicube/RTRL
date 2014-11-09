@@ -62,7 +62,8 @@ public abstract class Entity
 			}
 			else if(map.tiles[newX][newY].onWalkAttempt(this))
 			{
-				map.tiles[xPos][yPos].setCurrentEntity(null);
+				if(map.tiles[xPos][yPos].getCurrentEntity() == this)
+					map.tiles[xPos][yPos].setCurrentEntity(null);
 				map.tiles[newX][newY].setCurrentEntity(this);
 				xPos = newX;
 				yPos = newY;

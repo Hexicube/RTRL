@@ -300,7 +300,7 @@ public class GuiManagerInventory extends GuiManager
 				int str = e.getEffectStrength();
 				int time = e.timeRemaining();
 				FontHolder.render(batch, FontHolder.getCharList(e.getEffectType().displayName+" " + ((str>1)?Game.romanNumerals(str):"")), Game.width/2 + 162, posY + 128, false);
-				FontHolder.render(batch, FontHolder.getCharList(((time>50)?((time / 3000)+"m "):"")+((time / 50) % 50 + "s")), Game.width/2 + 172, posY + 119, false);
+				FontHolder.render(batch, FontHolder.getCharList(((time>50)?((time / 3000)+"m "):"")+((time / 50) % 60 + "s")), Game.width/2 + 172, posY + 119, false);
 				posY -= 18;
 			}
 		}
