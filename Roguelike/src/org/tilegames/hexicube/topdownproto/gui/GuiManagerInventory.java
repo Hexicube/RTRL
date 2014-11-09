@@ -16,6 +16,7 @@ import org.tilegames.hexicube.topdownproto.item.ItemStack;
 import org.tilegames.hexicube.topdownproto.item.weapon.ItemWeapon;
 import org.tilegames.hexicube.topdownproto.map.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -45,6 +46,8 @@ public class GuiManagerInventory extends GuiManager
 		genericActionItems[0] = new GuiElementTextButton(0, 0, 0.5f, 0.5f, 80, "Move", Color.RED);
 		genericActionItems[1] = new GuiElementTextButton(0, 0, 0.5f, 0.5f, 80, "Drop", Color.RED);
 		genericActionItems[2] = new GuiElementTextButton(0, 0, 0.5f, 0.5f, 80, "Delete", Color.RED);
+		
+		mouseMove(Gdx.input.getX(), Game.height-Gdx.input.getY()-1);
 	}
 	
 	@Override
