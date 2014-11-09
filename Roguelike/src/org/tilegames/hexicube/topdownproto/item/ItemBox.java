@@ -13,6 +13,7 @@ public abstract class ItemBox extends Item
 	@Override
 	public String[] getCustomActions(Item other)
 	{
+		if(other != null) return new String[0];
 		return new String[]{"Open", "Check"};
 	}
 	

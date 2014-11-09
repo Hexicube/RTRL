@@ -22,7 +22,7 @@ public class ItemNecklaceStrangle extends ItemAccessory
 	{
 		if(Game.rand.nextInt(10) < 8) cursed = true;
 		else cursed = false;
-		durability = Game.rand.nextInt(3601) + 3600;
+		durability = Game.rand.nextInt(1501) + 1500;
 		ticker = 20;
 	}
 	
@@ -93,7 +93,7 @@ public class ItemNecklaceStrangle extends ItemAccessory
 	@Override
 	public int getMaxDurability()
 	{
-		return 7200;
+		return 3000;
 	}
 	
 	@Override

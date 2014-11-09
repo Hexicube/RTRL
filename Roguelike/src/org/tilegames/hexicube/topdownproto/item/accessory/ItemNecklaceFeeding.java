@@ -20,7 +20,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	
 	public ItemNecklaceFeeding()
 	{
-		durability = Game.rand.nextInt(501) + 500;
+		durability = Game.rand.nextInt(3001) + 9000;
 	}
 	
 	@Override
@@ -54,16 +54,12 @@ public class ItemNecklaceFeeding extends ItemAccessory
 			nameDiscovered = true;
 			EntityPlayer p = (EntityPlayer)entity;
 			double level = (double)p.hungerLevel / (double)p.hungerLevelMax;
-			if(level < 0.5)
+			double thisLevel = (double)durability / (double)getMaxDurability();
+			if(level < thisLevel)
 			{
 				p.hungerLevel += 2;
 				durability -= 2;
 				if(durability == 0) Game.message("The " + getName() + " broke...");
-			}
-			if(level > 0.5 && durability < getMaxDurability())
-			{
-				p.hungerLevel--;
-				durability++;
 			}
 		}
 	}
@@ -77,7 +73,7 @@ public class ItemNecklaceFeeding extends ItemAccessory
 	@Override
 	public int getMaxDurability()
 	{
-		return 1000;
+		return 12000;
 	}
 	
 	@Override

@@ -43,7 +43,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 	@Override
 	public String getName()
 	{
-		return "Necklace of Binding";
+		return "Necklace of Sacred Bindings";
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			EntityPlayer p = (EntityPlayer)entity;
 			if(durability > 0)
 			{
-				if(p.heldItem.purify())
+				if(p.heldItem != null && p.heldItem.purify())
 				{
 					Game.message("Your "+p.heldItem.getName()+" was purified.");
 					durability--;
@@ -64,7 +64,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			{
 				if(durability > 0)
 				{
-					if(i.purify())
+					if(i != null && i.purify())
 					{
 						Game.message("Your "+i.getName()+" was purified.");
 						durability--;
@@ -73,7 +73,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			}
 			if(durability > 0)
 			{
-				if(p.ring1.purify())
+				if(p.ring1 != null && p.ring1.purify())
 				{
 					Game.message("Your "+p.ring1.getName()+" was purified.");
 					durability--;
@@ -81,7 +81,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			}
 			if(durability > 0)
 			{
-				if(p.ring2.purify())
+				if(p.ring2 != null && p.ring2.purify())
 				{
 					Game.message("Your "+p.ring2.getName()+" was purified.");
 					durability--;
@@ -89,7 +89,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			}
 			if(durability > 0)
 			{
-				if(p.bracelet1.purify())
+				if(p.bracelet1 != null && p.bracelet1.purify())
 				{
 					Game.message("Your "+p.bracelet1.getName()+" was purified.");
 					durability--;
@@ -97,7 +97,7 @@ public class ItemNecklaceBinding extends ItemAccessory
 			}
 			if(durability > 0)
 			{
-				if(p.bracelet2.purify())
+				if(p.bracelet2 != null && p.bracelet2.purify())
 				{
 					Game.message("Your "+p.bracelet2.getName()+" was purified.");
 					durability--;

@@ -94,7 +94,7 @@ public class Game implements ApplicationListener, InputProcessor
 		statusTex = loadImage("status");
 		statusBarTex = loadImage("statusbar");
 		
-		necklaceTex = new Texture[4];
+		necklaceTex = new Texture[5];
 		for(int a = 0; a < necklaceTex.length; a++)
 		{
 			necklaceTex[a] = loadImage("necklace/necklace" + (a + 1));

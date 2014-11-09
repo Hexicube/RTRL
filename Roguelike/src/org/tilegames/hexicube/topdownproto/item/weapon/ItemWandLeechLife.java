@@ -62,7 +62,7 @@ public class ItemWandLeechLife extends ItemWeapon
 		if(p.mana >= manaCost)
 		{
 			p.mana -= manaCost;
-			p.manaExperience += manaCost;
+			p.manaExperience += 12;
 			EntityLeechBolt e = new EntityLeechBolt(dir, p, p.xPos, p.yPos);
 			Game.addEntity(e, p.map, false);
 			e.move(dir);
